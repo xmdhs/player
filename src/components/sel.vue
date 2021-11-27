@@ -9,7 +9,7 @@
     </thead>
     <tbody>
       <tr v-for="v in list" :key="v.key">
-        <td>{{ v.v }}</td>
+        <td>{{ v.key }}</td>
         <td @click="set(v.v)">
           <button>{{ v.v }}</button>
         </td>
@@ -20,7 +20,7 @@
 
 
 <script setup lang="ts">
-import { ref, defineEmits, defineProps } from 'vue'
+import { defineEmits, defineProps } from 'vue'
 
 const props = defineProps<{
   msg: string

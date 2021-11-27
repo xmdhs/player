@@ -4,6 +4,7 @@ const dmapi = `https://auto.xmdhs.top/getdm?`
 const cors = 'https://quiet-disk-7a77.xmdhs.workers.dev/'
 
 export async function getbilCidS(b: string): Promise<bilCidR["data"]> {
+    b = b.trim()
     let q = "aid"
     if (b.startsWith("BV")) {
         q = "bvid"
@@ -14,6 +15,7 @@ export async function getbilCidS(b: string): Promise<bilCidR["data"]> {
     let j = await f.json() as bilCidR
     if (j.code != 0) {
         console.warn("api 报错", j)
+        throw new Error("api 报错" + j)
     }
     return j.data
 }
@@ -28,6 +30,7 @@ interface bilCidR {
 }
 
 export async function getDM(cid: string): Promise<string> {
+    cid = cid.trim()
     await fetchAndInstantiate()
     let q = new URLSearchParams()
     q.set("cid", cid)
@@ -58,6 +61,7 @@ fetchAndInstantiate();
 declare function bil2dp(s: string): { err: string } | string
 
 export async function getZm(bvid: string, cid: string): Promise<{ lan_doc: string, subtitle_url: string }[]> {
+    bvid = bvid.trim()
     let q = new URLSearchParams()
     q.set("cid", cid)
     q.set("bvid", bvid)
@@ -71,6 +75,9 @@ export async function getZm(bvid: string, cid: string): Promise<{ lan_doc: strin
 }
 
 export async function getBilZm(url: string): Promise<bilZmR> {
+    if (url.startsWith("//")) {
+        url = "https:" + url
+    }
     let f = await fetch(cors + url)
     let j = await f.json() as bilZmR
     return j
@@ -95,9 +102,16 @@ export function bilZm2vtt(zm: bilZmR): string {
 function vtttime(time: number) {
     // 毫秒转换成时分秒表示
     let ms = time % 1000;
+    ms = Math.round(ms)
+    let mss = String(ms)
+    if (mss.length == 1) {
+        mss = "00" + mss
+    } else if (mss.length == 2) {
+        mss = "0" + mss
+    }
     // 剩余秒数
     var s = Math.floor(time / 1000);
-    return his(s) + '.' + ms;
+    return his(s) + '.' + mss;
 };
 
 function his(seconds: number) {

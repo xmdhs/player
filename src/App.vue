@@ -1,4 +1,3 @@
-
 <template>
   <div class="container-lg px-3 my-5 markdown-body">
     <div id="in" v-if="!finish" style="display: flex;column-gap: 10px;">
@@ -30,9 +29,9 @@
           style="width: 100%;overflow: auto;word-break: break-all;"
           placeholder="vtt 格式字幕"
         ></textarea>
-        <selVue msg="选择弹幕 cid" :list="dmcidlist" @set="dmCidset" v-if="dmcidlist.length != 0"></selVue>
-        <selVue msg="选择字幕" :list="zmlist" @set="zmset" v-if="zmlist.length != 0"></selVue>
       </div>
+      <selVue msg="选择弹幕 cid" :list="dmcidlist" @set="dmCidset" v-if="dmcidlist.length != 0"></selVue>
+      <selVue msg="选择字幕" :list="zmlist" @set="zmset" v-if="zmlist.length != 0"></selVue>
     </div>
   </div>
 </template>
@@ -96,7 +95,7 @@ const Form = async () => {
     })
     zmlist.value = l
   }
-  wait.wait()
+  await wait.wait()
   newPlayer(danmaku.value, zm.value, dplayer.value, url.value)
 }
 
@@ -111,7 +110,9 @@ const zmset = async (v: string) => {
     })
     zmlist.value = l
     zmsetdo = true
+    return
   } else {
+    zmlist.value = []
     zmsetdo = false
     let r = await getBilZm(v)
     zm.value = bilZm2vtt(r)
@@ -136,8 +137,8 @@ function newPlayer(danmaku: string, vtt: string, dplayer: any, url: string) {
     let blob = new Blob([vtt])
     vttlink = URL.createObjectURL(blob)
   }
-  let d = newDp(dmlink, vttlink, dplayer, url)
-  d.on(DPlayerEvents.play, () => {
+  let d = newDp(url, dmlink, vttlink, dplayer)
+  d.on('play' as DPlayerEvents, () => {
     dmlink != "" ? URL.revokeObjectURL(dmlink) : ""
     vttlink != "" ? URL.revokeObjectURL(vttlink) : ""
   })
@@ -163,6 +164,8 @@ function newPlayer(danmaku: string, vtt: string, dplayer: any, url: string) {
     if (vtt != "") {
       o.subtitle = {
         url: vtt,
+        bottom: "12px",
+        fontSize: "24px"
       }
     }
     return new DPlayer(o)
@@ -173,4 +176,30 @@ function newPlayer(danmaku: string, vtt: string, dplayer: any, url: string) {
 </script>
 
 
-<style scoped></style>
+<style scoped>
+form#info > textarea {
+  resize: none;
+  max-height: 50px;
+}
+
+form#info {
+  margin-top: 10px;
+  width: 100%;
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+}
+</style>
+
+<style>
+.dplayer-danmaku-item {
+  font-family: SimHei, "Microsoft JhengHei", Arial, Helvetica, sans-serif;
+  font-weight: bold;
+  text-shadow: rgb(0 0 0) 1px 0px 1px, rgb(0 0 0) 0px 1px 1px,
+    rgb(0 0 0) 0px -1px 1px, rgb(0 0 0) -1px 0px 1px !important;
+}
+.dplayer-subtitle {
+  text-shadow: rgb(0 0 0) 1px 0px 1px, rgb(0 0 0) 0px 1px 1px,
+    rgb(0 0 0) 0px -1px 1px, rgb(0 0 0) -1px 0px 1px !important;
+}
+</style>
