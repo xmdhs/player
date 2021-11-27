@@ -6,7 +6,7 @@
     </div>
     <div class="c" v-if="!root">
       <div id="dplayer" ref="dplayer"></div>
-      <div id="info" v-if="!finish">
+      <div class="form" v-if="!finish">
         <div style="display: flex;column-gap: 10px;">
           <input type="text" v-model="bilDanmaku" placeholder="弹幕 bvid" />
           <input type="text" v-model="bzimu" placeholder="字幕 bvid" />
@@ -177,12 +177,12 @@ function newPlayer(danmaku: string, vtt: string, dplayer: any, url: string) {
 
 
 <style scoped>
-form#info > textarea {
+textarea.text {
   resize: none;
   max-height: 50px;
 }
 
-form#info {
+.form {
   margin-top: 10px;
   width: 100%;
   display: flex;
