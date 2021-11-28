@@ -4,7 +4,6 @@ const dmapi = `https://auto.xmdhs.top/getdm?`
 const cors = 'https://quiet-disk-7a77.xmdhs.workers.dev/'
 
 export async function getbilCidS(b: string): Promise<bilCidR["data"]> {
-    b = b.trim()
     let q = "aid"
     if (b.startsWith("BV")) {
         q = "bvid"
@@ -30,7 +29,6 @@ interface bilCidR {
 }
 
 export async function getDM(cid: string): Promise<string> {
-    cid = cid.trim()
     await fetchAndInstantiate()
     let q = new URLSearchParams()
     q.set("cid", cid)
@@ -61,7 +59,6 @@ fetchAndInstantiate();
 declare function bil2dp(s: string): { err: string } | string
 
 export async function getZm(bvid: string, cid: string): Promise<{ lan_doc: string, subtitle_url: string }[]> {
-    bvid = bvid.trim()
     let q = new URLSearchParams()
     q.set("cid", cid)
     q.set("bvid", bvid)

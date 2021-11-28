@@ -7,9 +7,9 @@
     <div class="c" v-if="!root">
       <div id="dplayer" ref="dplayer"></div>
       <div class="form" v-if="!finish">
-        <div style="display: flex;column-gap: 10px;">
-          <input type="text" v-model="bilDanmaku" placeholder="弹幕 bvid" />
-          <input type="text" v-model="bzimu" placeholder="字幕 bvid" />
+        <div class="input">
+          <input type="text" v-model="bilDanmaku.trim" placeholder="弹幕 bvid" />
+          <input type="text" v-model="bzimu.trim" placeholder="字幕 bvid" />
         </div>
         <textarea
           v-model="danmaku"
@@ -188,6 +188,12 @@ textarea.text {
   display: flex;
   gap: 10px;
   flex-direction: column;
+}
+
+.input {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 </style>
 
