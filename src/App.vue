@@ -8,8 +8,8 @@
       <div id="dplayer" ref="dplayer"></div>
       <div class="form" v-if="!finish">
         <div class="input">
-          <input type="text" v-model="bilDanmaku.trim" placeholder="弹幕 bvid" />
-          <input type="text" v-model="bzimu.trim" placeholder="字幕 bvid" />
+          <input type="text" v-model.trim="bilDanmaku" placeholder="弹幕 bvid" />
+          <input type="text" v-model.trim="bzimu" placeholder="字幕 bvid" />
         </div>
         <textarea
           v-model="danmaku"
@@ -17,7 +17,6 @@
           class="text"
           cols="5"
           rows="5"
-          style="width: 100%;overflow: auto;word-break: break-all;"
           placeholder="dplayer 格式弹幕"
         ></textarea>
         <textarea
@@ -26,7 +25,6 @@
           class="text"
           cols="5"
           rows="5"
-          style="width: 100%;overflow: auto;word-break: break-all;"
           placeholder="vtt 格式字幕"
         ></textarea>
       </div>
@@ -180,6 +178,9 @@ function newPlayer(danmaku: string, vtt: string, dplayer: any, url: string) {
 textarea.text {
   resize: none;
   max-height: 50px;
+  width: 100%;
+  overflow: auto;
+  word-break: break-all;
 }
 
 .form {
