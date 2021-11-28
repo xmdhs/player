@@ -163,7 +163,7 @@ function newPlayer(danmaku: string, vtt: string, dplayer: any, url: string) {
       o.subtitle = {
         url: vtt,
         bottom: "5%",
-        fontSize: "28px"
+        fontSize: "4vmin"
       }
     }
     return new DPlayer(o)
