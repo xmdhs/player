@@ -102,6 +102,12 @@ const zmset = async (v: string) => {
   if (!zmsetdo) {
     zmlist.value = []
     let r = await getZm(bzimu.value, v)
+    if (r.length == 0) {
+      console.log("没有找到字幕")
+      wait.done()
+      zmsetdo = false
+      return
+    }
     let l = [] as { v: string, key: string }[]
     r.forEach(v => {
       l.push({ v: String(v.subtitle_url), key: v.lan_doc })
@@ -137,7 +143,7 @@ function newPlayer(danmaku: string, vtt: string, dplayer: HTMLElement, url: stri
   }
   let d = newDp(url, dmlink, vttlink, dplayer)
   d.on('play' as DPlayerEvents, () => {
-    dmlink != "" && URL.revokeObjectURL(dmlink) 
+    dmlink != "" && URL.revokeObjectURL(dmlink)
     vttlink != "" && URL.revokeObjectURL(vttlink)
   })
   function newDp(url: string, danmaku: string, vtt: string, dom: HTMLElement): DPlayer {

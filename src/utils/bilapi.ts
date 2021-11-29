@@ -14,7 +14,7 @@ export async function getbilCidS(b: string): Promise<bilCidR["data"]> {
     let j = await f.json() as bilCidR
     if (j.code != 0) {
         console.warn("api 报错", j)
-        throw new Error("api 报错" + j)
+        throw new Error("api 报错")
     }
     return j.data
 }
@@ -36,7 +36,7 @@ export async function getDM(cid: string): Promise<string> {
     let t = await f.text()
     let s = bil2dp(t)
     if (typeof (s as { err: string }).err != "undefined") {
-        alert((s as { err: string }).err)
+        console.warn((s as { err: string }).err)
         throw new Error((s as { err: string }).err)
     }
     return s as string;
@@ -66,7 +66,7 @@ export async function getZm(bvid: string, cid: string): Promise<{ lan_doc: strin
     let j = await f.json()
     if (j.code != 0) {
         console.warn("api 报错" + j)
-        throw new Error("api 报错" + j)
+        throw new Error("api 报错")
     }
     return j.data.subtitle.subtitles
 }
