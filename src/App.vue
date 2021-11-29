@@ -40,7 +40,7 @@ import DPlayer, { DPlayerEvents, DPlayerOptions } from 'dplayer';
 import { bilZm2vtt, getbilCidS, getBilZm, getDM, getZm } from './utils/bilapi';
 import waitgroup from './utils/WaitGroup';
 import selVue from './components/sel.vue';
-const dplayer = ref(null)
+const dplayer = ref(null as HTMLElement | null);
 const url = ref("")
 const danmaku = ref("")
 const bilDanmaku = ref("")
@@ -94,7 +94,7 @@ const Form = async () => {
     zmlist.value = l
   }
   await wait.wait()
-  newPlayer(danmaku.value, zm.value, dplayer.value, url.value)
+  newPlayer(danmaku.value, zm.value, dplayer.value as HTMLElement, url.value)
 }
 
 let zmsetdo = false
@@ -125,7 +125,7 @@ const dmCidset = async (cid: string) => {
   wait.done()
 }
 
-function newPlayer(danmaku: string, vtt: string, dplayer: any, url: string) {
+function newPlayer(danmaku: string, vtt: string, dplayer: HTMLElement, url: string) {
   let [dmlink, vttlink] = ["", ""]
   if (danmaku != "") {
     let blob = new Blob([danmaku])
@@ -137,10 +137,10 @@ function newPlayer(danmaku: string, vtt: string, dplayer: any, url: string) {
   }
   let d = newDp(url, dmlink, vttlink, dplayer)
   d.on('play' as DPlayerEvents, () => {
-    dmlink != "" ? URL.revokeObjectURL(dmlink) : ""
-    vttlink != "" ? URL.revokeObjectURL(vttlink) : ""
+    dmlink != "" && URL.revokeObjectURL(dmlink) 
+    vttlink != "" && URL.revokeObjectURL(vttlink)
   })
-  function newDp(url: string, danmaku: string, vtt: string, dom: any): DPlayer {
+  function newDp(url: string, danmaku: string, vtt: string, dom: HTMLElement): DPlayer {
     try {
       new URL(url)
     } catch (e) {
