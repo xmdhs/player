@@ -1,12 +1,17 @@
 const cidapi = `https://quiet-disk-7a77.xmdhs.workers.dev/https://api.bilibili.com/x/player/pagelist?`
 const zmapi = `https://quiet-disk-7a77.xmdhs.workers.dev/https://api.bilibili.com/x/player/v2?`
 const dmapi = `https://auto.xmdhs.top/getdm?`
+const ep2cid = `https://quiet-disk-7a77.xmdhs.workers.dev/https://api.bilibili.com/pgc/view/web/season?`
 const cors = 'https://quiet-disk-7a77.xmdhs.workers.dev/'
 
 export async function getbilCidS(b: string): Promise<bilCidR["data"]> {
-    let q = "aid"
+    let q = ""
     if (b.startsWith("BV")) {
         q = "bvid"
+    } else if (b.startsWith("av")) {
+        q = "aid"
+    } else if (b.startsWith("ep")) {
+        return getepidCid(Number(b.substr(2)))
     }
     let uq = new URLSearchParams()
     uq.set(q, b)
@@ -19,13 +24,44 @@ export async function getbilCidS(b: string): Promise<bilCidR["data"]> {
     return j.data
 }
 
-interface bilCidR {
-    code: number
-    message: string
+interface bilCidR extends apiData {
     data: {
         cid: number
         part: string
     }[]
+}
+
+interface apiData {
+    code: number
+    message: string
+}
+
+interface epidR extends apiData {
+    result: {
+        episodes: {
+            cid: number
+            long_title: string
+        }[]
+    }
+}
+
+async function getepidCid(epid: number): Promise<bilCidR["data"]> {
+    let uq = new URLSearchParams()
+    uq.set("ep_id", epid.toString())
+    let f = await fetch(ep2cid + uq.toString())
+    let j = await f.json() as epidR
+    if (j.code != 0) {
+        console.warn("api 报错", j)
+        throw new Error("api 报错")
+    }
+    let o = [] as bilCidR["data"]
+    for (let i of j.result.episodes) {
+        o.push({
+            cid: i.cid,
+            part: i.long_title
+        })
+    }
+    return o
 }
 
 export async function getDM(cid: string): Promise<string> {

@@ -8,8 +8,8 @@
       <div id="dplayer" ref="dplayer"></div>
       <div class="form" v-if="!finish">
         <div class="input">
-          <input type="text" v-model.trim="bilDanmaku" placeholder="弹幕 bvid" />
-          <input type="text" v-model.trim="bzimu" placeholder="字幕 bvid" />
+          <input type="text" v-model.trim="bilDanmaku" placeholder="弹幕 bvid / epid" />
+          <input type="text" v-model.trim="bzimu" placeholder="字幕 bvid / epid" />
         </div>
         <textarea
           v-model="danmaku"
