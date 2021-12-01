@@ -1,8 +1,8 @@
-const cidapi = `https://quiet-disk-7a77.xmdhs.workers.dev/https://api.bilibili.com/x/player/pagelist?`
-const zmapi = `https://quiet-disk-7a77.xmdhs.workers.dev/https://api.bilibili.com/x/player/v2?`
+export const cors = 'https://quiet-disk-7a77.xmdhs.workers.dev/'
+const cidapi = cors + `/https://api.bilibili.com/x/player/pagelist?`
+const zmapi = cors + `/https://api.bilibili.com/x/player/v2?`
 const dmapi = `https://auto.xmdhs.top/getdm?`
-const ep2cid = `https://quiet-disk-7a77.xmdhs.workers.dev/https://api.bilibili.com/pgc/view/web/season?`
-const cors = 'https://quiet-disk-7a77.xmdhs.workers.dev/'
+const ep2cid = cors + `/https://api.bilibili.com/pgc/view/web/season?`
 
 export async function getbilCidS(b: string): Promise<{ data: bilCidR["data"], bvid: string }> {
     let q = ""

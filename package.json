@@ -7,12 +7,13 @@
     "serve": "vite preview"
   },
   "dependencies": {
+    "cjk-conv": "^1.2.134",
     "dplayer": "^1.26.0",
     "vue": "^3.2.16"
   },
   "devDependencies": {
-    "@types/golang-wasm-exec": "^1.15.0",
     "@types/dplayer": "^1.25.2",
+    "@types/golang-wasm-exec": "^1.15.0",
     "@vitejs/plugin-vue": "^1.9.3",
     "typescript": "^4.4.3",
     "vite": "^2.6.4",

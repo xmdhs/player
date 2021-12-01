@@ -9,6 +9,7 @@
       <div class="form" v-if="!finish">
         <div class="input">
           <input type="text" v-model.trim="bilDanmaku" placeholder="弹幕 bvid / epid" />
+          <input type="tel" v-model.trim="bahaDm" placeholder="baha 弹幕 sn" />
           <input type="text" v-model.trim="bzimu" placeholder="字幕 bvid / epid" />
         </div>
         <textarea
@@ -38,12 +39,14 @@
 import { onMounted, ref } from 'vue'
 import DPlayer, { DPlayerEvents, DPlayerOptions } from 'dplayer';
 import { bilZm2vtt, getbilCidS, getBilZm, getDM, getZm } from './utils/bilapi';
+import { getDm as getBahaDm } from './utils/baha';
 import waitgroup from './utils/WaitGroup';
 import selVue from './components/sel.vue';
 const dplayer = ref(null as HTMLElement | null);
 const url = ref("")
 const danmaku = ref("")
 const bilDanmaku = ref("")
+const bahaDm = ref(null)
 const bzimu = ref("")
 const finish = ref(false)
 const showUrlIn = ref(true)
@@ -95,6 +98,11 @@ const Form = async () => {
     })
     bzimu.value = r.bvid
     zmlist.value = l
+  }
+  if (typeof bahaDm.value == "number" && bahaDm.value != 0) {
+    let dm = await getBahaDm(bahaDm.value)
+    let json = JSON.stringify(dm)
+    danmaku.value = json
   }
   await wait.wait()
   newPlayer(danmaku.value, zm.value, dplayer.value as HTMLElement, url.value)
