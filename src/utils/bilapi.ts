@@ -4,12 +4,13 @@ const dmapi = `https://auto.xmdhs.top/getdm?`
 const ep2cid = `https://quiet-disk-7a77.xmdhs.workers.dev/https://api.bilibili.com/pgc/view/web/season?`
 const cors = 'https://quiet-disk-7a77.xmdhs.workers.dev/'
 
-export async function getbilCidS(b: string): Promise<bilCidR["data"]> {
+export async function getbilCidS(b: string): Promise<{ data: bilCidR["data"], bvid: string }> {
     let q = ""
     if (b.startsWith("BV")) {
         q = "bvid"
     } else if (b.startsWith("av")) {
         q = "aid"
+        b = b.substr(2)
     } else if (b.startsWith("ep")) {
         return getepidCid(Number(b.substr(2)))
     }
@@ -21,7 +22,7 @@ export async function getbilCidS(b: string): Promise<bilCidR["data"]> {
         console.warn("api 报错", j)
         throw new Error("api 报错")
     }
-    return j.data
+    return { data: j.data, bvid: b }
 }
 
 interface bilCidR extends apiData {
@@ -41,11 +42,13 @@ interface epidR extends apiData {
         episodes: {
             cid: number
             long_title: string
+            id: number
+            bvid: string
         }[]
     }
 }
 
-async function getepidCid(epid: number): Promise<bilCidR["data"]> {
+async function getepidCid(epid: number): Promise<{ data: bilCidR["data"], bvid: string }> {
     let uq = new URLSearchParams()
     uq.set("ep_id", epid.toString())
     let f = await fetch(ep2cid + uq.toString())
@@ -55,13 +58,15 @@ async function getepidCid(epid: number): Promise<bilCidR["data"]> {
         throw new Error("api 报错")
     }
     let o = [] as bilCidR["data"]
+    let bvid = ""
     for (let i of j.result.episodes) {
-        o.push({
-            cid: i.cid,
-            part: i.long_title
-        })
+        if (i.id == epid) {
+            o.push({ cid: i.cid, part: i.long_title })
+            bvid = i.bvid
+            break
+        }
     }
-    return o
+    return { data: o, bvid: bvid }
 }
 
 export async function getDM(cid: string): Promise<string> {

@@ -78,9 +78,10 @@ const Form = async () => {
     wait.add(1)
     const r = await getbilCidS(bilDanmaku.value)
     let l = [] as { v: string, key: string }[]
-    r.forEach(v => {
+    r.data.forEach(v => {
       l.push({ v: String(v.cid), key: v.part })
     })
+    bilDanmaku.value = r.bvid
     dmcidlist.value = l
   }
   if (bzimu.value != "") {
@@ -88,9 +89,10 @@ const Form = async () => {
     wait.add(1)
     const r = await getbilCidS(bzimu.value)
     let l = [] as { v: string, key: string }[]
-    r.forEach(v => {
+    r.data.forEach(v => {
       l.push({ v: String(v.cid), key: v.part })
     })
+    bzimu.value = r.bvid
     zmlist.value = l
   }
   await wait.wait()
