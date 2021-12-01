@@ -46,7 +46,7 @@ const dplayer = ref(null as HTMLElement | null);
 const url = ref("")
 const danmaku = ref("")
 const bilDanmaku = ref("")
-const bahaDm = ref(null)
+const bahaDm = ref("")
 const bzimu = ref("")
 const finish = ref(false)
 const showUrlIn = ref(true)
@@ -99,8 +99,8 @@ const Form = async () => {
     bzimu.value = r.bvid
     zmlist.value = l
   }
-  if (typeof bahaDm.value == "number" && bahaDm.value != 0) {
-    let dm = await getBahaDm(bahaDm.value)
+  if (!isNaN(Number(bahaDm.value)) && Number(bahaDm.value) != 0) {
+    let dm = await getBahaDm(Number(bahaDm.value))
     let json = JSON.stringify(dm)
     danmaku.value = json
   }
