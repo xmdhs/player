@@ -59,6 +59,7 @@ onMounted(() => {
     url.value = file
     showUrlIn.value = false
     root.value = false
+    document.title = file
   }
 })
 
@@ -144,7 +145,7 @@ function newPlayer(danmaku: string, vtt: string, dplayer: HTMLElement, url: stri
     vttlink = URL.createObjectURL(blob)
   }
   let d = newDp(url, dmlink, vttlink, dplayer)
-  d.on('play' as DPlayerEvents, () => {
+  d.on("play" as DPlayerEvents, () => {
     dmlink != "" && URL.revokeObjectURL(dmlink)
     vttlink != "" && URL.revokeObjectURL(vttlink)
   })
