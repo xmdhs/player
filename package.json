@@ -7,7 +7,6 @@
     "serve": "vite preview"
   },
   "dependencies": {
-    "cjk-conv": "^1.2.134",
     "dplayer": "^1.26.0",
     "vue": "^3.2.16"
   },

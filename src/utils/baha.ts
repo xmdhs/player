@@ -1,5 +1,4 @@
 import { cors } from "./bilapi"
-import { tw2cn } from 'cjk-conv';
 
 
 const dmapi = cors + `https://ani.gamer.com.tw/ajax/danmuGet.php?`
@@ -25,7 +24,7 @@ export async function getDm(sn: number): Promise<dplayerDm> {
             v.position ? v.position : 0,
             color2Number(v.color),
             String(v.sn),
-            tw2cn(v.text)
+            v.text
         ])
     }
     return dm

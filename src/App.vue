@@ -81,7 +81,7 @@ const Form = async () => {
     has = true
     wait.add(1)
     const r = await getbilCidS(bilDanmaku.value)
-    let l = [] as { v: string, key: string }[]
+    let l: { v: string, key: string }[] = []
     r.data.forEach(v => {
       l.push({ v: String(v.cid), key: v.part })
     })
@@ -92,7 +92,7 @@ const Form = async () => {
     has = true
     wait.add(1)
     const r = await getbilCidS(bzimu.value)
-    let l = [] as { v: string, key: string }[]
+    let l: { v: string, key: string }[] = []
     r.data.forEach(v => {
       l.push({ v: String(v.cid), key: v.part })
     })
@@ -105,7 +105,11 @@ const Form = async () => {
     danmaku.value = json
   }
   await wait.wait()
-  newPlayer(danmaku.value, zm.value, dplayer.value as HTMLElement, url.value)
+  if (!(dplayer.value instanceof HTMLElement)) {
+    console.warn("dplayer is not find")
+    return
+  }
+  newPlayer(danmaku.value, zm.value, dplayer.value, url.value)
 }
 
 let zmsetdo = false
@@ -119,7 +123,7 @@ const zmset = async (v: string) => {
       zmsetdo = false
       return
     }
-    let l = [] as { v: string, key: string }[]
+    let l: { v: string, key: string }[] = []
     r.forEach(v => {
       l.push({ v: String(v.subtitle_url), key: v.lan_doc })
     })
