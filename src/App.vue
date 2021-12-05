@@ -54,23 +54,23 @@ const root = ref(true)
 const dmcidlist = ref([] as { v: string, key: string }[])
 const zmlist = ref([] as { v: string, key: string }[])
 
-let _danmaku = ""
+const _danmaku = ref("")
 const danmaku = computed<string>({
   get() {
-    return _danmaku
+    return _danmaku.value
   },
   set(v) {
     let d: dplayerDm = {
       code: 0,
       data: []
     }
-    if (_danmaku != "") {
-      d = JSON.parse(_danmaku)
+    if (_danmaku.value != "") {
+      d = JSON.parse(_danmaku.value)
     }
     if (typeof v == "string") {
       let dm = JSON.parse(v)
       d.data = d.data.concat(dm.data)
-      _danmaku = JSON.stringify(d)
+      _danmaku.value = JSON.stringify(d)
     }
   }
 })
