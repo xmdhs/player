@@ -68,9 +68,11 @@ const danmaku = computed<string>({
       d = JSON.parse(_danmaku.value)
     }
     if (typeof v == "string") {
-      let dm = JSON.parse(v)
-      d.data = d.data.concat(dm.data)
-      _danmaku.value = JSON.stringify(d)
+      let dm = JSON.parse(v) as dplayerDm
+      if ("data" in dm) {
+        d.data = d.data.concat(dm.data)
+        _danmaku.value = JSON.stringify(d)
+      }
     }
   }
 })
