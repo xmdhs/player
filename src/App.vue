@@ -36,16 +36,15 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import DPlayer, { DPlayerEvents, DPlayerOptions } from 'dplayer';
 import { bilZm2vtt, getbilCidS, getBilZm, getDM, getZm } from './utils/bilapi';
-import { getDm as getBahaDm } from './utils/baha';
+import { dplayerDm, getDm as getBahaDm } from './utils/baha';
 import waitgroup from './utils/WaitGroup';
 import selVue from './components/sel.vue';
-const dplayer = ref(null as HTMLElement | null);
+const dplayer = ref<HTMLElement | null>(null);
+const bilDanmaku = ref('');
 const url = ref("")
-const danmaku = ref("")
-const bilDanmaku = ref("")
 const bahaDm = ref("")
 const bzimu = ref("")
 const finish = ref(false)
@@ -54,6 +53,27 @@ const zm = ref("")
 const root = ref(true)
 const dmcidlist = ref([] as { v: string, key: string }[])
 const zmlist = ref([] as { v: string, key: string }[])
+
+let _danmaku = ""
+const danmaku = computed<string>({
+  get() {
+    return _danmaku
+  },
+  set(v) {
+    let d: dplayerDm = {
+      code: 0,
+      data: []
+    }
+    if (_danmaku != "") {
+      d = JSON.parse(_danmaku)
+    }
+    if (typeof v == "string") {
+      let dm = JSON.parse(v)
+      d.data = d.data.concat(dm.data)
+      _danmaku = JSON.stringify(d)
+    }
+  }
+})
 
 onMounted(() => {
   let u = new URL(location.href)

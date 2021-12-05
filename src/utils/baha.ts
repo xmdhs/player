@@ -38,7 +38,7 @@ interface bahaDM {
     sn: number,
 }
 
-interface dplayerDm {
+export interface dplayerDm {
     code: number,
     data: [
         number,
