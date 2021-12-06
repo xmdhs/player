@@ -36,7 +36,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, Ref, ref } from 'vue'
 import DPlayer, { DPlayerEvents, DPlayerOptions } from 'dplayer';
 import { bilZm2vtt, getbilCidS, getBilZm, getDM, getZm } from './utils/bilapi';
 import { dplayerDm, getDm as getBahaDm } from './utils/baha';
@@ -53,29 +53,7 @@ const zm = ref("")
 const root = ref(true)
 const dmcidlist = ref([] as { v: string, key: string }[])
 const zmlist = ref([] as { v: string, key: string }[])
-
-const _danmaku = ref("")
-const danmaku = computed<string>({
-  get() {
-    return _danmaku.value
-  },
-  set(v) {
-    let d: dplayerDm = {
-      code: 0,
-      data: []
-    }
-    if (_danmaku.value != "") {
-      d = JSON.parse(_danmaku.value)
-    }
-    if (typeof v == "string") {
-      let dm = JSON.parse(v) as dplayerDm
-      if ("data" in dm) {
-        d.data = d.data.concat(dm.data)
-        _danmaku.value = JSON.stringify(d)
-      }
-    }
-  }
-})
+const danmaku = ref("")
 
 onMounted(() => {
   let u = new URL(location.href)
@@ -123,8 +101,7 @@ const Form = async () => {
   }
   if (!isNaN(Number(bahaDm.value)) && Number(bahaDm.value) != 0) {
     let dm = await getBahaDm(Number(bahaDm.value))
-    let json = JSON.stringify(dm)
-    danmaku.value = json
+    addDm(danmaku, dm)
   }
   await wait.wait()
   if (!(dplayer.value instanceof HTMLElement)) {
@@ -164,7 +141,13 @@ const zmset = async (v: string) => {
 const dmCidset = async (cid: string) => {
   dmcidlist.value = []
   let dm = await getDM(cid)
-  danmaku.value = dm
+  let d = JSON.parse(dm) as dplayerDm
+  if (d.code != 0 || !("data" in d)) {
+    console.log("没有找到弹幕", d)
+    wait.done()
+    return
+  }
+  addDm(danmaku, d)
   wait.done()
 }
 
@@ -213,7 +196,20 @@ function newPlayer(danmaku: string, vtt: string, dplayer: HTMLElement, url: stri
   }
 }
 
-
+function addDm(danmaku: Ref<string>, dm: dplayerDm) {
+  let d: dplayerDm = {
+    code: 0,
+    data: []
+  }
+  if (danmaku.value != "") {
+    d = JSON.parse(danmaku.value)
+  }
+  if (dm.data.length == 0) {
+    return
+  }
+  d.data.push(...dm.data)
+  danmaku.value = JSON.stringify(d)
+}
 </script>
 
 
