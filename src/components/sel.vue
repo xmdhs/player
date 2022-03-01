@@ -20,8 +20,6 @@
 
 
 <script setup lang="ts">
-import { defineEmits, defineProps } from 'vue'
-
 const props = defineProps<{
   msg: string
   list: { v: string, key: string }[]

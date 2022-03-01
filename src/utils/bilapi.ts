@@ -10,9 +10,9 @@ export async function getbilCidS(b: string): Promise<{ data: bilCidR["data"], bv
         q = "bvid"
     } else if (b.startsWith("av")) {
         q = "aid"
-        b = b.substr(2)
+        b = b.substring(2)
     } else if (b.startsWith("ep")) {
-        return getepidCid(Number(b.substr(2)))
+        return getepidCid(Number(b.substring(2)))
     }
     let uq = new URLSearchParams()
     uq.set(q, b)

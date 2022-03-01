@@ -1,13 +1,28 @@
 <template>
-  <div class="container-lg px-3 my-5 markdown-body">
+  <header :class="$style.header">
+    <nav class="container-fluid">
+      <ul>
+        <li>
+          <a href="/">
+            <strong>播放器</strong>
+          </a>
+        </li>
+      </ul>
+      <ul></ul>
+    </nav>
+  </header>
+  <main class="container">
     <div id="in" v-if="!finish" style="display: flex;column-gap: 10px;">
-      <input type="text" v-model="url" v-if="showUrlIn" />
-      <button @click="Form">播放</button>
+      <input type="text" v-model="url" v-if="showUrlIn" style="max-width: 20em;" />
+      <button @click="Form" style="max-width: 5em;">播放</button>
     </div>
-    <div class="c" v-if="!root">
-      <div id="dplayer" ref="dplayer"></div>
-      <div class="form" v-if="!finish">
-        <div class="input">
+    <div v-if="!root">
+      <div v-show="finish">
+        <div ref="dplayer"></div>
+        <br />
+      </div>
+      <div :class="$style.form" v-if="!finish">
+        <div :class="$style.input">
           <input type="text" v-model.trim="bilDanmaku" placeholder="弹幕 bvid / epid" />
           <input type="tel" v-model.trim="bahaDm" placeholder="baha 弹幕 sn" />
           <input type="text" v-model.trim="bzimu" placeholder="字幕 bvid / epid" />
@@ -15,7 +30,7 @@
         <textarea
           v-model="danmaku"
           autocomplete="on"
-          class="text"
+          :class="$style.text"
           cols="5"
           rows="5"
           placeholder="dplayer 格式弹幕"
@@ -23,7 +38,7 @@
         <textarea
           v-model="zm"
           autocomplete="on"
-          class="text"
+          :class="$style.text"
           cols="5"
           rows="5"
           placeholder="vtt 格式字幕"
@@ -32,16 +47,17 @@
       <selVue msg="选择弹幕 cid" :list="dmcidlist" @set="dmCidset" v-if="dmcidlist.length != 0"></selVue>
       <selVue msg="选择字幕" :list="zmlist" @set="zmset" v-if="zmlist.length != 0"></selVue>
     </div>
-  </div>
+  </main>
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, Ref, ref } from 'vue'
-import DPlayer, { DPlayerEvents, DPlayerOptions } from 'dplayer';
+import { Ref, ref } from 'vue'
 import { bilZm2vtt, getbilCidS, getBilZm, getDM, getZm } from './utils/bilapi';
 import { dplayerDm, getDm as getBahaDm } from './utils/baha';
 import waitgroup from './utils/WaitGroup';
 import selVue from './components/sel.vue';
+import { DPlayer, DPlayerOptions, DPlayerEvents, dp } from './types/Dplayer';
+
 const dplayer = ref<HTMLElement | null>(null);
 const bilDanmaku = ref('');
 const url = ref("")
@@ -55,16 +71,14 @@ const dmcidlist = ref([] as { v: string, key: string }[])
 const zmlist = ref([] as { v: string, key: string }[])
 const danmaku = ref("")
 
-onMounted(() => {
-  let u = new URL(location.href)
-  const file = u.searchParams.get('video')
-  if (typeof file == "string" && file != "") {
-    url.value = file
-    showUrlIn.value = false
-    root.value = false
-    document.title = file
-  }
-})
+let u = new URL(location.href)
+const file = u.searchParams.get('video')
+if (typeof file == "string" && file != "") {
+  url.value = file
+  showUrlIn.value = false
+  root.value = false
+  document.title = file
+}
 
 const wait = new waitgroup()
 
@@ -166,7 +180,7 @@ function newPlayer(danmaku: string, vtt: string, dplayer: HTMLElement, url: stri
     dmlink != "" && URL.revokeObjectURL(dmlink)
     vttlink != "" && URL.revokeObjectURL(vttlink)
   })
-  function newDp(url: string, danmaku: string, vtt: string, dom: HTMLElement): DPlayer {
+  function newDp(url: string, danmaku: string, vtt: string, dom: HTMLElement): dp {
     try {
       new URL(url)
     } catch (e) {
@@ -213,27 +227,30 @@ function addDm(danmaku: Ref<string>, dm: dplayerDm) {
 </script>
 
 
-<style scoped>
+<style module>
 textarea.text {
   resize: none;
-  max-height: 50px;
+  max-height: 100px;
   width: 100%;
   overflow: auto;
   word-break: break-all;
 }
 
 .form {
-  margin-top: 10px;
   width: 100%;
   display: flex;
-  gap: 10px;
   flex-direction: column;
 }
 
 .input {
-  display: flex;
+  display: grid;
   gap: 10px;
-  flex-wrap: wrap;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.header {
+  border-bottom: 1px solid #e5e5e5;
+  margin-bottom: 30px;
 }
 </style>
 

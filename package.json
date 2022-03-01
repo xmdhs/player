@@ -7,15 +7,15 @@
     "serve": "vite preview"
   },
   "dependencies": {
-    "dplayer": "^1.26.0",
-    "vue": "^3.2.16"
+    "@picocss/pico": "^1.4.4",
+    "vue": "^3.2.31"
   },
   "devDependencies": {
     "@types/dplayer": "^1.25.2",
     "@types/golang-wasm-exec": "^1.15.0",
-    "@vitejs/plugin-vue": "^1.9.3",
-    "typescript": "^4.4.3",
-    "vite": "^2.6.4",
+    "@vitejs/plugin-vue": "^1.10.2",
+    "typescript": "^4.6.2",
+    "vite": "^2.8.5",
     "vue-tsc": "^0.3.0"
   }
 }
