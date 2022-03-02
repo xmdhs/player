@@ -249,6 +249,7 @@ function warpErr<F extends Function>(f: F): F {
     try {
       return await f(...args)
     } catch (e) {
+      console.error(e)
       hasErr.value = String(e)
     }
   } as any
