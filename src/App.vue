@@ -12,6 +12,8 @@
     </nav>
   </header>
   <main class="container">
+    <p v-if="hasErr" style="color: red;font-weight: bolder;">{{ hasErr }}</p>
+
     <div id="in" v-if="!finish" style="display: flex;column-gap: 10px;">
       <input type="text" v-model="url" v-if="showUrlIn" style="max-width: 20em;" />
       <button @click="Form" style="max-width: 5em;">播放</button>
@@ -44,8 +46,22 @@
           placeholder="vtt 格式字幕"
         ></textarea>
       </div>
-      <selVue msg="选择弹幕 cid" :list="dmcidlist" @set="dmCidset" v-if="dmcidlist.length != 0"></selVue>
-      <selVue msg="选择字幕" :list="zmlist" @set="zmset" v-if="zmlist.length != 0"></selVue>
+      <selVue
+        title="标题"
+        value="cid"
+        msg="选择弹幕 cid"
+        :list="dmcidlist"
+        @set="dmCidset"
+        v-if="dmcidlist.length != 0"
+      ></selVue>
+      <selVue
+        title="标题"
+        value="cid"
+        msg="选择字幕"
+        :list="zmlist"
+        @set="zmset"
+        v-if="zmlist.length != 0"
+      ></selVue>
     </div>
   </main>
 </template>
@@ -70,6 +86,7 @@ const root = ref(true)
 const dmcidlist = ref([] as { v: string, key: string }[])
 const zmlist = ref([] as { v: string, key: string }[])
 const danmaku = ref("")
+const hasErr = ref("")
 
 let u = new URL(location.href)
 const file = u.searchParams.get('video')
@@ -82,7 +99,7 @@ if (typeof file == "string" && file != "") {
 
 const wait = new waitgroup()
 
-const Form = async () => {
+const Form = warpErr(async () => {
   if (root.value) {
     let u = new URL(location.href)
     u.searchParams.set("video", url.value)
@@ -123,10 +140,10 @@ const Form = async () => {
     return
   }
   newPlayer(danmaku.value, zm.value, dplayer.value, url.value)
-}
+})
 
 let zmsetdo = false
-const zmset = async (v: string) => {
+const zmset = warpErr(async (v: string) => {
   if (!zmsetdo) {
     zmlist.value = []
     let r = await getZm(bzimu.value, v)
@@ -150,9 +167,9 @@ const zmset = async (v: string) => {
     zm.value = bilZm2vtt(r)
   }
   wait.done()
-}
+})
 
-const dmCidset = async (cid: string) => {
+const dmCidset = warpErr(async (cid: string) => {
   dmcidlist.value = []
   let dm = await getDM(cid)
   let d = JSON.parse(dm) as dplayerDm
@@ -163,7 +180,7 @@ const dmCidset = async (cid: string) => {
   }
   addDm(danmaku, d)
   wait.done()
-}
+})
 
 function newPlayer(danmaku: string, vtt: string, dplayer: HTMLElement, url: string) {
   let [dmlink, vttlink] = ["", ""]
@@ -224,6 +241,18 @@ function addDm(danmaku: Ref<string>, dm: dplayerDm) {
   d.data.push(...dm.data)
   danmaku.value = JSON.stringify(d)
 }
+
+
+function warpErr<F extends Function>(f: F): F {
+  return async function (...args: any[]) {
+    hasErr.value = ""
+    try {
+      return await f(...args)
+    } catch (e) {
+      hasErr.value = String(e)
+    }
+  } as any
+}
 </script>
 
 
@@ -243,14 +272,18 @@ textarea.text {
 }
 
 .input {
-  display: grid;
-  gap: 10px;
-  grid-template-columns: 1fr 1fr 1fr;
+  display: flex;
+  column-gap: 10px;
+  flex-wrap: wrap;
 }
 
 .header {
   border-bottom: 1px solid #e5e5e5;
   margin-bottom: 30px;
+}
+
+.input > input {
+  max-width: 15em;
 }
 </style>
 

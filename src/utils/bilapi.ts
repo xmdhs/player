@@ -19,8 +19,7 @@ export async function getbilCidS(b: string): Promise<{ data: bilCidR["data"], bv
     let f = await fetch(cidapi + uq.toString())
     let j = await f.json() as bilCidR
     if (j.code != 0) {
-        console.warn("api 报错", j)
-        throw new Error("api 报错")
+        throw ["api 报错", j]
     }
     return { data: j.data, bvid: b }
 }
@@ -54,8 +53,7 @@ async function getepidCid(epid: number): Promise<{ data: bilCidR["data"], bvid: 
     let f = await fetch(ep2cid + uq.toString())
     let j = await f.json() as epidR
     if (j.code != 0) {
-        console.warn("api 报错", j)
-        throw new Error("api 报错")
+        throw ["api 报错", j]
     }
     let o = [] as bilCidR["data"]
     let bvid = ""
@@ -77,8 +75,7 @@ export async function getDM(cid: string): Promise<string> {
     let t = await f.text()
     let s = bil2dp(t)
     if (typeof (s as { err: string }).err != "undefined") {
-        console.warn((s as { err: string }).err)
-        throw new Error((s as { err: string }).err)
+        throw (s as { err: string }).err
     }
     return s as string;
 }
@@ -106,8 +103,7 @@ export async function getZm(bvid: string, cid: string): Promise<{ lan_doc: strin
     let f = await fetch(zmapi + q.toString())
     let j = await f.json()
     if (j.code != 0) {
-        console.warn("api 报错" + j)
-        throw new Error("api 报错")
+        throw ["api 报错", j]
     }
     return j.data.subtitle.subtitles
 }

@@ -3,15 +3,15 @@
   <table>
     <thead>
       <tr>
-        <th>key</th>
-        <th>v</th>
+        <th>{{ title }}</th>
+        <th>{{ value }}</th>
       </tr>
     </thead>
     <tbody>
       <tr v-for="v in list" :key="v.key">
         <td>{{ v.key }}</td>
         <td @click="set(v.v)">
-          <button>{{ v.v }}</button>
+          <button style="width: 10em;">{{ v.v }}</button>
         </td>
       </tr>
     </tbody>
@@ -23,6 +23,8 @@
 const props = defineProps<{
   msg: string
   list: { v: string, key: string }[]
+  title: string
+  value: string
 }>()
 
 const emit = defineEmits<{
