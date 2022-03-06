@@ -1,20 +1,8 @@
 <template>
-  <header :class="$style.header">
-    <nav class="container-fluid">
-      <ul>
-        <li>
-          <a href="/">
-            <strong>播放器</strong>
-          </a>
-        </li>
-      </ul>
-      <ul></ul>
-    </nav>
-  </header>
-  <main class="container">
+  <main class="container-lg px-3 my-5 markdown-body">
     <p v-if="hasErr" style="color: red;font-weight: bolder;">{{ hasErr }}</p>
 
-    <div id="in" v-if="!finish" style="display: flex;column-gap: 10px;">
+    <div id="in" v-if="!finish" style="display: flex;gap: 10px;margin-bottom: 10px;">
       <input type="text" v-model="url" v-if="showUrlIn" style="max-width: 20em;" />
       <button @click="Form" style="max-width: 5em;">播放</button>
     </div>
@@ -270,17 +258,13 @@ textarea.text {
   width: 100%;
   display: flex;
   flex-direction: column;
+  gap: 10px;
 }
 
 .input {
   display: flex;
-  column-gap: 10px;
+  gap: 10px;
   flex-wrap: wrap;
-}
-
-.header {
-  border-bottom: 1px solid #e5e5e5;
-  margin-bottom: 30px;
 }
 
 .input > input {
@@ -299,4 +283,8 @@ textarea.text {
   text-shadow: rgb(0 0 0) 1px 0px 1px, rgb(0 0 0) 0px 1px 1px,
     rgb(0 0 0) 0px -1px 1px, rgb(0 0 0) -1px 0px 1px !important;
 }
+</style>
+
+<style>
+@import url(https://cdn.jsdelivr.net/gh/xmdhs/searchqanda/style.css);
 </style>

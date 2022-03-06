@@ -7,7 +7,6 @@
     "serve": "vite preview"
   },
   "dependencies": {
-    "@picocss/pico": "^1.4.4",
     "vue": "^3.2.31"
   },
   "devDependencies": {
