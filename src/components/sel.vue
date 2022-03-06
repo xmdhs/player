@@ -11,7 +11,7 @@
       <tr v-for="v in list" :key="v.key">
         <td>{{ v.key }}</td>
         <td @click="set(v.v)">
-          <button style="width: 10em;">{{ v.v }}</button>
+          <button>{{ v.v }}</button>
         </td>
       </tr>
     </tbody>

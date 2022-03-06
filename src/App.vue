@@ -3,8 +3,8 @@
     <p v-if="hasErr" style="color: red;font-weight: bolder;">{{ hasErr }}</p>
 
     <div id="in" v-if="!finish" style="display: flex;gap: 10px;margin-bottom: 10px;">
-      <input type="text" v-model="url" v-if="showUrlIn" style="max-width: 20em;" />
-      <button @click="Form" style="max-width: 5em;">播放</button>
+      <input type="text" v-model="url" v-if="showUrlIn" />
+      <button @click="Form">播放</button>
     </div>
     <div v-if="!root">
       <div v-show="finish">
