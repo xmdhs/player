@@ -1,6 +1,7 @@
 lockfileVersion: 5.3
 
 specifiers:
+  '@picocss/pico': ^1.4.4
   '@types/dplayer': ^1.25.2
   '@types/golang-wasm-exec': ^1.15.0
   '@vitejs/plugin-vue': ^1.10.2
@@ -10,6 +11,7 @@ specifiers:
   vue-tsc: ^0.3.0
 
 dependencies:
+  '@picocss/pico': 1.4.4
   vue: 3.2.31
 
 devDependencies:
@@ -55,6 +57,10 @@ packages:
   /@emmetio/scanner/1.0.0:
     resolution: {integrity: sha512-8HqW8EVqjnCmWXVpqAOZf+EGESdkR27odcMMMGefgKXtar00SoYNSryGv//TELI4T3QFsECo78p+0lmalk/CFA==}
     dev: true
+
+  /@picocss/pico/1.4.4:
+    resolution: {integrity: sha512-MuL4MOY1Tugf91N06mhYETVqMiNeT9gObMJ0WNrnbSGBw61gsqXzn7ScjXvVpnQmFC8DP13mluzz1s+ogpiuEQ==}
+    dev: false
 
   /@types/dplayer/1.25.2:
     resolution: {integrity: sha512-bkTVZkK3Vi7N7eX2FUBnqKhCjTaeRLkhvY8H6zolatbSTtjPPdxyUzhE3C29sIBYRRq1kQHSduFgCHKg5VF3Jw==}

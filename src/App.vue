@@ -1,14 +1,26 @@
 <template>
-  <main class="container-lg px-3 my-5 markdown-body">
+  <header :class="$style.header">
+    <nav class="container-fluid">
+      <ul>
+        <li>
+          <a href="/">
+            <strong>播放器</strong>
+          </a>
+        </li>
+      </ul>
+      <ul></ul>
+    </nav>
+  </header>
+  <main class="container">
     <p v-if="hasErr" style="color: red;font-weight: bolder;">{{ hasErr }}</p>
 
-    <div id="in" v-if="!finish" style="display: flex;gap: 10px;margin-bottom: 10px;">
-      <input type="text" v-model="url" v-if="showUrlIn" />
-      <button @click="Form">播放</button>
+    <div id="in" v-if="!finish" style="display: flex;">
+      <input type="text" v-model="url" v-if="showUrlIn" style="max-width: 20em;" />
+      <button @click="Form" style="max-width: 5em;">播放</button>
     </div>
     <div v-if="!root">
       <div v-show="finish">
-        <div ref="dplayer"></div>
+        <d-player :danmaku="danmaku" :vtt="zm" :url="url" v-if="done" />
         <br />
       </div>
       <div :class="$style.form" v-if="!finish">
@@ -60,9 +72,7 @@ import { bilZm2vtt, getbilCidS, getBilZm, getDM, getZm } from './utils/bilapi';
 import { dplayerDm, getDm as getBahaDm } from './utils/baha';
 import waitgroup from './utils/WaitGroup';
 import selVue from './components/sel.vue';
-import { DPlayer, DPlayerOptions, DPlayerEvents, dp } from './types/Dplayer';
 
-const dplayer = ref<HTMLElement | null>(null);
 const bilDanmaku = ref('');
 const url = ref("")
 const bahaDm = ref("")
@@ -75,6 +85,7 @@ const dmcidlist = ref([] as { v: string, key: string }[])
 const zmlist = ref([] as { v: string, key: string }[])
 const danmaku = ref("")
 const hasErr = ref("")
+const done = ref(false)
 
 let u = new URL(location.href)
 const file = u.searchParams.get('video')
@@ -95,6 +106,7 @@ const Form = warpErr(async () => {
     return
   }
   finish.value = true
+  done.value = false
   let has = false
   if (bilDanmaku.value != "") {
     has = true
@@ -123,11 +135,7 @@ const Form = warpErr(async () => {
     addDm(danmaku, dm)
   }
   await wait.wait()
-  if (!(dplayer.value instanceof HTMLElement)) {
-    console.warn("dplayer is not find")
-    return
-  }
-  newPlayer(danmaku.value, zm.value, dplayer.value, url.value)
+  done.value = true
 })
 
 let zmsetdo = false
@@ -171,48 +179,7 @@ const dmCidset = warpErr(async (cid: string) => {
 })
 
 function newPlayer(danmaku: string, vtt: string, dplayer: HTMLElement, url: string) {
-  let [dmlink, vttlink] = ["", ""]
-  if (danmaku != "") {
-    let blob = new Blob([danmaku])
-    dmlink = URL.createObjectURL(blob)
-  }
-  if (vtt != "") {
-    let blob = new Blob([vtt])
-    vttlink = URL.createObjectURL(blob)
-  }
-  let d = newDp(url, dmlink, vttlink, dplayer)
-  d.on("play" as DPlayerEvents, () => {
-    dmlink != "" && URL.revokeObjectURL(dmlink)
-    vttlink != "" && URL.revokeObjectURL(vttlink)
-  })
-  function newDp(url: string, danmaku: string, vtt: string, dom: HTMLElement): dp {
-    try {
-      new URL(url)
-    } catch (e) {
-      url = "./files/" + url
-    }
-    let o = {
-      container: dom,
-      video: {
-        url: url,
-      },
-    } as DPlayerOptions;
-    if (danmaku != "") {
-      o.danmaku = {
-        addition: [danmaku],
-        id: "",
-        api: "",
-      }
-    }
-    if (vtt != "") {
-      o.subtitle = {
-        url: vtt,
-        bottom: "5%",
-        fontSize: "4vmin"
-      }
-    }
-    return new DPlayer(o)
-  }
+
 }
 
 function addDm(danmaku: Ref<string>, dm: dplayerDm) {
@@ -258,17 +225,21 @@ textarea.text {
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 10px;
 }
 
 .input {
   display: flex;
-  gap: 10px;
+  column-gap: 10px;
   flex-wrap: wrap;
 }
 
 .input > input {
   max-width: 15em;
+}
+
+.header {
+  border-bottom: 1px solid #e5e5e5;
+  margin-bottom: 30px;
 }
 </style>
 
@@ -283,8 +254,4 @@ textarea.text {
   text-shadow: rgb(0 0 0) 1px 0px 1px, rgb(0 0 0) 0px 1px 1px,
     rgb(0 0 0) 0px -1px 1px, rgb(0 0 0) -1px 0px 1px !important;
 }
-</style>
-
-<style>
-@import url(https://cdn.jsdelivr.net/gh/xmdhs/searchqanda/style.css);
 </style>
