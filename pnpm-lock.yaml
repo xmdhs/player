@@ -9,12 +9,14 @@ specifiers:
   typescript: ^4.6.2
   vite: ^2.8.5
   vue: ^3.2.31
+  vue-router: ^4.0.14
   vue-tsc: ^0.3.0
 
 dependencies:
   '@picocss/pico': 1.4.4
   '@plussub/srt-vtt-parser': 1.1.0
   vue: 3.2.31
+  vue-router: 4.0.14_vue@3.2.31
 
 devDependencies:
   '@types/dplayer': 1.25.2
@@ -167,6 +169,10 @@ packages:
     dependencies:
       '@vue/compiler-dom': 3.2.31
       '@vue/shared': 3.2.31
+    dev: false
+
+  /@vue/devtools-api/6.1.0:
+    resolution: {integrity: sha512-1FtbxEEHN70WGJl1b/h8nLmyN+tOHONNsNLvgVEXF/L/vBrRqQZ0kF+dev1YAz3OtxsQ1sV/vPLKwRlq1axrgg==}
     dev: false
 
   /@vue/reactivity-transform/3.2.31:
@@ -937,6 +943,15 @@ packages:
       vscode-pug-languageservice: 0.27.24
       vscode-typescript-languageservice: 0.27.25
     dev: true
+
+  /vue-router/4.0.14_vue@3.2.31:
+    resolution: {integrity: sha512-wAO6zF9zxA3u+7AkMPqw9LjoUCjSxfFvINQj3E/DceTt6uEz1XZLraDhdg2EYmvVwTBSGlLYsUw8bDmx0754Mw==}
+    peerDependencies:
+      vue: ^3.2.0
+    dependencies:
+      '@vue/devtools-api': 6.1.0
+      vue: 3.2.31
+    dev: false
 
   /vue-tsc/0.3.0_typescript@4.6.2:
     resolution: {integrity: sha512-zaDRZBxwRIz1XjhNP92FqugG71st6BUMnA2EwPeXrAyzbEYVRz6TezNFceYl3QYqqN8CtaxbqUhaQEDj/ntoCA==}
