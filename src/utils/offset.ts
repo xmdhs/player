@@ -4,7 +4,7 @@ import { bilZm2vtt, bilZmR } from './bilapi'
 
 export function dmoffset(dm: dplayerDm, offset: number): dplayerDm {
     for (const v of dm.data) {
-        v[0] += offset * 1000
+        v[0] += offset / 1000
     }
     return dm
 }
