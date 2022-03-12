@@ -1,6 +1,6 @@
 import { dplayerDm } from './interface'
 import { parse } from '@plussub/srt-vtt-parser'
-import { vtttime } from "./vtttime"
+import { vtttime } from "./vtt"
 
 export function dmoffset(dm: dplayerDm, offset: number): dplayerDm {
     for (const v of dm.data) {
