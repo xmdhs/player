@@ -1,4 +1,4 @@
-import { cors } from "./bilapi"
+import { dplayerDm, cors } from "./interface"
 
 
 const dmapi = cors + `https://ani.gamer.com.tw/ajax/danmuGet.php?`
@@ -38,22 +38,11 @@ interface bahaDM {
     sn: number,
 }
 
-export interface dplayerDm {
-    code: number,
-    data: [
-        number,
-        number,
-        number,
-        string,
-        string,
-    ][]
-}
-
 
 
 function color2Number(color: string) {
     if (color[0] === '#') {
-        color = color.substr(1);
+        color = color.substring(1)
     }
     if (color.length === 3) {
         color = `${color[0]}${color[0]}${color[1]}${color[1]}${color[2]}${color[2]}`;

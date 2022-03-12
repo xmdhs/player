@@ -28,6 +28,7 @@
           <input type="text" v-model.trim="bilDanmaku" placeholder="弹幕 bvid / epid" />
           <input type="tel" v-model.trim="bahaDm" placeholder="baha 弹幕 sn" />
           <input type="text" v-model.trim="bzimu" placeholder="字幕 bvid / epid" />
+          <input type="text" v-model.trim="offset" placeholder="偏移（单位 ms）" />
         </div>
         <textarea
           v-model="danmaku"
@@ -69,9 +70,11 @@
 <script setup lang="ts">
 import { Ref, ref } from 'vue'
 import { bilZm2vtt, getbilCidS, getBilZm, getDM, getZm } from './utils/bilapi';
-import { dplayerDm, getDm as getBahaDm } from './utils/baha';
+import { getDm as getBahaDm } from './utils/baha';
+import { dplayerDm } from './utils/interface';
 import waitgroup from './utils/WaitGroup';
 import selVue from './components/sel.vue';
+import { dmoffset, vttoffset } from './utils/offset';
 
 const bilDanmaku = ref('');
 const url = ref("")
@@ -86,6 +89,7 @@ const zmlist = ref([] as { v: string, key: string }[])
 const danmaku = ref("")
 const hasErr = ref("")
 const done = ref(false)
+const offset = ref(0)
 
 let u = new URL(location.href)
 const file = u.searchParams.get('video')
@@ -107,9 +111,7 @@ const Form = warpErr(async () => {
   }
   finish.value = true
   done.value = false
-  let has = false
   if (bilDanmaku.value != "") {
-    has = true
     wait.add(1)
     const r = await getbilCidS(bilDanmaku.value)
     let l: { v: string, key: string }[] = []
@@ -120,7 +122,6 @@ const Form = warpErr(async () => {
     dmcidlist.value = l
   }
   if (bzimu.value != "") {
-    has = true
     wait.add(1)
     const r = await getbilCidS(bzimu.value)
     let l: { v: string, key: string }[] = []
@@ -135,6 +136,12 @@ const Form = warpErr(async () => {
     addDm(danmaku, dm)
   }
   await wait.wait()
+
+  if (offset.value != 0) {
+    danmaku.value = JSON.stringify(dmoffset(JSON.parse(danmaku.value), offset.value))
+    zm.value = vttoffset(zm.value, offset.value)
+  }
+
   done.value = true
 })
 
@@ -160,7 +167,7 @@ const zmset = warpErr(async (v: string) => {
     zmlist.value = []
     zmsetdo = false
     let r = await getBilZm(v)
-    zm.value = bilZm2vtt(r)
+    zm.value = bilZm2vtt(r.body)
   }
   wait.done()
 })
@@ -177,10 +184,6 @@ const dmCidset = warpErr(async (cid: string) => {
   addDm(danmaku, d)
   wait.done()
 })
-
-function newPlayer(danmaku: string, vtt: string, dplayer: HTMLElement, url: string) {
-
-}
 
 function addDm(danmaku: Ref<string>, dm: dplayerDm) {
   let d: dplayerDm = {

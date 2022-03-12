@@ -1,4 +1,5 @@
-export const cors = 'https://quiet-disk-7a77.xmdhs.workers.dev/'
+import { cors } from "./interface"
+
 const cidapi = cors + `https://api.bilibili.com/x/player/pagelist?`
 const zmapi = cors + `https://api.bilibili.com/x/player/v2?`
 const dmapi = `https://auto.xmdhs.com/getdm?`
@@ -117,7 +118,7 @@ export async function getBilZm(url: string): Promise<bilZmR> {
     return j
 }
 
-interface bilZmR {
+export interface bilZmR {
     body: {
         content: string
         from: number
@@ -126,9 +127,9 @@ interface bilZmR {
     }[]
 }
 
-export function bilZm2vtt(zm: bilZmR): string {
+export function bilZm2vtt(zm: bilZmR["body"]): string {
     let s = "WEBVTT\n\n"
-    zm.body.forEach(b => {
+    zm.forEach(b => {
         s += `${vtttime(b.from * 1000)} --> ${vtttime(b.to * 1000)}\n${b.content}\n\n`
     })
     return s
