@@ -1,6 +1,6 @@
 import { dplayerDm } from './interface'
 import { parse } from '@plussub/srt-vtt-parser'
-import { bilZm2vtt, bilZmR } from './bilapi'
+import { bilZmR, vtttime } from './bilapi'
 
 export function dmoffset(dm: dplayerDm, offset: number): dplayerDm {
     for (const v of dm.data) {
@@ -12,14 +12,9 @@ export function dmoffset(dm: dplayerDm, offset: number): dplayerDm {
 export function vttoffset(vtt: string, offset: number): string {
     const data = parse(vtt)
     let v: bilZmR["body"] = []
-    let i = 0
+    let s = "WEBVTT\n\n"
     for (const e of data.entries) {
-        v.push({
-            content: e.text,
-            from: e.from += offset,
-            to: e.to += offset,
-            location: i++
-        })
+        s += `${vtttime(e.from + offset)} --> ${vtttime(e.to + offset)}\n${e.text}\n\n`
     }
-    return bilZm2vtt(v)
+    return s
 }

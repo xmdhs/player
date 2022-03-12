@@ -134,7 +134,7 @@ export function bilZm2vtt(zm: bilZmR["body"]): string {
     })
     return s
 }
-function vtttime(time: number) {
+export function vtttime(time: number) {
     // 毫秒转换成时分秒表示
     let ms = time % 1000;
     ms = Math.round(ms)

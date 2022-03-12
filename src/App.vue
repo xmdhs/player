@@ -89,7 +89,7 @@ const zmlist = ref([] as { v: string, key: string }[])
 const danmaku = ref("")
 const hasErr = ref("")
 const done = ref(false)
-const offset = ref<string | number>("")
+const offset = ref("")
 
 let u = new URL(location.href)
 const file = u.searchParams.get('video')
@@ -138,8 +138,12 @@ const Form = warpErr(async () => {
   await wait.wait()
 
   if (!isNaN(Number(offset.value)) && Number(offset.value) != 0) {
-    danmaku.value = JSON.stringify(dmoffset(JSON.parse(danmaku.value), offset.value as number))
-    zm.value = vttoffset(zm.value, offset.value as number)
+    if (danmaku.value != "") {
+      danmaku.value = JSON.stringify(dmoffset(JSON.parse(danmaku.value), Number(offset.value)))
+    }
+    if (zm.value != "") {
+      zm.value = vttoffset(zm.value, Number(offset.value))
+    }
   }
 
   done.value = true
