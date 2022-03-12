@@ -50,7 +50,7 @@
 </template>
 
 <script setup lang="ts">
-import { Ref, ref, watch } from 'vue'
+import { Ref, ref, watchEffect } from 'vue'
 import { bilZm2vtt, getbilCidS, getBilZm, getDM, getZm } from '../utils/bilapi';
 import { getDm as getBahaDm } from '../utils/baha';
 import { dplayerDm } from '../utils/interface';
@@ -75,7 +75,7 @@ const props = defineProps<{
     url: string
 }>();
 
-watch(props, () => {
+watchEffect(() => {
     if (props.url != "") {
         document.title = props.url
     }
