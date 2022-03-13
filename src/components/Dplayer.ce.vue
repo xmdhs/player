@@ -4,7 +4,7 @@
 
 <script setup lang="ts">
 import { onUnmounted, ref, watchEffect } from 'vue';
-import { DPlayer, DPlayerOptions, DPlayerEvents, dp } from '../types/Dplayer';
+import { DPlayer, DPlayerOptions, dp } from '../types/Dplayer';
 
 const dplayer = ref<HTMLElement | null>(null);
 
@@ -24,12 +24,17 @@ watchEffect(() => {
     }
 })
 
+let dmlink: string
+let vttlink: string
+
 onUnmounted(() => {
     d?.destroy();
+    dmlink != "" && URL.revokeObjectURL(dmlink)
+    vttlink != "" && URL.revokeObjectURL(vttlink)
 });
 
 function newPlayer(danmaku: string, vtt: string, dplayer: HTMLElement, url: string) {
-    let [dmlink, vttlink] = ["", ""]
+    [dmlink, vttlink] = ["", ""]
     if (danmaku != "") {
         let blob = new Blob([danmaku])
         dmlink = URL.createObjectURL(blob)
@@ -39,10 +44,6 @@ function newPlayer(danmaku: string, vtt: string, dplayer: HTMLElement, url: stri
         vttlink = URL.createObjectURL(blob)
     }
     let d = newDp(url, dmlink, vttlink, dplayer)
-    d.on("play" as DPlayerEvents, () => {
-        dmlink != "" && URL.revokeObjectURL(dmlink)
-        vttlink != "" && URL.revokeObjectURL(vttlink)
-    })
     return d
     function newDp(url: string, danmaku: string, vtt: string, dom: HTMLElement): dp {
         try {
