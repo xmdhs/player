@@ -17,7 +17,7 @@ const props = defineProps<{
 let d: dp
 
 watchEffect(() => {
-    d?.destroy();
+    clean()
     if (dplayer.value) {
         dplayer.value.className = ""
         d = newPlayer(props.danmaku, props.vtt, dplayer.value, props.url);
@@ -28,10 +28,14 @@ let dmlink: string
 let vttlink: string
 
 onUnmounted(() => {
+    clean()
+});
+
+function clean() {
     d?.destroy();
     dmlink != "" && URL.revokeObjectURL(dmlink)
     vttlink != "" && URL.revokeObjectURL(vttlink)
-});
+}
 
 function newPlayer(danmaku: string, vtt: string, dplayer: HTMLElement, url: string) {
     [dmlink, vttlink] = ["", ""]
