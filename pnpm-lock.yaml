@@ -3,7 +3,6 @@ lockfileVersion: 5.3
 specifiers:
   '@picocss/pico': ^1.4.4
   '@plussub/srt-vtt-parser': ^1.1.0
-  '@types/dplayer': ^1.25.2
   '@types/golang-wasm-exec': ^1.15.0
   '@vitejs/plugin-vue': ^1.10.2
   typescript: ^4.6.2
@@ -19,7 +18,6 @@ dependencies:
   vue-router: 4.0.14_vue@3.2.31
 
 devDependencies:
-  '@types/dplayer': 1.25.2
   '@types/golang-wasm-exec': 1.15.0
   '@vitejs/plugin-vue': 1.10.2_vite@2.8.5
   typescript: 4.6.2
@@ -69,10 +67,6 @@ packages:
   /@plussub/srt-vtt-parser/1.1.0:
     resolution: {integrity: sha512-wDhuvXmTC6E9lxbwX/ashWpvFTH2v5MRT6LqTlGC6+fmragETMzcCubaEiVWWiNVT+HexKe2F6s421OFmfrjiw==}
     dev: false
-
-  /@types/dplayer/1.25.2:
-    resolution: {integrity: sha512-bkTVZkK3Vi7N7eX2FUBnqKhCjTaeRLkhvY8H6zolatbSTtjPPdxyUzhE3C29sIBYRRq1kQHSduFgCHKg5VF3Jw==}
-    dev: true
 
   /@types/golang-wasm-exec/1.15.0:
     resolution: {integrity: sha512-FrL97mp7WW8LqNinVkzTVKOIQKuYjQqgucnh41+1vRQ+bf1LT8uh++KRf9otZPXsa6H1p8ruIGz1BmCGttOL6Q==}

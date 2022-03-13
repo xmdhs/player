@@ -15,6 +15,8 @@ const props = defineProps<{
 }>();
 
 let d: dp
+let dmlink: string
+let vttlink: string
 
 watchEffect(() => {
     clean()
@@ -23,9 +25,6 @@ watchEffect(() => {
         d = newPlayer(props.danmaku, props.vtt, dplayer.value, props.url);
     }
 })
-
-let dmlink: string
-let vttlink: string
 
 onUnmounted(() => {
     clean()
