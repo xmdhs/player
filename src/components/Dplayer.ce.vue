@@ -74,11 +74,30 @@ function newPlayer(danmaku: string, vtt: string, dplayer: HTMLElement, url: stri
                 fontSize: "4vmin"
             }
         }
+        if (url.endsWith(".m3u8") && Hls.isSupported()) {
+            o.video!.type = "customHls"
+            o.video!.customType = {
+                customHls: function (video: HTMLVideoElement, player: any) {
+                    const hls = new Hls();
+                    hls.loadSource(video.src);
+                    hls.attachMedia(video);
+                },
+
+            }
+        }
+
         return new DPlayer(o)
     }
 }
 
 
+</script>
+
+<script lang="ts">
+declare var Hls: {
+    isSupported: () => boolean
+    new (): any
+}
 
 </script>
 
