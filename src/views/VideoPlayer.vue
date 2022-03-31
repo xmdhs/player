@@ -10,6 +10,7 @@
             <div :class="$style.input">
                 <input type="text" v-model.trim="bilDanmaku" placeholder="弹幕 bvid / epid" />
                 <input type="tel" v-model.trim="bahaDm" placeholder="baha 弹幕 sn" />
+                <input type="text" v-model.trim="acplaySearchWord" placeholder="弹弹play 弹幕搜索" />
                 <input type="text" v-model.trim="bzimu" placeholder="字幕 bvid / epid" />
                 <input type="text" v-model.trim="offset" placeholder="偏移（单位 ms）" />
             </div>
@@ -46,6 +47,15 @@
             @set="zmset"
             v-if="zmlist.length != 0"
         ></selVue>
+
+        <selVue
+            title="标题"
+            value="id"
+            msg="选择弹幕"
+            :list="acplist"
+            @set="acpSet"
+            v-if="acplist.length != 0"
+        ></selVue>
     </div>
 </template>
 
@@ -57,6 +67,8 @@ import { dplayerDm } from '../utils/interface';
 import waitgroup from '../utils/WaitGroup';
 import selVue from '../components/sel.vue';
 import { dmoffset, vttoffset } from '../utils/offset';
+import { searchanime, getDm as getAcpDm, SearchObject } from '../utils/acplay';
+
 
 const bilDanmaku = ref('');
 const bahaDm = ref("")
@@ -70,6 +82,8 @@ const hasErr = ref("")
 const videodone = ref(false)
 const offset = ref("")
 
+const acplaySearchWord = ref("")
+const acplist = ref([] as { v: string, key: string }[])
 
 const props = defineProps<{
     url: string
@@ -80,6 +94,8 @@ watchEffect(() => {
         document.title = props.url
     }
 })
+
+let acpSearchO = {} as SearchObject
 
 const wait = new waitgroup()
 
@@ -110,6 +126,17 @@ const Form = warpErr(async () => {
         let dm = await getBahaDm(Number(bahaDm.value))
         addDm(danmaku, dm)
     }
+    if (acplaySearchWord.value != "") {
+        wait.add(1)
+        acpSearchO = await searchanime(acplaySearchWord.value)
+        let l: { v: string, key: string }[] = []
+        acpSearchO.animes.forEach(v => {
+            l.push({ v: String(v.animeId), key: String(v.animeTitle) })
+        })
+        acplist.value = l
+    }
+
+
     await wait.wait()
 
     if (!isNaN(Number(offset.value)) && Number(offset.value) != 0) {
@@ -123,6 +150,34 @@ const Form = warpErr(async () => {
 
     videodone.value = true
 })
+
+
+let acpSetDo = false
+const acpSet = warpErr(async (v: string) => {
+    if (!acpSetDo) {
+        acplist.value = []
+        let animeO = acpSearchO?.animes.find(vv => String(vv.animeId) == v)
+        if (!animeO) {
+            console.log("没有找到", acpSearchO)
+            wait.done()
+            return
+        }
+        let l: { v: string, key: string }[] = []
+        animeO.episodes.forEach(v => {
+            l.push({ v: String(v.episodeId), key: String(v.episodeTitle) })
+        })
+        acplist.value = l
+        acpSetDo = true
+        return
+    } else {
+        acpSetDo = false
+        acplist.value = []
+        let d = await getAcpDm(Number(v))
+        addDm(danmaku, d)
+        wait.done()
+    }
+})
+
 
 let zmsetdo = false
 const zmset = warpErr(async (v: string) => {
@@ -147,8 +202,8 @@ const zmset = warpErr(async (v: string) => {
         zmsetdo = false
         let r = await getBilZm(v)
         zm.value = bilZm2vtt(r.body)
+        wait.done()
     }
-    wait.done()
 })
 
 const dmCidset = warpErr(async (cid: string) => {
