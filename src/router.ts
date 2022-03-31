@@ -31,8 +31,10 @@ const routes: RouteRecordRaw[] = [
     }
 ]
 
+const hash = location.host == "auto.xmdhs.com" || location.host == "auto.xmdhs.top" ? true : false
+
 const router = createRouter({
-    history: createWebHistory(),
+    history: hash ? createWebHashHistory("/tgdown/") : createWebHistory(),
     scrollBehavior: (to, from, savedPosition) => {
         if (savedPosition) {
             return savedPosition
