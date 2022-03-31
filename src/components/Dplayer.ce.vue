@@ -17,6 +17,7 @@ const props = defineProps<{
 let d: dp
 let dmlink: string
 let vttlink: string
+let hls: any
 
 watchEffect(() => {
     clean()
@@ -30,7 +31,6 @@ onUnmounted(() => {
     clean()
 });
 
-let hls: any
 
 function clean() {
     hls?.destroy();
