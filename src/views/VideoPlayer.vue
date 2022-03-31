@@ -134,6 +134,9 @@ const Form = warpErr(async () => {
             l.push({ v: String(v.animeId), key: String(v.animeTitle) })
         })
         acplist.value = l
+        if (l.length == 0){
+            wait.done()
+        }
     }
 
 

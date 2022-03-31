@@ -1,7 +1,7 @@
 import { dplayerDm, cors } from "./interface"
 
-const commentApiAddr = cors + `https://api.acplay.net/api/v2/comment`
-const searchApiAddr = cors + `https://api.acplay.net/api/v2/search/episodes?`
+const commentApiAddr = `https://cors.eu.org/` + `https://api.acplay.net/api/v2/comment`
+const searchApiAddr = `https://cors.eu.org/` + `https://api.acplay.net/api/v2/search/episodes?`
 
 export async function searchanime(key: string): Promise<SearchObject> {
     let u = new URLSearchParams()
