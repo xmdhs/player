@@ -30,6 +30,8 @@ onUnmounted(() => {
     clean()
 });
 
+let hls: any
+
 function clean() {
     hls?.destroy();
     d?.destroy();
@@ -37,7 +39,6 @@ function clean() {
     vttlink != "" && URL.revokeObjectURL(vttlink)
 }
 
-let hls: any
 
 function newPlayer(danmaku: string, vtt: string, dplayer: HTMLElement, url: string) {
     [dmlink, vttlink] = ["", ""]
