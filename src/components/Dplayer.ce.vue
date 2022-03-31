@@ -31,10 +31,13 @@ onUnmounted(() => {
 });
 
 function clean() {
+    hls?.destroy();
     d?.destroy();
     dmlink != "" && URL.revokeObjectURL(dmlink)
     vttlink != "" && URL.revokeObjectURL(vttlink)
 }
+
+let hls: any
 
 function newPlayer(danmaku: string, vtt: string, dplayer: HTMLElement, url: string) {
     [dmlink, vttlink] = ["", ""]
@@ -78,7 +81,7 @@ function newPlayer(danmaku: string, vtt: string, dplayer: HTMLElement, url: stri
             o.video!.type = "customHls"
             o.video!.customType = {
                 customHls: function (video: HTMLVideoElement, player: any) {
-                    const hls = new Hls();
+                    hls = new Hls();
                     hls.loadSource(video.src);
                     hls.attachMedia(video);
                 },
