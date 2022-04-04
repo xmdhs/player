@@ -1,18 +1,22 @@
 import { dplayerDm, cors } from "./interface"
 
-const commentApiAddr = `https://cors.eu.org/` + `https://api.acplay.net/api/v2/comment`
-const searchApiAddr = `https://cors.eu.org/` + `https://api.acplay.net/api/v2/search/episodes?`
+const commentApiAddr = cors + `https://api.acplay.net/api/v2/comment`
+const searchApiAddr = cors + `https://api.acplay.net/api/v2/search/episodes?`
 
 export async function searchanime(key: string): Promise<SearchObject> {
     let u = new URLSearchParams()
     u.append('anime', key)
-    let f = await fetch(searchApiAddr + u.toString())
+    let f = await fetch(searchApiAddr + u.toString(), {
+        referrerPolicy: "origin"
+    })
     let j = await f.json() as SearchObject
     return j
 }
 
 export async function getDm(episodeId: number): Promise<dplayerDm> {
-    const f = await fetch(`${commentApiAddr}/${episodeId}?withRelated=true&chConvert=1`)
+    const f = await fetch(`${commentApiAddr}/${episodeId}?withRelated=true&chConvert=1`, {
+        referrerPolicy: "origin"
+    })
     const j = await f.json() as CommentObject
     let dm: dplayerDm = {
         code: 0,

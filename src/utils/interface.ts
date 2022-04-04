@@ -9,4 +9,4 @@ export interface dplayerDm {
         string,
     ][]
 }
-export const cors = 'https://quiet-disk-7a77.xmdhs.workers.dev/'
+export const cors = 'https://cors.xmdhs.com/'
