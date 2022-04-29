@@ -88,7 +88,7 @@ async function fetchAndInstantiate() {
     if (has) {
         return
     }
-    const response = await fetch("https://cdn.jsdelivr.net/gh/xxmdhs/ip/ip.wasm");
+    const response = await fetch("https://static.xmdhs.com/ip@1.wasm");
     const buffer = await response.arrayBuffer();
     const obj = await WebAssembly.instantiate(buffer, go.importObject)
     go.run(obj.instance);
