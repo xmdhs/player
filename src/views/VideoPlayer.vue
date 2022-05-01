@@ -115,10 +115,12 @@ const Form = warpErr(async () => {
 
     let limit = Number(dmlimit.value)
     limit = isNaN(limit) ? 0 : limit
-    limit && limitDm(tempdm, limit)
+    if (limit > 0) {
+        tempdm = limitDm(tempdm, limit)
+    }
 
     if (!isNaN(Number(offset.value)) && Number(offset.value) != 0) {
-        if (danmaku.value != "") {
+        if (tempdm.data.length > 0) {
             danmaku.value = JSON.stringify(dmoffset(tempdm, Number(offset.value)))
         }
         if (zm.value != "") {
