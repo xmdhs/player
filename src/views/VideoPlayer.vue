@@ -13,49 +13,18 @@
                 <input type="text" v-model.trim="acplaySearchWord" placeholder="弹弹play 弹幕搜索" />
                 <input type="text" v-model.trim="bzimu" placeholder="字幕 bvid / epid" />
                 <input type="text" v-model.trim="offset" placeholder="偏移（单位 ms）" />
+                <input type="tel" v-model.trim="dmlimit" placeholder="弹幕数量上限" />
             </div>
-            <textarea
-                v-model="danmaku"
-                autocomplete="on"
-                :class="$style.text"
-                cols="5"
-                rows="5"
-                placeholder="dplayer 格式弹幕"
-            ></textarea>
-            <textarea
-                v-model="zm"
-                autocomplete="on"
-                :class="$style.text"
-                cols="5"
-                rows="5"
-                placeholder="vtt 格式字幕"
-            ></textarea>
+            <textarea v-model="danmaku" autocomplete="on" :class="$style.text" cols="5" rows="5"
+                placeholder="dplayer 格式弹幕"></textarea>
+            <textarea v-model="zm" autocomplete="on" :class="$style.text" cols="5" rows="5"
+                placeholder="vtt 格式字幕"></textarea>
         </div>
-        <selVue
-            title="标题"
-            value="cid"
-            msg="选择弹幕 cid"
-            :list="dmcidlist"
-            @set="dmCidset"
-            v-if="dmcidlist.length != 0"
-        ></selVue>
-        <selVue
-            title="标题"
-            value="cid"
-            msg="选择字幕"
-            :list="zmlist"
-            @set="zmset"
-            v-if="zmlist.length != 0"
-        ></selVue>
+        <selVue title="标题" value="cid" msg="选择弹幕 cid" :list="dmcidlist" @set="dmCidset" v-if="dmcidlist.length != 0">
+        </selVue>
+        <selVue title="标题" value="cid" msg="选择字幕" :list="zmlist" @set="zmset" v-if="zmlist.length != 0"></selVue>
 
-        <selVue
-            title="标题"
-            value="id"
-            msg="选择弹幕"
-            :list="acplist"
-            @set="acpSet"
-            v-if="acplist.length != 0"
-        ></selVue>
+        <selVue title="标题" value="id" msg="选择弹幕" :list="acplist" @set="acpSet" v-if="acplist.length != 0"></selVue>
     </div>
 </template>
 
@@ -84,6 +53,9 @@ const offset = ref("")
 
 const acplaySearchWord = ref("")
 const acplist = ref([] as { v: string, key: string }[])
+const dmlimit = ref("")
+
+let tempdm: dplayerDm = { code: 0, data: [] }
 
 const props = defineProps<{
     url: string
@@ -102,6 +74,7 @@ const wait = new waitgroup()
 const Form = warpErr(async () => {
     finish.value = true
     videodone.value = false
+
     if (bilDanmaku.value != "") {
         wait.add(1)
         const r = await getbilCidS(bilDanmaku.value)
@@ -124,7 +97,7 @@ const Form = warpErr(async () => {
     }
     if (!isNaN(Number(bahaDm.value)) && Number(bahaDm.value) != 0) {
         let dm = await getBahaDm(Number(bahaDm.value))
-        addDm(danmaku, dm)
+        addDm(tempdm, dm)
     }
     if (acplaySearchWord.value != "") {
         wait.add(1)
@@ -134,17 +107,19 @@ const Form = warpErr(async () => {
             l.push({ v: String(v.animeId), key: String(v.animeTitle) })
         })
         acplist.value = l
-        if (l.length == 0){
+        if (l.length == 0) {
             wait.done()
         }
     }
-
-
     await wait.wait()
+
+    let limit = Number(dmlimit.value)
+    limit = isNaN(limit) ? 0 : limit
+    limit && limitDm(tempdm, limit)
 
     if (!isNaN(Number(offset.value)) && Number(offset.value) != 0) {
         if (danmaku.value != "") {
-            danmaku.value = JSON.stringify(dmoffset(JSON.parse(danmaku.value), Number(offset.value)))
+            danmaku.value = JSON.stringify(dmoffset(tempdm, Number(offset.value)))
         }
         if (zm.value != "") {
             zm.value = vttoffset(zm.value, Number(offset.value))
@@ -176,7 +151,7 @@ const acpSet = warpErr(async (v: string) => {
         acpSetDo = false
         acplist.value = []
         let d = await getAcpDm(Number(v))
-        addDm(danmaku, d)
+        addDm(tempdm, d)
         wait.done()
     }
 })
@@ -218,23 +193,26 @@ const dmCidset = warpErr(async (cid: string) => {
         wait.done()
         return
     }
-    addDm(danmaku, d)
+    addDm(tempdm, d)
     wait.done()
 })
 
-function addDm(danmaku: Ref<string>, dm: dplayerDm) {
-    let d: dplayerDm = {
-        code: 0,
-        data: []
+function addDm(danmaku: dplayerDm, dm: dplayerDm) {
+    danmaku.data.push(...dm.data)
+}
+
+function limitDm(danmaku: dplayerDm, limit: number): dplayerDm {
+    if (danmaku.data.length < limit) {
+        return danmaku
     }
-    if (danmaku.value != "") {
-        d = JSON.parse(danmaku.value)
+    let l: dplayerDm["data"] = []
+
+    for (let i = 0; i < limit; i++) {
+        const r = Math.floor(Math.random() * danmaku.data.length)
+        l.push(danmaku.data[r])
     }
-    if (dm.data.length == 0) {
-        return
-    }
-    d.data.push(...dm.data)
-    danmaku.value = JSON.stringify(d)
+    danmaku.data = l
+    return danmaku
 }
 
 
@@ -273,7 +251,7 @@ textarea.text {
     flex-wrap: wrap;
 }
 
-.input > input {
+.input>input {
     max-width: 15em;
 }
 </style>
@@ -285,6 +263,7 @@ textarea.text {
     text-shadow: rgb(0 0 0) 1px 0px 1px, rgb(0 0 0) 0px 1px 1px,
         rgb(0 0 0) 0px -1px 1px, rgb(0 0 0) -1px 0px 1px !important;
 }
+
 .dplayer-subtitle {
     text-shadow: rgb(0 0 0) 1px 0px 1px, rgb(0 0 0) 0px 1px 1px,
         rgb(0 0 0) 0px -1px 1px, rgb(0 0 0) -1px 0px 1px !important;
