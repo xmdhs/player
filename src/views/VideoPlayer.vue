@@ -118,15 +118,18 @@ const Form = warpErr(async () => {
     if (limit > 0) {
         tempdm = limitDm(tempdm, limit)
     }
-
-    if (!isNaN(Number(offset.value)) && Number(offset.value) != 0) {
-        if (tempdm.data.length > 0) {
-            danmaku.value = JSON.stringify(dmoffset(tempdm, Number(offset.value)))
-        }
-        if (zm.value != "") {
-            zm.value = vttoffset(zm.value, Number(offset.value))
-        }
+    let offsetn = Number(offset.value)
+    if (!isNaN(offsetn)) {
+        dmoffset(tempdm, offsetn)
     }
+
+    if (tempdm.data.length > 0) {
+        danmaku.value = JSON.stringify(tempdm)
+    }
+    if (zm.value != "") {
+        zm.value = vttoffset(zm.value, Number(offset.value))
+    }
+
 
     videodone.value = true
 })
