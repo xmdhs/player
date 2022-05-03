@@ -220,6 +220,19 @@ function limitDm(danmaku: dplayerDm, limit: number): dplayerDm {
     return danmaku
 }
 
+function deduplicate(danmaku: dplayerDm) {
+    let l: dplayerDm["data"] = []
+    let m = new Map<string, dplayerDm["data"][0]>()
+    danmaku.data.forEach(v => {
+        m.set(v.toString(), v)
+    })
+    m.forEach(v => {
+        l.push(v)
+    })
+    danmaku.data = l
+    return danmaku
+}
+
 
 function warpErr<F extends Function>(f: F): F {
     return async function (...args: any[]) {
