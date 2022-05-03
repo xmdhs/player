@@ -217,6 +217,7 @@ function limitDm(danmaku: dplayerDm, limit: number): dplayerDm {
             i--
             continue
         }
+        s.add(r)
         l.push(danmaku.data[r])
     }
     danmaku.data = l
