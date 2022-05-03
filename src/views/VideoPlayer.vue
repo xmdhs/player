@@ -113,7 +113,6 @@ const Form = warpErr(async () => {
     }
     await wait.wait()
 
-    deduplicate(tempdm)
 
     let limit = Number(dmlimit.value)
     if (!isNaN(limit) && limit > 0) {
@@ -209,25 +208,17 @@ function limitDm(danmaku: dplayerDm, limit: number): dplayerDm {
     if (danmaku.data.length < limit) {
         return danmaku
     }
-    let l: dplayerDm["data"] = []
+    let s = new Set<number>()
 
+    let l: dplayerDm["data"] = []
     for (let i = 0; i < limit; i++) {
         const r = Math.floor(Math.random() * danmaku.data.length)
+        if (s.has(r)) {
+            i--
+            continue
+        }
         l.push(danmaku.data[r])
     }
-    danmaku.data = l
-    return danmaku
-}
-
-function deduplicate(danmaku: dplayerDm) {
-    let l: dplayerDm["data"] = []
-    let m = new Map<string, dplayerDm["data"][0]>()
-    danmaku.data.forEach(v => {
-        m.set(v.toString(), v)
-    })
-    m.forEach(v => {
-        l.push(v)
-    })
     danmaku.data = l
     return danmaku
 }
