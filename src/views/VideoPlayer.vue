@@ -208,20 +208,22 @@ function limitDm(danmaku: dplayerDm, limit: number): dplayerDm {
     if (danmaku.data.length < limit) {
         return danmaku
     }
-    let s = new Set<number>()
-
-    let l: dplayerDm["data"] = []
-    for (let i = 0; i < limit; i++) {
-        const r = Math.floor(Math.random() * danmaku.data.length)
-        if (s.has(r)) {
-            i--
-            continue
-        }
-        s.add(r)
-        l.push(danmaku.data[r])
-    }
-    danmaku.data = l
+    shuffle(danmaku.data)
+    danmaku.data = danmaku.data.slice(0, limit)
     return danmaku
+}
+
+function shuffle(arr: any[]) {
+    let length = arr.length;
+    let random: number;
+    while (0 != length) {
+        random = Math.floor(Math.random() * length)
+        length--;
+        let temp = arr[length];
+        arr[length] = arr[random];
+        arr[random] = temp;
+    }
+    return arr;
 }
 
 
