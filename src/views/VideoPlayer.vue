@@ -113,13 +113,14 @@ const Form = warpErr(async () => {
     }
     await wait.wait()
 
+    deduplicate(tempdm)
+
     let limit = Number(dmlimit.value)
-    limit = isNaN(limit) ? 0 : limit
-    if (limit > 0) {
+    if (!isNaN(limit) && limit > 0) {
         tempdm = limitDm(tempdm, limit)
     }
     let offsetn = Number(offset.value)
-    if (!isNaN(offsetn)) {
+    if (!isNaN(offsetn) && offsetn > 0) {
         dmoffset(tempdm, offsetn)
     }
 
@@ -129,8 +130,6 @@ const Form = warpErr(async () => {
     if (zm.value != "") {
         zm.value = vttoffset(zm.value, Number(offset.value))
     }
-
-
     videodone.value = true
 })
 
