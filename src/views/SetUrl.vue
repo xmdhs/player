@@ -1,13 +1,14 @@
 <template>
-    <div :class="$style.sel">
-        <input type="text" v-model="url" style="max-width: 20em;" />
-        <button @click="Form" style="max-width: 5em;">播放</button>
-    </div>
+    <n-space :align="'baseline'">
+        <n-input size="large" type="text" v-model:value="url" style="min-width: 50em;" />
+        <n-button @click="Form">播放</n-button>
+    </n-space>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { NInput, NButton, NSpace } from 'naive-ui';
 
 const url = ref('');
 
@@ -20,9 +21,3 @@ function Form() {
 }
 </script>
 
-<style module>
-.sel {
-    display: flex;
-    column-gap: 10px;
-}
-</style>

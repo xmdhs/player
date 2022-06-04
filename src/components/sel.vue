@@ -1,31 +1,25 @@
 <template>
-  <p>{{ msg }}</p>
-  <table>
-    <thead>
-      <tr>
-        <th>{{ title }}</th>
-        <th>{{ value }}</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="v in list" :key="v.key">
-        <td>{{ v.key }}</td>
-        <td @click="set(v.v);">
-          <button style="max-width: 15em;">{{ v.v }}</button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <n-h2>{{ msg }}</n-h2>
+  <n-radio-group v-model:value="v">
+    <n-space vertical>
+      <n-radio-button v-for="v in list" :key="v.key" :value="v.v" :label="v.key" />
+    </n-space>
+  </n-radio-group>
 </template>
 
 
 <script setup lang="ts">
+import { NRadioGroup, NRadioButton, NH2, NSpace } from 'naive-ui';
+import { ref, watch } from 'vue';
+
 const props = defineProps<{
   msg: string
   list: { v: string, key: string }[]
   title: string
   value: string
 }>()
+
+const v = ref('');
 
 const emit = defineEmits<{
   (e: 'set', r: string): void
@@ -34,6 +28,9 @@ const emit = defineEmits<{
 const set = (v: string) => {
   emit('set', v)
 }
+
+watch(v, set)
+
 </script>
 
 <style scoped>

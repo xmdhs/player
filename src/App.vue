@@ -1,57 +1,74 @@
 <template>
-    <header :class="$style.header">
-        <nav class="container-fluid">
-            <ul>
-                <li>
-                    <RouterLink to="/">
-                        <strong>播放器</strong>
-                    </RouterLink>
-                </li>
-            </ul>
-            <ul></ul>
-        </nav>
-    </header>
-    <main class="container">
-        <router-view v-slot="{ Component, route }">
-            <keep-alive>
-                <component :is="Component" v-if="route.meta.keepAlive" />
-            </keep-alive>
-            <component :is="Component" v-if="!route.meta.keepAlive" />
-        </router-view>
-    </main>
+    <n-message-provider>
+        <n-layout>
+            <n-layout-header bordered :class="$style.header">
+                <router-link to="/" :class="$style.headerText">
+                    <strong>播放器</strong>
+                </router-link>
+            </n-layout-header>
+            <n-layout-content :class="$style.container" content-style="padding: 24px;">
+                <router-view v-slot="{ Component, route }">
+                    <keep-alive>
+                        <component :is="Component" v-if="route.meta.keepAlive" />
+                    </keep-alive>
+                    <component :is="Component" v-if="!route.meta.keepAlive" />
+                </router-view>
+            </n-layout-content>
+        </n-layout>
+    </n-message-provider>
 </template>
 
 <script setup lang="ts">
-import { RouterView, RouterLink } from 'vue-router';
+import { NMessageProvider, NLayout, NLayoutContent, NLayoutHeader } from 'naive-ui'
+import { RouterView, RouterLink } from 'vue-router'
 </script>
 
 <style module>
-textarea.text {
-    resize: none;
-    max-height: 100px;
+.container {
     width: 100%;
-    overflow: auto;
-    word-break: break-all;
+    margin-right: auto;
+    margin-left: auto;
 }
 
-.form {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
+@media (min-width: 576px) {
+    .container {
+        max-width: 510px;
+        padding-right: 0;
+        padding-left: 0;
+    }
 }
 
-.input {
-    display: flex;
-    column-gap: 10px;
-    flex-wrap: wrap;
+@media (min-width: 768px) {
+    .container {
+        max-width: 700px;
+    }
 }
 
-.input > input {
-    max-width: 15em;
+@media (min-width: 992px) {
+    .container {
+        max-width: 920px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .container {
+        max-width: 1130px;
+    }
+}
+
+.headerText {
+    padding: 1rem 0.5rem;
+    font-size: 20px;
+    cursor: pointer;
+    color: inherit;
+    text-decoration: inherit;
 }
 
 .header {
-    border-bottom: 1px solid #e5e5e5;
-    margin-bottom: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-right: 1rem;
+    padding-left: 1rem;
 }
 </style>

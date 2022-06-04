@@ -1,35 +1,40 @@
 <template>
-    <p v-if="hasErr" style="color: red;font-weight: bolder;">{{ hasErr }}</p>
-    <button @click="Form" style="max-width: 5em;" v-if="!finish">播放</button>
-    <div>
-        <div v-show="finish">
-            <d-player :danmaku="danmaku" :vtt="zm" :url="url" v-if="videodone" />
-            <br />
-        </div>
-        <div :class="$style.form" v-if="!finish">
-            <div :class="$style.input">
-                <input type="text" v-model.trim="bilDanmaku" placeholder="弹幕 bvid / epid" />
-                <input type="tel" v-model.trim="bahaDm" placeholder="baha 弹幕 sn" />
-                <input type="text" v-model.trim="acplaySearchWord" placeholder="弹弹play 弹幕搜索" />
-                <input type="text" v-model.trim="bzimu" placeholder="字幕 bvid / epid" />
-                <input type="text" v-model.trim="offset" placeholder="偏移（单位 ms）" />
-                <input type="tel" v-model.trim="dmlimit" placeholder="弹幕数量上限" />
-            </div>
-            <textarea v-model="danmaku" autocomplete="on" :class="$style.text" cols="5" rows="5"
-                placeholder="dplayer 格式弹幕"></textarea>
-            <textarea v-model="zm" autocomplete="on" :class="$style.text" cols="5" rows="5"
-                placeholder="vtt 格式字幕"></textarea>
-        </div>
-        <selVue title="标题" value="cid" msg="选择弹幕 cid" :list="dmcidlist" @set="dmCidset" v-if="dmcidlist.length != 0">
-        </selVue>
-        <selVue title="标题" value="cid" msg="选择字幕" :list="zmlist" @set="zmset" v-if="zmlist.length != 0"></selVue>
-
-        <selVue title="标题" value="id" msg="选择弹幕" :list="acplist" @set="acpSet" v-if="acplist.length != 0"></selVue>
+    <div v-if="hasErr">
+        <n-alert @click="back" title="Error" type="error">
+            <n-space vertical>
+                {{ hasErr }}
+            </n-space>
+        </n-alert>
     </div>
+
+    <div v-show="finish">
+        <DplayerVue :danmaku="danmaku" :vtt="zm" :url="url" v-if="videodone" />
+        <br />
+    </div>
+    <n-space vertical v-if="!finish">
+        <n-button @click="Form">播放</n-button>
+        <n-space wrap>
+            <n-input size="large" type="text" v-model:value.trim="bilDanmaku" placeholder="弹幕 bvid / epid" />
+            <n-input-number size="large" v-model:value="bahaDm" :show-button="false" placeholder="弹幕数量上限" />
+            <n-input size="large" type="text" v-model:value.trim="acplaySearchWord" placeholder="弹弹play 弹幕搜索" />
+            <n-input size="large" type="text" v-model:value.trim="bzimu" placeholder="字幕 bvid / epid" />
+            <n-input-number size="large" v-model:value="offset" :show-button="false" placeholder="偏移（单位 ms）" />
+            <n-input-number size="large" v-model:value="dmlimit" :show-button="false" placeholder="弹幕数量上限" />
+        </n-space>
+        <n-input :autosize="{ maxRows: 5, minRows: 5 }" type="textarea" v-model:value="danmaku"
+            placeholder="dplayer 格式弹幕" />
+        <n-input :autosize="{ maxRows: 5, minRows: 5 }" type="textarea" v-model:value="zm" placeholder="vtt 格式字幕" />
+    </n-space>
+    <n-space vertical>
+        <n-button @click='back' type="primary" v-if="finish && !videodone">重新输入</n-button>
+        <selVue title="标题" value="cid" msg="选择弹幕 cid" :list="dmcidlist" @set="dmCidset" v-if="dmcidlist.length != 0" />
+        <selVue title="标题" value="cid" msg="选择字幕" :list="zmlist" @set="zmset" v-if="zmlist.length != 0" />
+        <selVue title="标题" value="id" msg="选择弹幕" :list="acplist" @set="acpSet" v-if="acplist.length != 0" />
+    </n-space>
 </template>
 
 <script setup lang="ts">
-import { Ref, ref, watchEffect } from 'vue'
+import { ref, watchEffect } from 'vue'
 import { bilZm2vtt, getbilCidS, getBilZm, getDM, getZm } from '../utils/bilapi';
 import { getDm as getBahaDm } from '../utils/baha';
 import { dplayerDm } from '../utils/interface';
@@ -37,10 +42,12 @@ import waitgroup from '../utils/WaitGroup';
 import selVue from '../components/sel.vue';
 import { dmoffset, vttoffset } from '../utils/offset';
 import { searchanime, getDm as getAcpDm, SearchObject } from '../utils/acplay';
+import DplayerVue from '../components/Dplayer.vue';
+import { NAlert, NButton, NInput, NInputNumber, NSpace, NText } from 'naive-ui'
 
 
 const bilDanmaku = ref('');
-const bahaDm = ref("")
+const bahaDm = ref(null as number | null);
 const bzimu = ref("")
 const finish = ref(false)
 const zm = ref("")
@@ -49,11 +56,11 @@ const zmlist = ref([] as { v: string, key: string }[])
 const danmaku = ref("")
 const hasErr = ref("")
 const videodone = ref(false)
-const offset = ref("")
+const offset = ref(null as number | null)
 
 const acplaySearchWord = ref("")
 const acplist = ref([] as { v: string, key: string }[])
-const dmlimit = ref("")
+const dmlimit = ref(null as number | null)
 
 let tempdm: dplayerDm = { code: 0, data: [] }
 
@@ -238,33 +245,19 @@ function warpErr<F extends Function>(f: F): F {
         }
     } as any
 }
+
+function back() {
+    hasErr.value = ""
+    finish.value = false
+    videodone.value = false
+    acplist.value = []
+    dmcidlist.value = []
+    zmlist.value = []
+}
 </script>
 
 
 <style module>
-textarea.text {
-    resize: none;
-    max-height: 100px;
-    width: 100%;
-    overflow: auto;
-    word-break: break-all;
-}
-
-.form {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-}
-
-.input {
-    display: flex;
-    column-gap: 10px;
-    flex-wrap: wrap;
-}
-
-.input>input {
-    max-width: 15em;
-}
 </style>
 
 <style>
