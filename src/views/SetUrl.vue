@@ -52,6 +52,7 @@ onActivated(() => {
         URL.revokeObjectURL(u);
         u = "";
     }
+    document.title = "播放器"
 });
 
 </script>
