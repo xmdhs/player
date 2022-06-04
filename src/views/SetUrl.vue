@@ -8,7 +8,7 @@
         <n-upload :custom-request="customRequest" style="max-width: 50em;" :show-file-list="false">
             <n-upload-dragger>
                 <n-text style="font-size: 16px">
-                    点击或者拖动文件到该区域观看本地视频
+                    点击或者拖动视频到该区域观看
                 </n-text>
             </n-upload-dragger>
         </n-upload>
