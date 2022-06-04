@@ -15,7 +15,7 @@
         <n-button @click="Form">播放</n-button>
         <n-space wrap>
             <n-input size="large" type="text" v-model:value.trim="bilDanmaku" placeholder="弹幕 bvid / epid" />
-            <n-input-number size="large" v-model:value="bahaDm" :show-button="false" placeholder="弹幕数量上限" />
+            <n-input-number size="large" v-model:value="bahaDm" :show-button="false" placeholder="baha 弹幕 sn" />
             <n-input size="large" type="text" v-model:value.trim="acplaySearchWord" placeholder="弹弹play 弹幕搜索" />
             <n-input size="large" type="text" v-model:value.trim="bzimu" placeholder="字幕 bvid / epid" />
             <n-input-number size="large" v-model:value="offset" :show-button="false" placeholder="偏移（单位 ms）" />
