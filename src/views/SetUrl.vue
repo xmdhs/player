@@ -1,7 +1,7 @@
 <template>
     <n-space vertical>
         <n-space :align="'baseline'">
-            <n-input size="large" type="text" v-model:value="url" style="min-width: 50em;" placeholder="视频直链" />
+            <n-input size="large" type="text" v-model:value="url" placeholder="视频直链" />
             <n-button @click="Form">播放</n-button>
         </n-space>
 
