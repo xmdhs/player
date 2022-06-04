@@ -1,11 +1,15 @@
 <template>
-    <n-space vertical>
-        <n-space :align="'baseline'">
-            <n-input size="large" type="text" v-model:value="url" placeholder="视频直链" />
-            <n-button @click="Form">播放</n-button>
-        </n-space>
+    <n-space vertical :size="20">
+        <n-grid :cols="8" x-gap="5" item-responsive>
+            <n-gi span="6">
+                <n-input type="text" v-model:value="url" placeholder="视频直链" />
+            </n-gi>
+            <n-gi>
+                <n-button @click="Form">播放</n-button>
+            </n-gi>
+        </n-grid>
 
-        <n-upload :custom-request="customRequest" style="max-width: 50em;" :show-file-list="false">
+        <n-upload :custom-request="customRequest" style="width: 75%;" :show-file-list="false">
             <n-upload-dragger>
                 <n-text style="font-size: 16px">
                     点击或者拖动视频到该区域观看
@@ -18,7 +22,7 @@
 <script setup lang="ts">
 import { onActivated, ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { NInput, NButton, NSpace, NUpload, NUploadDragger, NText, UploadCustomRequestOptions, UploadFileInfo, } from 'naive-ui';
+import { NInput, NButton, NSpace, NUpload, NUploadDragger, NText, UploadCustomRequestOptions, NGrid, NGi } from 'naive-ui';
 
 const url = ref('');
 
