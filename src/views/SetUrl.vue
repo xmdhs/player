@@ -9,13 +9,17 @@
             </n-gi>
         </n-grid>
 
-        <n-upload :custom-request="customRequest" style="width: 75%;" :show-file-list="false">
-            <n-upload-dragger>
-                <n-text style="font-size: 16px">
-                    点击或者拖动视频到该区域观看
-                </n-text>
-            </n-upload-dragger>
-        </n-upload>
+        <n-grid :cols="8" item-responsive>
+            <n-gi span="7 400:6">
+                <n-upload :custom-request="customRequest" :show-file-list="false">
+                    <n-upload-dragger>
+                        <n-text style="font-size: 16px">
+                            点击或者拖动视频到该区域观看
+                        </n-text>
+                    </n-upload-dragger>
+                </n-upload>
+            </n-gi>
+        </n-grid>
     </n-space>
 </template>
 
