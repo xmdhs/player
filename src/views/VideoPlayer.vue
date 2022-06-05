@@ -99,12 +99,16 @@ const Form = warpErr(async () => {
     if (bzimu.value != "") {
         wait.add(1)
         const r = await getbilCidS(bzimu.value)
-        let l: { label: string, value: string }[] = []
-        r.data.forEach(v => {
-            l.push({ value: String(v.cid), label: v.part })
-        })
-        bzimu.value = r.bvid
-        zmlist.value = l
+        if (r.data.length == 1) {
+            zmset(String(r.data[0].cid))
+        } else {
+            let l: { label: string, value: string }[] = []
+            r.data.forEach(v => {
+                l.push({ value: String(v.cid), label: v.part })
+            })
+            bzimu.value = r.bvid
+            zmlist.value = l
+        }
     }
     if (bahaDm.value) {
         let dm = await getBahaDm(bahaDm.value)
