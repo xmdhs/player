@@ -1,6 +1,6 @@
 <template>
   <n-h2>{{ msg }}</n-h2>
-  <n-select :class="$style.selete" v-model:value="v" :placeholder="msg" filterable :options="list" />
+  <n-select :class="$style.selete" v-model:value="v" :placeholder="msg" :options="list" />
 </template>
 
 
