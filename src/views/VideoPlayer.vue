@@ -85,12 +85,16 @@ const Form = warpErr(async () => {
     if (bilDanmaku.value != "") {
         wait.add(1)
         const r = await getbilCidS(bilDanmaku.value)
-        let l: { label: string, value: string }[] = []
-        r.data.forEach(v => {
-            l.push({ value: String(v.cid), label: v.part })
-        })
-        bilDanmaku.value = r.bvid
-        dmcidlist.value = l
+        if (r.data.length == 1) {
+            dmCidset(String(r.data[0].cid))
+        } else if (r.data.length > 1) {
+            let l: { label: string, value: string }[] = []
+            r.data.forEach(v => {
+                l.push({ value: String(v.cid), label: v.part })
+            })
+            bilDanmaku.value = r.bvid
+            dmcidlist.value = l
+        }
     }
     if (bzimu.value != "") {
         wait.add(1)
@@ -174,6 +178,11 @@ const zmset = warpErr(async (v: string) => {
             console.log("没有找到字幕")
             wait.done()
             zmsetdo = false
+            return
+        }
+        if (r.length == 1) {
+            zmsetdo = true
+            zmset(r[0].subtitle_url)
             return
         }
         let l: { label: string, value: string }[] = []
