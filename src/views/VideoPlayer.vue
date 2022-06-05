@@ -87,7 +87,7 @@ const Form = warpErr(async () => {
         const r = await getbilCidS(bilDanmaku.value)
         let l: { label: string, value: string }[] = []
         r.data.forEach(v => {
-            l.push({ label: String(v.cid), value: v.part })
+            l.push({ value: String(v.cid), label: v.part })
         })
         bilDanmaku.value = r.bvid
         dmcidlist.value = l
@@ -97,7 +97,7 @@ const Form = warpErr(async () => {
         const r = await getbilCidS(bzimu.value)
         let l: { label: string, value: string }[] = []
         r.data.forEach(v => {
-            l.push({ label: String(v.cid), value: v.part })
+            l.push({ value: String(v.cid), label: v.part })
         })
         bzimu.value = r.bvid
         zmlist.value = l
