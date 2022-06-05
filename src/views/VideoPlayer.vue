@@ -266,6 +266,7 @@ function reset() {
     zmlist.value = []
     acpSetDo = false
     zmsetdo = false
+    danmaku.value = ""
     wait.setZero()
 }
 </script>
