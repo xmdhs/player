@@ -1,5 +1,5 @@
 export default class waitgroup {
-    constructor() {}
+    constructor() { }
 
     private i: number = 0;
 
@@ -31,5 +31,10 @@ export default class waitgroup {
         return new Promise<void>((resolve, reject) => {
             this.resolveList.push(resolve);
         });
+    }
+
+    public setZero() {
+        this.i = 0;
+        this.do();
     }
 }

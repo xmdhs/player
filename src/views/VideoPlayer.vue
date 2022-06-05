@@ -1,6 +1,6 @@
 <template>
     <div v-if="hasErr">
-        <n-alert @click="back" title="Error" type="error">
+        <n-alert @click="reset" title="Error" type="error">
             <n-space vertical>
                 {{ hasErr }}
             </n-space>
@@ -26,7 +26,7 @@
         <n-input :autosize="{ maxRows: 5, minRows: 5 }" type="textarea" v-model:value="zm" placeholder="vtt 格式字幕" />
     </n-space>
     <n-space vertical>
-        <n-button @click='back' type="primary" v-if="finish && !videodone">重新输入</n-button>
+        <n-button @click='reset' type="primary" v-if="finish && !videodone">重新输入</n-button>
         <selVue title="标题" value="cid" msg="选择弹幕 cid" :list="dmcidlist" @set="dmCidset" v-if="dmcidlist.length != 0" />
         <selVue title="标题" value="cid" msg="选择字幕" :list="zmlist" @set="zmset" v-if="zmlist.length != 0" />
         <selVue title="标题" value="id" msg="选择弹幕" :list="acplist" @set="acpSet" v-if="acplist.length != 0" />
@@ -43,7 +43,7 @@ import selVue from '../components/sel.vue';
 import { dmoffset, vttoffset } from '../utils/offset';
 import { searchanime, getDm as getAcpDm, SearchObject } from '../utils/acplay';
 import DplayerVue from '../components/Dplayer.vue';
-import { NAlert, NButton, NInput, NInputNumber, NSpace, NText } from 'naive-ui'
+import { NAlert, NButton, NInput, NInputNumber, NSpace } from 'naive-ui'
 
 
 const bilDanmaku = ref('');
@@ -51,15 +51,15 @@ const bahaDm = ref(null as number | null);
 const bzimu = ref("")
 const finish = ref(false)
 const zm = ref("")
-const dmcidlist = ref([] as { v: string, key: string }[])
-const zmlist = ref([] as { v: string, key: string }[])
+const dmcidlist = ref([] as { label: string, value: string }[])
+const zmlist = ref([] as { label: string, value: string }[])
 const danmaku = ref("")
 const hasErr = ref("")
 const videodone = ref(false)
 const offset = ref(null as number | null)
 
 const acplaySearchWord = ref("")
-const acplist = ref([] as { v: string, key: string }[])
+const acplist = ref([] as { label: string, value: string }[])
 const dmlimit = ref(null as number | null)
 
 let tempdm: dplayerDm = { code: 0, data: [] }
@@ -85,9 +85,9 @@ const Form = warpErr(async () => {
     if (bilDanmaku.value != "") {
         wait.add(1)
         const r = await getbilCidS(bilDanmaku.value)
-        let l: { v: string, key: string }[] = []
+        let l: { label: string, value: string }[] = []
         r.data.forEach(v => {
-            l.push({ v: String(v.cid), key: v.part })
+            l.push({ label: String(v.cid), value: v.part })
         })
         bilDanmaku.value = r.bvid
         dmcidlist.value = l
@@ -95,23 +95,23 @@ const Form = warpErr(async () => {
     if (bzimu.value != "") {
         wait.add(1)
         const r = await getbilCidS(bzimu.value)
-        let l: { v: string, key: string }[] = []
+        let l: { label: string, value: string }[] = []
         r.data.forEach(v => {
-            l.push({ v: String(v.cid), key: v.part })
+            l.push({ label: String(v.cid), value: v.part })
         })
         bzimu.value = r.bvid
         zmlist.value = l
     }
-    if (!isNaN(Number(bahaDm.value)) && Number(bahaDm.value) != 0) {
-        let dm = await getBahaDm(Number(bahaDm.value))
+    if (bahaDm.value) {
+        let dm = await getBahaDm(bahaDm.value)
         addDm(tempdm, dm)
     }
     if (acplaySearchWord.value != "") {
         wait.add(1)
         acpSearchO = await searchanime(acplaySearchWord.value)
-        let l: { v: string, key: string }[] = []
+        let l: { label: string, value: string }[] = []
         acpSearchO.animes.forEach(v => {
-            l.push({ v: String(v.animeId), key: String(v.animeTitle) })
+            l.push({ value: String(v.animeId), label: String(v.animeTitle) })
         })
         acplist.value = l
         if (l.length == 0) {
@@ -121,13 +121,11 @@ const Form = warpErr(async () => {
     await wait.wait()
 
 
-    let limit = Number(dmlimit.value)
-    if (!isNaN(limit) && limit > 0) {
-        tempdm = limitDm(tempdm, limit)
+    if (dmlimit.value) {
+        tempdm = limitDm(tempdm, dmlimit.value)
     }
-    let offsetn = Number(offset.value)
-    if (!isNaN(offsetn) && offsetn > 0) {
-        dmoffset(tempdm, offsetn)
+    if (offset.value) {
+        dmoffset(tempdm, offset.value)
     }
 
     if (tempdm.data.length > 0) {
@@ -150,9 +148,9 @@ const acpSet = warpErr(async (v: string) => {
             wait.done()
             return
         }
-        let l: { v: string, key: string }[] = []
+        let l: { label: string, value: string }[] = []
         animeO.episodes.forEach(v => {
-            l.push({ v: String(v.episodeId), key: String(v.episodeTitle) })
+            l.push({ value: String(v.episodeId), label: String(v.episodeTitle) })
         })
         acplist.value = l
         acpSetDo = true
@@ -178,9 +176,9 @@ const zmset = warpErr(async (v: string) => {
             zmsetdo = false
             return
         }
-        let l: { v: string, key: string }[] = []
+        let l: { label: string, value: string }[] = []
         r.forEach(v => {
-            l.push({ v: String(v.subtitle_url), key: v.lan_doc })
+            l.push({ value: String(v.subtitle_url), label: v.lan_doc })
         })
         zmlist.value = l
         zmsetdo = true
@@ -246,13 +244,16 @@ function warpErr<F extends Function>(f: F): F {
     } as any
 }
 
-function back() {
+function reset() {
     hasErr.value = ""
     finish.value = false
     videodone.value = false
     acplist.value = []
     dmcidlist.value = []
     zmlist.value = []
+    acpSetDo = false
+    zmsetdo = false
+    wait.setZero()
 }
 </script>
 

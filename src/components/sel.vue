@@ -1,25 +1,21 @@
 <template>
   <n-h2>{{ msg }}</n-h2>
-  <n-radio-group v-model:value="v">
-    <n-space vertical>
-      <n-radio-button v-for="v in list" :key="v.key" :value="v.v" :label="v.key" />
-    </n-space>
-  </n-radio-group>
+  <n-select :class="$style.selete" v-model:value="v" :placeholder="msg" filterable :options="list" />
 </template>
 
 
 <script setup lang="ts">
-import { NRadioGroup, NRadioButton, NH2, NSpace } from 'naive-ui';
+import { NH2, NSelect } from 'naive-ui';
 import { ref, watch } from 'vue';
 
 const props = defineProps<{
   msg: string
-  list: { v: string, key: string }[]
+  list: { label: string, value: string }[]
   title: string
   value: string
 }>()
 
-const v = ref('');
+const v = ref(null as string | null);
 
 const emit = defineEmits<{
   (e: 'set', r: string): void
@@ -29,9 +25,26 @@ const set = (v: string) => {
   emit('set', v)
 }
 
-watch(v, set)
+watch(v, (v) => {
+  v && set(v)
+})
+
+watch(props, () => {
+  v.value = null
+})
 
 </script>
 
-<style scoped>
+<style module>
+@media (min-width: 400px) {
+  .selete {
+    width: 85%;
+  }
+}
+
+@media (min-width: 768px) {
+  .selete {
+    width: 50%;
+  }
+}
 </style>
