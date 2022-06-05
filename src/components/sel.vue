@@ -36,7 +36,7 @@ watch(props, () => {
 </script>
 
 <style module>
-@media (min-width: 400px) {
+@media (max-width: 400px) {
   .selete {
     width: 85%;
   }
