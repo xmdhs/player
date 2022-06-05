@@ -85,6 +85,7 @@ const Form = warpErr(async () => {
     if (bilDanmaku.value != "") {
         wait.add(1)
         const r = await getbilCidS(bilDanmaku.value)
+        bilDanmaku.value = r.bvid
         if (r.data.length == 1) {
             dmCidset(String(r.data[0].cid))
         } else if (r.data.length > 1) {
@@ -92,13 +93,13 @@ const Form = warpErr(async () => {
             r.data.forEach(v => {
                 l.push({ value: String(v.cid), label: v.part })
             })
-            bilDanmaku.value = r.bvid
             dmcidlist.value = l
         }
     }
     if (bzimu.value != "") {
         wait.add(1)
         const r = await getbilCidS(bzimu.value)
+        bzimu.value = r.bvid
         if (r.data.length == 1) {
             zmset(String(r.data[0].cid))
         } else {
@@ -106,7 +107,6 @@ const Form = warpErr(async () => {
             r.data.forEach(v => {
                 l.push({ value: String(v.cid), label: v.part })
             })
-            bzimu.value = r.bvid
             zmlist.value = l
         }
     }
