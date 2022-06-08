@@ -9,4 +9,8 @@ export interface dplayerDm {
         string,
     ][]
 }
-export const cors = 'https://cors.xmdhs.com/'
+export let cors = 'https://cors.xmdhs.com/'
+
+export function setCors(url: string) {
+    cors = url
+}
