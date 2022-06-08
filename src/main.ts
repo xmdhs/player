@@ -1,7 +1,7 @@
 import { createApp, defineCustomElement } from 'vue'
 import App from './App.vue'
 import router from './router'
-import { CorsServer } from './utils/wails/App'
+import { CorsServer } from './wails/App'
 import { setCors } from './utils/interface'
 
 (async () => {

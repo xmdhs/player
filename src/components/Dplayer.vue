@@ -4,7 +4,8 @@
 
 <script setup lang="ts">
 import { onUnmounted, ref, watchEffect } from 'vue';
-import { DPlayer, DPlayerOptions, dp } from '../types/Dplayer';
+import { DPlayer, DPlayerOptions, dp, DPlayerEvents } from '../types/Dplayer';
+import { WindowFullscreen, WindowUnfullscreen } from '../wails/runtime/runtime'
 
 const dplayer = ref<HTMLElement | null>(null);
 
@@ -24,6 +25,14 @@ watchEffect(() => {
     if (dplayer.value) {
         dplayer.value.className = ""
         d = newPlayer(props.danmaku, props.vtt, dplayer.value, props.url);
+        if ((window as any)["runtime"]) {
+            d.on(DPlayerEvents.fullscreen, () => {
+                WindowFullscreen()
+            })
+            d.on(DPlayerEvents.fullscreen_cancel, () => {
+                WindowUnfullscreen()
+            })
+        }
     }
 })
 
@@ -100,7 +109,7 @@ function newPlayer(danmaku: string, vtt: string, dplayer: HTMLElement, url: stri
 <script lang="ts">
 declare var Hls: {
     isSupported: () => boolean
-    new (): any
+    new(): any
 }
 
 </script>
@@ -112,6 +121,7 @@ declare var Hls: {
     text-shadow: rgb(0 0 0) 1px 0px 1px, rgb(0 0 0) 0px 1px 1px,
         rgb(0 0 0) 0px -1px 1px, rgb(0 0 0) -1px 0px 1px !important;
 }
+
 .dplayer-subtitle {
     text-shadow: rgb(0 0 0) 1px 0px 1px, rgb(0 0 0) 0px 1px 1px,
         rgb(0 0 0) 0px -1px 1px, rgb(0 0 0) -1px 0px 1px !important;
