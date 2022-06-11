@@ -207,9 +207,8 @@ const zmset = warpErr(async (v: string) => {
 
 const dmCidset = warpErr(async (cid: string) => {
     dmcidlist.value = []
-    let dm = await getDM(cid)
-    let d = JSON.parse(dm) as dplayerDm
-    if (d.code != 0 || !("data" in d)) {
+    let d = await getDM(cid)
+    if (d?.code != 0 || !("data" in d)) {
         console.log("没有找到弹幕", d)
         wait.done()
         return

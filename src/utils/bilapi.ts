@@ -1,9 +1,9 @@
-import { cors } from "./interface"
+import { cors, dplayerDm } from "./interface"
 import { vtttime } from "./vtt"
 
 const cidapi = cors + `https://api.bilibili.com/x/player/pagelist?`
 const zmapi = cors + `https://api.bilibili.com/x/player/v2?`
-const dmapi = (globalThis as any)?._player?.dmapi as string || `https://auto.xmdhs.com/getdm?`
+const dmapi = cors + "https://api.bilibili.com/x/v1/dm/list.so?"
 const ep2cid = cors + `https://api.bilibili.com/pgc/view/web/season?`
 
 export async function getbilCidS(b: string): Promise<{ data: bilCidR["data"], bvid: string }> {
@@ -69,34 +69,48 @@ async function getepidCid(epid: number): Promise<{ data: bilCidR["data"], bvid: 
     return { data: o, bvid: bvid }
 }
 
-export async function getDM(cid: string): Promise<string> {
-    await fetchAndInstantiate()
+export async function getDM(cid: string): Promise<dplayerDm> {
     let q = new URLSearchParams()
-    q.set("cid", cid)
+    q.set("oid", cid)
     let f = await fetch(dmapi + q.toString())
     let t = await f.text()
-    let s = bil2dp(t)
-    if (typeof (s as { err: string }).err != "undefined") {
-        throw (s as { err: string }).err
-    }
-    return s as string;
+    return bil2dp(t)
 }
 
-let go = new Go();
-let has = false;
-async function fetchAndInstantiate() {
-    if (has) {
-        return
-    }
-    const response = await fetch("https://static.xmdhs.com/ip@1.wasm");
-    const buffer = await response.arrayBuffer();
-    const obj = await WebAssembly.instantiate(buffer, go.importObject)
-    go.run(obj.instance);
-    has = true
-}
-fetchAndInstantiate();
+function bil2dp(t: string): dplayerDm {
+    let parser = new DOMParser();
+    let dom = parser.parseFromString(t, "application/xml");
+    let dlist = dom.getElementsByTagName("d")
 
-declare function bil2dp(s: string): { err: string } | string
+    let d: dplayerDm = { code: 0, data: [] }
+
+
+    f: for (const v of Array.from(dlist)) {
+        let l: dplayerDm["data"][0] = [0, 0, 0, "", ""]
+        const t = v.getAttribute("p")?.split(",")
+        if (!t || v.textContent == null) {
+            continue
+        }
+        l[0] = parseFloat(t[0])
+        switch (parseInt(t[1])) {
+            case 1 || 2 || 3:
+                l[1] = 0
+                break;
+            case 4:
+                l[1] = 2
+                break;
+            case 5:
+                l[1] = 1
+            default:
+                continue f;
+        }
+        l[2] = parseFloat(t[3])
+        l[3] = t[6]
+        l[4] = v.textContent
+        d.data.push(l)
+    }
+    return d
+}
 
 export async function getZm(bvid: string, cid: string): Promise<{ lan_doc: string, subtitle_url: string }[]> {
     let q = new URLSearchParams()
