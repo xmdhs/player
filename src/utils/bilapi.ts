@@ -1,10 +1,10 @@
 import { cors, dplayerDm } from "./interface"
 import { vtttime } from "./vtt"
 
-const cidapi = cors + `https://api.bilibili.com/x/player/pagelist?`
-const zmapi = cors + `https://api.bilibili.com/x/player/v2?`
-const dmapi = cors + "https://api.bilibili.com/x/v1/dm/list.so?"
-const ep2cid = cors + `https://api.bilibili.com/pgc/view/web/season?`
+const cidapi = () => (cors + `https://api.bilibili.com/x/player/pagelist?`)
+const zmapi = () => (cors + `https://api.bilibili.com/x/player/v2?`)
+const dmapi = () => (cors + "https://api.bilibili.com/x/v1/dm/list.so?")
+const ep2cid = () => (cors + `https://api.bilibili.com/pgc/view/web/season?`)
 
 export async function getbilCidS(b: string): Promise<{ data: bilCidR["data"], bvid: string }> {
     let q = ""
@@ -18,7 +18,7 @@ export async function getbilCidS(b: string): Promise<{ data: bilCidR["data"], bv
     }
     let uq = new URLSearchParams()
     uq.set(q, b)
-    let f = await fetch(cidapi + uq.toString())
+    let f = await fetch(cidapi() + uq.toString())
     let j = await f.json() as bilCidR
     if (j.code != 0) {
         throw ["api 报错", j]
@@ -52,7 +52,7 @@ interface epidR extends apiData {
 async function getepidCid(epid: number): Promise<{ data: bilCidR["data"], bvid: string }> {
     let uq = new URLSearchParams()
     uq.set("ep_id", epid.toString())
-    let f = await fetch(ep2cid + uq.toString())
+    let f = await fetch(ep2cid() + uq.toString())
     let j = await f.json() as epidR
     if (j.code != 0) {
         throw ["api 报错", j]
@@ -72,7 +72,7 @@ async function getepidCid(epid: number): Promise<{ data: bilCidR["data"], bvid: 
 export async function getDM(cid: string): Promise<dplayerDm> {
     let q = new URLSearchParams()
     q.set("oid", cid)
-    let f = await fetch(dmapi + q.toString())
+    let f = await fetch(dmapi() + q.toString())
     let t = await f.text()
     return bil2dp(t)
 }
@@ -120,7 +120,7 @@ export async function getZm(bvid: string, cid: string): Promise<{ lan_doc: strin
     let q = new URLSearchParams()
     q.set("cid", cid)
     q.set("bvid", bvid)
-    let f = await fetch(zmapi + q.toString())
+    let f = await fetch(zmapi() + q.toString())
     let j = await f.json()
     if (j.code != 0) {
         throw ["api 报错", j]

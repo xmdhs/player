@@ -1,12 +1,12 @@
 import { dplayerDm, cors } from "./interface"
 
 
-const dmapi = cors + `https://ani.gamer.com.tw/ajax/danmuGet.php?`
+const dmapi = () => (cors + `https://ani.gamer.com.tw/ajax/danmuGet.php?`)
 
 export async function getDm(sn: number): Promise<dplayerDm> {
     let u = new URLSearchParams()
     u.append('sn', sn.toString())
-    let f = await fetch(dmapi, {
+    let f = await fetch(dmapi(), {
         "headers": {
             "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
         },
