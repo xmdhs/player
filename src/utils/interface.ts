@@ -9,7 +9,7 @@ export interface dplayerDm {
         string,
     ][]
 }
-export let cors = 'https://cors.xmdhs.com/'
+export let cors = (globalThis as any)?._player?.cors as string || 'https://cors.xmdhs.com/'
 
 export function setCors(url: string) {
     cors = url

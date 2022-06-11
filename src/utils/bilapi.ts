@@ -3,7 +3,7 @@ import { vtttime } from "./vtt"
 
 const cidapi = cors + `https://api.bilibili.com/x/player/pagelist?`
 const zmapi = cors + `https://api.bilibili.com/x/player/v2?`
-const dmapi = `https://auto.xmdhs.com/getdm?`
+const dmapi = (globalThis as any)?._player?.dmapi as string || `https://auto.xmdhs.com/getdm?`
 const ep2cid = cors + `https://api.bilibili.com/pgc/view/web/season?`
 
 export async function getbilCidS(b: string): Promise<{ data: bilCidR["data"], bvid: string }> {
