@@ -93,7 +93,9 @@ function bil2dp(t: string): dplayerDm {
         }
         l[0] = parseFloat(t[0])
         switch (parseInt(t[1])) {
-            case 1 || 2 || 3:
+            case 1:
+            case 2:
+            case 3:
                 l[1] = 0
                 break;
             case 4:
