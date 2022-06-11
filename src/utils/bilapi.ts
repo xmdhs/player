@@ -103,6 +103,7 @@ function bil2dp(t: string): dplayerDm {
                 break;
             case 5:
                 l[1] = 1
+                break;
             default:
                 continue f;
         }
