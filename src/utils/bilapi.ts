@@ -105,7 +105,8 @@ function bil2dp(t: string): dplayerDm {
                 l[1] = 1
                 break;
             default:
-                continue f;
+                l[1] = 0
+                break;
         }
         l[2] = parseFloat(t[3])
         l[3] = t[6]
