@@ -9,7 +9,8 @@
 
     <div v-show="finish">
         <DplayerVue :danmaku="danmaku" :vtt="zm" :url="url" v-if="videodone" />
-        <danmakuList :dmList="tempdm['data']" @change="(d) => { tempdm['data'] = d }" />
+        <br />
+        <danmakuList v-if="danmaku" :dmList="tempdm['data']" @change="(d) => { tempdm['data'] = d }" />
         <br />
     </div>
     <n-space vertical v-if="!finish">
