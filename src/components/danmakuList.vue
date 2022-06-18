@@ -30,7 +30,7 @@ const props = withDefaults(defineProps<{
     dmList: dplayerDm["data"];
     height?: string;
 }>(), {
-    height: '45em',
+    height: '30em',
 })
 
 

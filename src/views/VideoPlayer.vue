@@ -7,10 +7,14 @@
         </n-alert>
     </div>
 
-    <div v-show="finish">
-        <DplayerVue :danmaku="danmaku" :vtt="zm" :url="url" v-if="videodone" />
+    <div v-show="finish" v-if="videodone">
+        <DplayerVue :danmaku="danmaku" :vtt="zm" :url="url" />
         <br />
-        <danmakuList v-if="danmaku" :dmList="tempdm['data']" @change="(d) => { tempdm['data'] = d }" />
+        <n-collapse>
+            <n-collapse-item title="弹幕列表" name="1">
+                <danmakuList v-if="danmaku" :dmList="tempdm['data']" @change="(d) => { tempdm['data'] = d }" />
+            </n-collapse-item>
+        </n-collapse>
         <br />
     </div>
     <n-space vertical v-if="!finish">
@@ -45,7 +49,7 @@ import selVue from '../components/sel.vue';
 import { dmoffset, vttoffset } from '../utils/offset';
 import { searchanime, getDm as getAcpDm, SearchObject } from '../utils/acplay';
 import DplayerVue from '../components/Dplayer.vue';
-import { NAlert, NButton, NInput, NInputNumber, NSpace } from 'naive-ui'
+import { NAlert, NButton, NInput, NInputNumber, NSpace, NCollapse, NCollapseItem } from 'naive-ui'
 import danmakuList from '../components/danmakuList.vue';
 
 
