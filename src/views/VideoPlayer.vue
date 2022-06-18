@@ -16,6 +16,12 @@
             </n-collapse-item>
         </n-collapse>
         <br />
+        <n-collapse v-if="danmaku">
+            <n-collapse-item title="屏蔽列表" name="1">
+                <blockList :blockUserList="['a', 'b']" :blockWordList="['c', 'd']" />
+            </n-collapse-item>
+        </n-collapse>
+        <br />
     </div>
     <n-space vertical v-if="!finish">
         <n-button @click="Form">播放</n-button>
@@ -51,6 +57,7 @@ import { searchanime, getDm as getAcpDm, SearchObject } from '../utils/acplay';
 import DplayerVue from '../components/Dplayer.vue';
 import { NAlert, NButton, NInput, NInputNumber, NSpace, NCollapse, NCollapseItem } from 'naive-ui'
 import danmakuList from '../components/danmakuList.vue';
+import blockList from '../components/blockList.vue';
 
 
 const bilDanmaku = ref('');

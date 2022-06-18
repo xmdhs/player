@@ -17,7 +17,7 @@
 
 <script setup lang="ts">
 import { NDataTable, DataTableColumns, DropdownOption, NDropdown, NThing, NButton } from 'naive-ui'
-import { h, nextTick, ref, watch, watchEffect } from 'vue';
+import { h, nextTick, ref, watch } from 'vue';
 import { dplayerDm } from '../utils/interface';
 
 
