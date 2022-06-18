@@ -10,9 +10,9 @@
     <div v-show="finish" v-if="videodone">
         <DplayerVue :danmaku="danmaku" :vtt="zm" :url="url" />
         <br />
-        <n-collapse>
+        <n-collapse v-if="danmaku">
             <n-collapse-item title="弹幕列表" name="1">
-                <danmakuList v-if="danmaku" :dmList="tempdm['data']" @change="(d) => { tempdm['data'] = d }" />
+                <danmakuList :dmList="tempdm['data']" @change="(d) => { tempdm['data'] = d }" />
             </n-collapse-item>
         </n-collapse>
         <br />
