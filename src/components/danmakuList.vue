@@ -135,10 +135,6 @@ async function handleSelect(e: string) {
             filtered.value = true
             break;
         case 'blocked':
-            tempDmList = data.value.filter(() => true)
-            data.value = tempDmList.filter(dm => {
-                return dm.sendID != selectDm.sendID
-            })
             emit('block', selectDm.sendID)
             break;
 
