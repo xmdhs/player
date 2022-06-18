@@ -1,19 +1,24 @@
 <template>
-    <n-data-table :columns="colsReactive" :data="data" :row-props="rowProps" />
+    <n-data-table :columns="colsReactive" :data="data" :row-props="rowProps" :max-height="250" size="small"
+        style="cursor: pointer;" />
     <n-dropdown placement="bottom-start" trigger="manual" :x="x" :y="y" :options="options" :show="showDropdown"
         :on-clickoutside="onClickoutside" @select="handleSelect" />
 </template>
 
 <script setup lang="ts">
-import { NCard, NTabs, NTabPane, NDataTable, DataTableColumns, NButton, DropdownOption, NDropdown } from 'naive-ui'
+import { NDataTable, DataTableColumns, DropdownOption, NDropdown } from 'naive-ui'
 import { h, nextTick, ref } from 'vue';
 import { dplayerDm } from '../utils/interface';
 
 const props = defineProps<{
     dmList: dplayerDm["data"];
-    BlockUser: string[];
-    BlockWord: string[];
 }>()
+
+const emit = defineEmits<{
+    (e: 'change', dmList: dplayerDm["data"]): void
+    (e: 'block', blockName: string): void
+}>()
+
 
 const x = ref(0)
 const y = ref(0)
@@ -30,23 +35,24 @@ const data = ref<dm[]>([])
 
 const options: DropdownOption[] = [
     {
-        label: '编辑',
-        key: 'edit'
+        label: '查看',
+        key: 'view'
     },
     {
-        label: () => h('span', { style: { color: 'red' } }, '删除'),
-        key: 'delete'
+        label: () => h('span', { style: { color: 'red' } }, '屏蔽'),
+        key: 'blocked'
     }
 ]
 
 const colsReactive: DataTableColumns<dm> = [
     {
         title: '时间',
-        key: 'time'
+        key: 'time',
     },
     {
         title: '内容',
-        key: 'text'
+        key: 'text',
+        titleColSpan: 2,
     },
     {
         title: '发送者',
@@ -68,9 +74,9 @@ function rowProps(row: dm) {
     }
 }
 
-function handleSelect() {
+function handleSelect(e: string) {
     showDropdown.value = false
-    console.log('select')
+    console.log(e)
 }
 
 function onClickoutside() {

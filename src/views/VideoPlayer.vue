@@ -9,6 +9,7 @@
 
     <div v-show="finish">
         <DplayerVue :danmaku="danmaku" :vtt="zm" :url="url" v-if="videodone" />
+        <danmakuList :dmList="tempdm['data']" @change="(d) => { tempdm['data'] = d }" />
         <br />
     </div>
     <n-space vertical v-if="!finish">
@@ -44,6 +45,7 @@ import { dmoffset, vttoffset } from '../utils/offset';
 import { searchanime, getDm as getAcpDm, SearchObject } from '../utils/acplay';
 import DplayerVue from '../components/Dplayer.vue';
 import { NAlert, NButton, NInput, NInputNumber, NSpace } from 'naive-ui'
+import danmakuList from '../components/danmakuList.vue';
 
 
 const bilDanmaku = ref('');
@@ -62,7 +64,7 @@ const acplaySearchWord = ref("")
 const acplist = ref([] as { label: string, value: string }[])
 const dmlimit = ref(null as number | null)
 
-let tempdm: dplayerDm = { code: 0, data: [] }
+let tempdm = ref<dplayerDm>({ code: 0, data: [] })
 
 const props = defineProps<{
     url: string
@@ -112,7 +114,7 @@ const Form = warpErr(async () => {
     }
     if (bahaDm.value) {
         let dm = await getBahaDm(bahaDm.value)
-        addDm(tempdm, dm)
+        addDm(tempdm.value, dm)
     }
     if (acplaySearchWord.value != "") {
         wait.add(1)
@@ -130,14 +132,14 @@ const Form = warpErr(async () => {
 
 
     if (dmlimit.value) {
-        tempdm = limitDm(tempdm, dmlimit.value)
+        tempdm.value = limitDm(tempdm.value, dmlimit.value)
     }
     if (offset.value) {
-        dmoffset(tempdm, offset.value)
+        dmoffset(tempdm.value, offset.value)
     }
 
-    if (tempdm.data.length > 0) {
-        danmaku.value = JSON.stringify(tempdm)
+    if (tempdm.value.data.length > 0) {
+        danmaku.value = JSON.stringify(tempdm.value)
     }
     if (zm.value != "") {
         zm.value = vttoffset(zm.value, Number(offset.value))
@@ -167,7 +169,7 @@ const acpSet = warpErr(async (v: string) => {
         acpSetDo = false
         acplist.value = []
         let d = await getAcpDm(Number(v))
-        addDm(tempdm, d)
+        addDm(tempdm.value, d)
         wait.done()
     }
 })
@@ -213,7 +215,7 @@ const dmCidset = warpErr(async (cid: string) => {
         wait.done()
         return
     }
-    addDm(tempdm, d)
+    addDm(tempdm.value, d)
     wait.done()
 })
 
