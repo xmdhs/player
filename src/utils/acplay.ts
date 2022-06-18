@@ -36,7 +36,7 @@ export async function getDm(episodeId: number): Promise<dplayerDm> {
                 dptype = 1
                 break
         }
-        const d = [Number(second), dptype, Number(color), String(v.cid), v.m] as dplayerDm['data'][0]
+        const d: dplayerDm['data'][0] = [Number(second), dptype, Number(color), name, v.m]
         dm.data.push(d)
     }
     return dm
