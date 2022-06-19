@@ -36,9 +36,12 @@ export class RemoteStore<T> implements store<T> {
 
     async get(key: string): Promise<T> {
         let s = await fetch(this.api() + "store/" + key);
-        if (s) {
+        if (s.status == 200) {
             return await s.json();
         }
-        throw new Error("not found");
+        if (s.status == 404) {
+            new Error("not found")
+        }
+        throw new Error(await s.text());
     }
 }
