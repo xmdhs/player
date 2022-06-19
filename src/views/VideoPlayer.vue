@@ -293,15 +293,18 @@ const blockUserList = ref([] as string[]);
 const blockWordList = ref([] as string[]);
 
 (warpErr(async () => {
-    try {
-        blockUserList.value = await getBlocked('user') || []
-        blockWordList.value = await getBlocked('word') || []
-    } catch (e) {
-        if (e instanceof Error && e.message == "not found") {
-            return
+    const warp = async (list: Ref<string[]>, key: string) => {
+        try {
+            blockUserList.value = await getBlocked(key) || []
+        } catch (e) {
+            if (!(e instanceof Error && e.message == "not found")) {
+                throw e
+            }
         }
-        throw e
     }
+
+    await warp(blockUserList, "user")
+    await warp(blockWordList, "word")
 }))()
 
 
