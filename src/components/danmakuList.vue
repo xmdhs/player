@@ -10,7 +10,8 @@
         </template>
     </n-thing>
     <n-data-table :columns="colsReactive" :data="data" :row-props="rowProps" :max-height="height" :min-height="height"
-        size="small" :row-key="(row) => row.index" />
+        size="small" :row-key="(row) => row.index" :pagination="{ pageSize: 30, showQuickJumper: true }"
+        :paginate-single-page="false" />
     <n-dropdown placement="bottom-start" trigger="manual" :x="x" :y="y" :options="options" :show="showDropdown"
         v-if="showDropdown" :on-clickoutside="onClickoutside" @select="handleSelect" />
 </template>
@@ -134,7 +135,7 @@ async function handleSelect(e: string) {
             filtered.value = true
             break;
         case 'blocked':
-            clean() 
+            clean()
             emit('addblockUser', selectDm.sendID)
             break;
 
