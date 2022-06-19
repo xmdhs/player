@@ -25,7 +25,7 @@ export class RemoteStore<T> implements store<T> {
     }
 
     async set(key: string, value: T): Promise<void> {
-        await fetch(this.api() + "/store/" + key, {
+        await fetch(this.api() + "store/" + key, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -35,7 +35,7 @@ export class RemoteStore<T> implements store<T> {
     }
 
     async get(key: string): Promise<T> {
-        let s = await fetch(this.api() + "/store/" + key);
+        let s = await fetch(this.api() + "store/" + key);
         if (s) {
             return await s.json();
         }
