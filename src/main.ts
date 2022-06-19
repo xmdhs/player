@@ -1,13 +1,15 @@
 import { createApp, defineCustomElement } from 'vue'
 import App from './App.vue'
 import router from './router'
-import { CorsServer } from './wails/App'
-import { setCors } from './utils/interface'
+import { CorsServer,ApiServer } from './wails/App'
+import { setCors,setApiAddr } from './utils/interface'
 
 (async () => {
     try {
         let n = await CorsServer()
         setCors(`http://127.0.0.1:${n}/`)
+        let apip = await ApiServer()
+        setApiAddr(`http://http://127.0.0.1:${apip}/`)
     } catch (e) {
         console.debug(e)
     }

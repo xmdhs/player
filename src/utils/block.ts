@@ -1,13 +1,13 @@
 import { LocalStore, RemoteStore } from "./store";
-import { cors, dplayerDm } from "./interface";
+import { apiAddr, dplayerDm } from "./interface";
 
 const store = (() => {
-    if ((globalThis as any)?._player?.cors as string) {
+    if ((globalThis as any)?._player?.api as string) {
         return new RemoteStore<string[]>(() => (globalThis as any)?._player?.cors as string)
     }
 
     if ((window as any)["runtime"]) {
-        return new RemoteStore<string[]>(() => cors)
+        return new RemoteStore<string[]>(() => apiAddr)
     }
 
     return new LocalStore<string[]>();
