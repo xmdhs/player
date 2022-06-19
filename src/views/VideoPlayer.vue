@@ -7,8 +7,23 @@
         </n-alert>
     </div>
 
-    <div v-show="finish">
-        <DplayerVue :danmaku="danmaku" :vtt="zm" :url="url" v-if="videodone" />
+    <div v-show="finish" v-if="videodone">
+        <DplayerVue :danmaku="danmaku" :vtt="zm" :url="url" />
+        <br />
+        <n-collapse v-if="danmaku">
+            <n-collapse-item title="弹幕列表" name="1">
+                <danmakuList :dmList="tempdm['data']" @addblockUser="(user) => _addblock('user', user)" />
+            </n-collapse-item>
+        </n-collapse>
+        <br />
+        <n-collapse v-if="danmaku">
+            <n-collapse-item title="屏蔽列表" name="1">
+                <blockList :blockUserList="blockUserList" :blockWordList="blockWordList"
+                    @blockUserchange="(user) => delblock('user', user)"
+                    @blockWordblockWord="(word) => delblock('word', word)"
+                    @addBlockWord="(word) => _addblock('word', word)" />
+            </n-collapse-item>
+        </n-collapse>
         <br />
     </div>
     <n-space vertical v-if="!finish">
@@ -34,7 +49,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watchEffect } from 'vue'
+import { Ref, ref, watchEffect } from 'vue'
 import { bilZm2vtt, getbilCidS, getBilZm, getDM, getZm } from '../utils/bilapi';
 import { getDm as getBahaDm } from '../utils/baha';
 import { dplayerDm } from '../utils/interface';
@@ -43,7 +58,10 @@ import selVue from '../components/sel.vue';
 import { dmoffset, vttoffset } from '../utils/offset';
 import { searchanime, getDm as getAcpDm, SearchObject } from '../utils/acplay';
 import DplayerVue from '../components/Dplayer.vue';
-import { NAlert, NButton, NInput, NInputNumber, NSpace } from 'naive-ui'
+import { NAlert, NButton, NInput, NInputNumber, NSpace, NCollapse, NCollapseItem } from 'naive-ui'
+import danmakuList from '../components/danmakuList.vue';
+import blockList from '../components/blockList.vue';
+import { addblock, unblock, getBlocked, danmakuFilter } from '../utils/block';
 
 
 const bilDanmaku = ref('');
@@ -62,7 +80,7 @@ const acplaySearchWord = ref("")
 const acplist = ref([] as { label: string, value: string }[])
 const dmlimit = ref(null as number | null)
 
-let tempdm: dplayerDm = { code: 0, data: [] }
+const tempdm = ref<dplayerDm>({ code: 0, data: [] })
 
 const props = defineProps<{
     url: string
@@ -112,7 +130,7 @@ const Form = warpErr(async () => {
     }
     if (bahaDm.value) {
         let dm = await getBahaDm(bahaDm.value)
-        addDm(tempdm, dm)
+        addDm(tempdm.value, dm)
     }
     if (acplaySearchWord.value != "") {
         wait.add(1)
@@ -130,14 +148,14 @@ const Form = warpErr(async () => {
 
 
     if (dmlimit.value) {
-        tempdm = limitDm(tempdm, dmlimit.value)
+        tempdm.value = limitDm(tempdm.value, dmlimit.value)
     }
     if (offset.value) {
-        dmoffset(tempdm, offset.value)
+        dmoffset(tempdm.value, offset.value)
     }
 
-    if (tempdm.data.length > 0) {
-        danmaku.value = JSON.stringify(tempdm)
+    if (tempdm.value.data.length > 0) {
+        danmaku.value = JSON.stringify(tempdm.value)
     }
     if (zm.value != "") {
         zm.value = vttoffset(zm.value, Number(offset.value))
@@ -167,7 +185,7 @@ const acpSet = warpErr(async (v: string) => {
         acpSetDo = false
         acplist.value = []
         let d = await getAcpDm(Number(v))
-        addDm(tempdm, d)
+        addDm(tempdm.value, d)
         wait.done()
     }
 })
@@ -213,7 +231,7 @@ const dmCidset = warpErr(async (cid: string) => {
         wait.done()
         return
     }
-    addDm(tempdm, d)
+    addDm(tempdm.value, d)
     wait.done()
 })
 
@@ -268,6 +286,63 @@ function reset() {
     danmaku.value = ""
     wait.setZero()
 }
+
+let oldDmdata: dplayerDm["data"] = []
+
+const blockUserList = ref([] as string[]);
+const blockWordList = ref([] as string[]);
+
+(warpErr(async () => {
+    try {
+        blockUserList.value = await getBlocked('user') || []
+        blockWordList.value = await getBlocked('word') || []
+    } catch (e) {
+        if (e instanceof Error && e.message == "not found") {
+            return
+        }
+        throw e
+    }
+}))()
+
+
+function _addblock(type: 'user' | 'word', v: string) {
+    if (oldDmdata.length == 0) {
+        oldDmdata = tempdm.value.data
+    }
+    addblock(type, v)
+    let list: Ref<string[]>
+    switch (type) {
+        case 'user':
+            list = blockUserList
+            break
+        case 'word':
+            list = blockWordList
+            break
+    }
+    list.value.push(v)
+    tempdm.value = danmakuFilter(tempdm.value, type == 'user' ? list.value : [], type == 'word' ? list.value : [])
+    danmaku.value = JSON.stringify(tempdm.value)
+}
+
+function delblock(type: 'user' | 'word', v: string) {
+    if (oldDmdata.length == 0) {
+        oldDmdata = tempdm.value.data
+    }
+    unblock(type, v)
+    let list: Ref<string[]>
+    switch (type) {
+        case 'user':
+            list = blockUserList
+            break
+        case 'word':
+            list = blockWordList
+            break
+    }
+    list.value = list.value.filter(vv => vv != v)
+    tempdm.value = danmakuFilter({ code: 0, data: oldDmdata }, blockUserList.value, blockWordList.value)
+    danmaku.value = JSON.stringify(tempdm.value)
+}
+
 </script>
 
 

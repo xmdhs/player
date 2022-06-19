@@ -23,7 +23,7 @@ export async function getDm(sn: number): Promise<dplayerDm> {
             v.time / 10,
             v.position ? v.position : 0,
             color2Number(v.color),
-            String(v.sn),
+            "[Gamer]" + String(v.sn),
             v.text
         ])
     }

@@ -109,7 +109,7 @@ function bil2dp(t: string): dplayerDm {
                 break;
         }
         l[2] = parseFloat(t[3])
-        l[3] = t[6]
+        l[3] = "[BiliBili]" + t[6]
         l[4] = v.textContent
         d.data.push(l)
     }
