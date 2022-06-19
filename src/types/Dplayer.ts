@@ -153,6 +153,8 @@ export interface Danmaku {
   hide(): void;
 
   show(): void;
+
+  reload(newApi: DPlayerDanmaku): void;
 }
 
 export interface FullScreen {
@@ -190,16 +192,9 @@ export interface dp {
   volume(percentage: number, nostorage: boolean, nonotice: boolean): void;
 }
 
-
-interface w extends Window {
-  "DPlayer": dplayer;
-}
-
-declare var window: w
-
 interface dplayer {
   new(options: DPlayerOptions): dp;
 };
 
 
-export var DPlayer = window["DPlayer"] as dplayer;
+export var DPlayer = (window as any)["DPlayer"] as dplayer;

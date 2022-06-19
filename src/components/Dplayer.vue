@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="ts">
-import { onUnmounted, ref, watchEffect } from 'vue';
+import { onUnmounted, ref, watch } from 'vue';
 import { DPlayer, DPlayerOptions, dp, DPlayerEvents } from '../types/Dplayer';
 import { WindowFullscreen, WindowUnfullscreen } from '../wails/runtime/runtime'
 
@@ -20,7 +20,24 @@ let dmlink: string
 let vttlink: string
 let hls: any
 
-watchEffect(() => {
+watch(props, (newV, old) => {
+    if (newV.danmaku != old.danmaku && d) {
+        dmlink != "" && URL.revokeObjectURL(dmlink)
+        let blob = new Blob([newV.danmaku])
+        dmlink = URL.createObjectURL(blob)
+        d.danmaku.reload({
+            addition: [dmlink],
+            id: "",
+            api: "",
+        })
+    }
+    if (newV.url == old.url) {
+        return
+    }
+    start()
+})
+
+function start() {
     clean()
     if (dplayer.value) {
         dplayer.value.className = ""
@@ -34,11 +51,14 @@ watchEffect(() => {
             })
         }
     }
-})
+}
+
+start()
 
 onUnmounted(() => {
     clean()
 });
+
 
 
 function clean() {

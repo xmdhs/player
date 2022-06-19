@@ -12,13 +12,16 @@
         <br />
         <n-collapse v-if="danmaku">
             <n-collapse-item title="弹幕列表" name="1">
-                <danmakuList :dmList="tempdm['data']" @change="(d) => { tempdm['data'] = d }" />
+                <danmakuList :dmList="tempdm['data']" @addblockUser="(user) => _addblock('user', user)" />
             </n-collapse-item>
         </n-collapse>
         <br />
         <n-collapse v-if="danmaku">
             <n-collapse-item title="屏蔽列表" name="1">
-                <blockList :blockUserList="['a', 'b']" :blockWordList="['c', 'd']" />
+                <blockList :blockUserList="blockUserList" :blockWordList="blockWordList"
+                    @blockUserchange="(user) => delblock('user', user)"
+                    @blockWordblockWord="(word) => delblock('word', word)"
+                    @addBlockWord="(word) => _addblock('word', word)" />
             </n-collapse-item>
         </n-collapse>
         <br />
@@ -46,7 +49,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watchEffect } from 'vue'
+import { Ref, ref, watchEffect } from 'vue'
 import { bilZm2vtt, getbilCidS, getBilZm, getDM, getZm } from '../utils/bilapi';
 import { getDm as getBahaDm } from '../utils/baha';
 import { dplayerDm } from '../utils/interface';
@@ -58,6 +61,7 @@ import DplayerVue from '../components/Dplayer.vue';
 import { NAlert, NButton, NInput, NInputNumber, NSpace, NCollapse, NCollapseItem } from 'naive-ui'
 import danmakuList from '../components/danmakuList.vue';
 import blockList from '../components/blockList.vue';
+import { addblock, unblock, getBlocked, danmakuFilter } from '../utils/block';
 
 
 const bilDanmaku = ref('');
@@ -76,7 +80,7 @@ const acplaySearchWord = ref("")
 const acplist = ref([] as { label: string, value: string }[])
 const dmlimit = ref(null as number | null)
 
-let tempdm = ref<dplayerDm>({ code: 0, data: [] })
+const tempdm = ref<dplayerDm>({ code: 0, data: [] })
 
 const props = defineProps<{
     url: string
@@ -282,6 +286,46 @@ function reset() {
     danmaku.value = ""
     wait.setZero()
 }
+
+let oldDmdata: dplayerDm["data"] = []
+
+const blockUserList = ref([] as string[]);
+const blockWordList = ref([] as string[]);
+
+(warpErr(async () => {
+    blockUserList.value = await getBlocked('user') || []
+    blockWordList.value = await getBlocked('word') || []
+}))()
+
+
+function _addblock(type: 'user' | 'word', v: string) {
+    if (oldDmdata.length == 0) {
+        oldDmdata = tempdm.value.data
+    }
+    addblock(type, v)
+    let list: Ref<string[]>
+    switch (type) {
+        case 'user':
+            list = blockUserList
+            break
+        case 'word':
+            list = blockWordList
+            break
+    }
+    list.value.push(v)
+    tempdm.value = danmakuFilter(tempdm.value, type == 'user' ? list.value : [], type == 'word' ? list.value : [])
+    danmaku.value = JSON.stringify(tempdm.value)
+}
+
+function delblock(type: 'user' | 'word', v: string) {
+    if (oldDmdata.length == 0) {
+        oldDmdata = tempdm.value.data
+    }
+    unblock(type, v)
+    tempdm.value = danmakuFilter(tempdm.value, blockUserList.value, blockWordList.value)
+    danmaku.value = JSON.stringify(tempdm.value)
+}
+
 </script>
 
 

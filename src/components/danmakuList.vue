@@ -22,8 +22,7 @@ import { dplayerDm } from '../utils/interface';
 
 
 const emit = defineEmits<{
-    (e: 'change', dmList: dplayerDm["data"]): void
-    (e: 'block', blockName: string): void
+    (e: 'addblockUser', blockName: string): void
 }>()
 
 const props = withDefaults(defineProps<{
@@ -135,7 +134,7 @@ async function handleSelect(e: string) {
             filtered.value = true
             break;
         case 'blocked':
-            emit('block', selectDm.sendID)
+            emit('addblockUser', selectDm.sendID)
             break;
 
     }
