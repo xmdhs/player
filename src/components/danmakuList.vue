@@ -153,5 +153,8 @@ function clean() {
 
 </script>
 
-<style module>
+<style>
+.n-pagination{
+    flex-wrap: wrap;
+}
 </style>
