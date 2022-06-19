@@ -40,7 +40,7 @@ export class RemoteStore<T> implements store<T> {
             return await s.json();
         }
         if (s.status == 404) {
-            new Error("not found")
+            throw new Error("not found")
         }
         throw new Error(await s.text());
     }
