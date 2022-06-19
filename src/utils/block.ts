@@ -3,7 +3,7 @@ import { apiAddr, dplayerDm } from "./interface";
 
 const store = (() => {
     if ((globalThis as any)?._player?.api as string) {
-        return new RemoteStore<string[]>(() => (globalThis as any)?._player?.cors as string)
+        return new RemoteStore<string[]>(() => (globalThis as any)?._player?.api as string)
     }
 
     if ((window as any)["runtime"]) {
