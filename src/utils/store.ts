@@ -13,7 +13,7 @@ export class LocalStore<T> implements store<T> {
         if (s) {
             return JSON.parse(s);
         }
-        throw null;
+        throw new Error("not found");
     }
 }
 
@@ -39,6 +39,6 @@ export class RemoteStore<T> implements store<T> {
         if (s) {
             return await s.json();
         }
-        throw null;
+        throw new Error("not found");
     }
 }

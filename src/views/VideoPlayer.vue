@@ -293,8 +293,15 @@ const blockUserList = ref([] as string[]);
 const blockWordList = ref([] as string[]);
 
 (warpErr(async () => {
-    blockUserList.value = await getBlocked('user') || []
-    blockWordList.value = await getBlocked('word') || []
+    try {
+        blockUserList.value = await getBlocked('user') || []
+        blockWordList.value = await getBlocked('word') || []
+    } catch (e) {
+        if (e instanceof Error && e.message == "not found") {
+            return
+        }
+        throw e
+    }
 }))()
 
 
@@ -322,7 +329,17 @@ function delblock(type: 'user' | 'word', v: string) {
         oldDmdata = tempdm.value.data
     }
     unblock(type, v)
-    tempdm.value = danmakuFilter(tempdm.value, blockUserList.value, blockWordList.value)
+    let list: Ref<string[]>
+    switch (type) {
+        case 'user':
+            list = blockUserList
+            break
+        case 'word':
+            list = blockWordList
+            break
+    }
+    list.value = list.value.filter(vv => vv != v)
+    tempdm.value = danmakuFilter({ code: 0, data: oldDmdata }, blockUserList.value, blockWordList.value)
     danmaku.value = JSON.stringify(tempdm.value)
 }
 

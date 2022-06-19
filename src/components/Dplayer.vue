@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="ts">
-import { onUnmounted, ref, watch } from 'vue';
+import { onMounted, onUnmounted, ref, watch } from 'vue';
 import { DPlayer, DPlayerOptions, dp, DPlayerEvents } from '../types/Dplayer';
 import { WindowFullscreen, WindowUnfullscreen } from '../wails/runtime/runtime'
 
@@ -20,10 +20,14 @@ let dmlink: string
 let vttlink: string
 let hls: any
 
-watch(props, (newV, old) => {
-    if (newV.danmaku != old.danmaku && d) {
+let oldanmaku: string
+let oldurl: string
+
+watch(props, v => {
+    if (v.danmaku != oldanmaku) {
+        oldanmaku = v.danmaku
         dmlink != "" && URL.revokeObjectURL(dmlink)
-        let blob = new Blob([newV.danmaku])
+        let blob = new Blob([v.danmaku])
         dmlink = URL.createObjectURL(blob)
         d.danmaku.reload({
             addition: [dmlink],
@@ -31,14 +35,17 @@ watch(props, (newV, old) => {
             api: "",
         })
     }
-    if (newV.url == old.url) {
+    if (v.url == oldurl) {
         return
     }
     start()
 })
 
+
 function start() {
     clean()
+    oldanmaku = props.danmaku
+    oldurl = props.url
     if (dplayer.value) {
         dplayer.value.className = ""
         d = newPlayer(props.danmaku, props.vtt, dplayer.value, props.url);
@@ -53,11 +60,8 @@ function start() {
     }
 }
 
-start()
-
-onUnmounted(() => {
-    clean()
-});
+onMounted(start)
+onUnmounted(clean);
 
 
 

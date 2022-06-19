@@ -3,7 +3,7 @@
         <div style="flex:1">
             <n-input v-model:value="value" type="text" placeholder="屏蔽词（正则）" />
         </div>
-        <n-button @click="$emit('addBlockWord', value)">添加</n-button>
+        <n-button @click="$emit('addBlockWord', value); value = ''">添加</n-button>
     </div>
     <n-tabs type="line" animated @update:value="(v) => tabValue = v">
         <n-tab-pane name="1" tab="屏蔽正则">
@@ -19,7 +19,7 @@
 </template>
 
 <script setup lang="ts">
-import { NSpace, NInput, NButton, NTabs, NTabPane, NDataTable, DataTableColumns } from 'naive-ui'
+import { NInput, NButton, NTabs, NTabPane, NDataTable, DataTableColumns } from 'naive-ui'
 import { computed, h, ref } from 'vue';
 
 const props = withDefaults(defineProps<{

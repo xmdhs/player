@@ -15,16 +15,15 @@ const store = (() => {
 
 
 export async function addblock(key: string, value: string) {
-    let l = await store.get(key);
-    if (l) {
-        if (l.includes(value)) {
-            return;
-        }
-        l.push(value)
-        await store.set(key, l);
-        return
+    let l: string[] = []
+    try {
+        l = await store.get(key);
+    } catch (e) { }
+    if (l.includes(value)) {
+        return;
     }
-    await store.set(key, [value]);
+    l.push(value)
+    await store.set(key, l);
 }
 
 export async function unblock(key: string, value: string) {
@@ -39,11 +38,13 @@ export async function getBlocked(key: string) {
 }
 
 export function danmakuFilter(danmaku: dplayerDm, blockUser: string[], blockWord: string[]) {
+    let d: dplayerDm = { code: 0, data: [] }
+    d.data.push(...danmaku.data)
     if (blockUser.length > 0) {
-        danmaku.data = danmaku.data.filter(x => blockUser.includes(x[3]))
+        d.data = d.data.filter(x => !blockUser.includes(x[3]))
     }
     if (blockWord.length > 0) {
-        danmaku.data = danmaku.data.filter(x => blockWord.some(y => new RegExp(y).test(x[4])))
+        d.data = d.data.filter(x => !blockWord.some(y => new RegExp(y).test(x[4])))
     }
-    return danmaku
+    return d
 }
