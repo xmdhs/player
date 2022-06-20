@@ -52,7 +52,7 @@ watch(props, readData)
 readData()
 
 function readData() {
-    clean()
+    filtered.value = false
     data.value = []
     props.dmList.forEach(dm => {
         data.value.push({
@@ -127,9 +127,7 @@ async function handleSelect(e: string) {
     showDropdown.value = false
     switch (e) {
         case 'view':
-            if (tempDmList.length == 0) {
-                tempDmList = data.value.filter(() => true)
-            }
+            tempDmList = data.value.filter(() => true)
             data.value = tempDmList.filter(dm => {
                 return dm.sendID == selectDm.sendID
             })
