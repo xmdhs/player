@@ -136,7 +136,6 @@ async function handleSelect(e: string) {
             filtered.value = true
             break;
         case 'blocked':
-            clean()
             emit('addblockUser', selectDm.sendID)
             break;
 
