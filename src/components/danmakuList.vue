@@ -52,6 +52,7 @@ watch(props, readData)
 readData()
 
 function readData() {
+    clean()
     data.value = []
     props.dmList.forEach(dm => {
         data.value.push({
