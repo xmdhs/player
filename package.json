@@ -10,7 +10,8 @@
     "@plussub/srt-vtt-parser": "^1.1.0",
     "naive-ui": "^2.29.1",
     "vue": "^3.2.31",
-    "vue-router": "^4.0.14"
+    "vue-router": "^4.0.14",
+    "vuex": "^4.0.2"
   },
   "devDependencies": {
     "@types/golang-wasm-exec": "^1.15.0",

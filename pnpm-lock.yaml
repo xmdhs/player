@@ -10,12 +10,14 @@ specifiers:
   vue: ^3.2.31
   vue-router: ^4.0.14
   vue-tsc: ^0.3.0
+  vuex: ^4.0.2
 
 dependencies:
   '@plussub/srt-vtt-parser': 1.1.0
   naive-ui: 2.29.1_vue@3.2.31
   vue: 3.2.31
   vue-router: 4.0.14_vue@3.2.31
+  vuex: 4.0.2_vue@3.2.31
 
 devDependencies:
   '@types/golang-wasm-exec': 1.15.0
@@ -1209,6 +1211,15 @@ packages:
       seemly: 0.3.3
       vdirs: 0.1.8_vue@3.2.31
       vooks: 0.2.12_vue@3.2.31
+      vue: 3.2.31
+    dev: false
+
+  /vuex/4.0.2_vue@3.2.31:
+    resolution: {integrity: sha512-M6r8uxELjZIK8kTKDGgZTYX/ahzblnzC4isU1tpmEuOIIKmV+TRdc+H4s8ds2NuZ7wpUTdGRzJRtoj+lI+pc0Q==}
+    peerDependencies:
+      vue: ^3.0.2
+    dependencies:
+      '@vue/devtools-api': 6.1.0
       vue: 3.2.31
     dev: false
 
