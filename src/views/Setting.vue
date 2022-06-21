@@ -12,8 +12,13 @@
                     <n-p v-if="!store.state.bilibili.logined">
                         <n-button @click="router.push('/login')">还没有登录，去登录</n-button>
                     </n-p>
-                    <n-button v-if="store.state.bilibili.logined"
-                        @click="store.commit('bilibili/setLogin', { logined: false })">退出登录</n-button>
+                    <n-popconfirm v-if="store.state.bilibili.logined"
+                        @positive-click="store.commit('bilibili/setLogin', { logined: false })">
+                        <template #trigger>
+                            <n-button>退出登录</n-button>
+                        </template>
+                        一切都将一去杳然，任何人都无法将其捕获。
+                    </n-popconfirm>
                 </n-space>
                 <n-space justify="space-between">
                     <n-p>视频最大分辨率</n-p>
@@ -26,7 +31,7 @@
 </template>
 
 <script setup lang="ts">
-import { NH1, NH2, NP, NSpace, NSelect, NButton } from 'naive-ui'
+import { NH1, NH2, NP, NSpace, NSelect, NButton, NPopconfirm } from 'naive-ui'
 import { ref, watch } from 'vue';
 import { useStore } from '@/store/store';
 import { useRouter } from 'vue-router'
