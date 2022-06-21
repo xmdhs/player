@@ -1,4 +1,3 @@
-import { KeepAlive } from 'vue'
 import { createRouter, createWebHashHistory, createWebHistory, RouteRecordRaw } from 'vue-router'
 
 declare module 'vue-router' {
@@ -8,8 +7,12 @@ declare module 'vue-router' {
     }
 }
 
-import SetUrl from './views/SetUrl.vue'
-import VideoPlayer from './views/VideoPlayer.vue'
+import SetUrl from '@/views/SetUrl.vue'
+import VideoPlayer from '@/views/VideoPlayer.vue'
+import Setting from '@/views/Setting.vue'
+import BilLogin from '@/views/BilLogin.vue'
+import BiliCid from '@/views/BiliCid.vue'
+
 
 const routes: RouteRecordRaw[] = [
     {
@@ -28,6 +31,31 @@ const routes: RouteRecordRaw[] = [
             scrollToTop: true
         },
         props: route => ({ url: route.query.video })
+    },
+    {
+        path: "/setting",
+        name: "setting",
+        component: Setting,
+        meta: {
+            scrollToTop: true
+        },
+    },
+    {
+        path: "/login",
+        name: "login",
+        component: BilLogin,
+        meta: {
+            scrollToTop: true
+        },
+    },
+    {
+        path: "/bilicid",
+        name: "BiliCid",
+        component: BiliCid,
+        meta: {
+            scrollToTop: true
+        },
+        props: route => ({ videoID: route.query.videoID })
     }
 ]
 

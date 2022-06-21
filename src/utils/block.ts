@@ -1,5 +1,5 @@
-import { LocalStore, RemoteStore } from "./store";
-import { apiAddr, dplayerDm } from "./interface";
+import { LocalStore, RemoteStore } from "@/utils/store";
+import { apiAddr, dplayerDm } from "@/utils/interface";
 
 const store = (() => {
     if ((globalThis as any)?._player?.api as string) {

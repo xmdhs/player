@@ -1,4 +1,4 @@
-import { dplayerDm, cors } from "./interface"
+import { dplayerDm, cors } from "@/utils/interface"
 
 const commentApiAddr = () => (cors + `https://api.acplay.net/api/v2/comment`)
 const searchApiAddr = () => (cors + `https://api.acplay.net/api/v2/search/episodes?`)

@@ -1,4 +1,4 @@
-import { dplayerDm, cors } from "./interface"
+import { dplayerDm, cors } from "@/utils/interface"
 
 
 const dmapi = () => (cors + `https://ani.gamer.com.tw/ajax/danmuGet.php?`)

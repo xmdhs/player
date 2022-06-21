@@ -1,12 +1,4 @@
 <template>
-    <div v-if="hasErr">
-        <n-alert @click="reset" title="Error" type="error">
-            <n-space vertical>
-                {{ hasErr }}
-            </n-space>
-        </n-alert>
-    </div>
-
     <div v-show="finish" v-if="videodone">
         <DplayerVue :danmaku="danmaku" :vtt="zm" :url="url" />
         <br />
@@ -50,18 +42,19 @@
 
 <script setup lang="ts">
 import { Ref, ref, watchEffect } from 'vue'
-import { bilZm2vtt, getbilCidS, getBilZm, getDM, getZm } from '../utils/bilapi';
-import { getDm as getBahaDm } from '../utils/baha';
-import { dplayerDm } from '../utils/interface';
-import waitgroup from '../utils/WaitGroup';
-import selVue from '../components/sel.vue';
-import { dmoffset, vttoffset } from '../utils/offset';
-import { searchanime, getDm as getAcpDm, SearchObject } from '../utils/acplay';
-import DplayerVue from '../components/Dplayer.vue';
-import { NAlert, NButton, NInput, NInputNumber, NSpace, NCollapse, NCollapseItem } from 'naive-ui'
-import danmakuList from '../components/danmakuList.vue';
-import blockList from '../components/blockList.vue';
-import { addblock, unblock, getBlocked, danmakuFilter } from '../utils/block';
+import { bilZm2vtt, getbilCidS, getBilZm, getDM, getZm } from '@/utils/bilapi';
+import { getDm as getBahaDm } from '@/utils/baha';
+import { dplayerDm } from '@/utils/interface';
+import waitgroup from '@/utils/WaitGroup';
+import selVue from '@/components/Sel.vue';
+import { dmoffset, vttoffset } from '@/utils/offset';
+import { searchanime, getDm as getAcpDm, SearchObject } from '@/utils/acplay';
+import DplayerVue from '@/components/Dplayer.vue';
+import { NButton, NInput, NInputNumber, NSpace, NCollapse, NCollapseItem, useNotification } from 'naive-ui'
+import danmakuList from '@/components/DanmakuList.vue';
+import blockList from '@/components/BlockList.vue';
+import { addblock, unblock, getBlocked, danmakuFilter } from '@/utils/block';
+import { NError } from '@/utils/Nnotification';
 
 
 const bilDanmaku = ref('');
@@ -72,7 +65,6 @@ const zm = ref("")
 const dmcidlist = ref([] as { label: string, value: string }[])
 const zmlist = ref([] as { label: string, value: string }[])
 const danmaku = ref("")
-const hasErr = ref("")
 const videodone = ref(false)
 const offset = ref(null as number | null)
 
@@ -81,6 +73,7 @@ const acplist = ref([] as { label: string, value: string }[])
 const dmlimit = ref(null as number | null)
 
 const tempdm = ref<dplayerDm>({ code: 0, data: [] })
+const notification = useNotification()
 
 const props = defineProps<{
     url: string
@@ -264,18 +257,16 @@ function shuffle(arr: any[]) {
 
 function warpErr<F extends Function>(f: F): F {
     return async function (...args: any[]) {
-        hasErr.value = ""
         try {
             return await f(...args)
         } catch (e) {
             console.error(e)
-            hasErr.value = String(e)
+            NError(notification, String(e))
         }
     } as any
 }
 
 function reset() {
-    hasErr.value = ""
     finish.value = false
     videodone.value = false
     acplist.value = []

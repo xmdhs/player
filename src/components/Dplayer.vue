@@ -4,8 +4,8 @@
 
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref, watch } from 'vue';
-import { DPlayer, DPlayerOptions, dp, DPlayerEvents } from '../types/Dplayer';
-import { WindowFullscreen, WindowUnfullscreen } from '../wails/runtime/runtime'
+import { DPlayer, DPlayerOptions, dp, DPlayerEvents } from '@/types/Dplayer';
+import { WindowFullscreen, WindowUnfullscreen } from '@/wails/runtime/runtime'
 
 const dplayer = ref<HTMLElement | null>(null);
 
