@@ -17,7 +17,7 @@
                 </n-space>
                 <n-space justify="space-between">
                     <n-p>视频最大分辨率</n-p>
-                    <n-select v-model:value="store.state.bilibili.resolution" :options="options" style="width: 8em;" />
+                    <n-select v-model:value="resolution" :options="options" style="width: 8em;" />
                 </n-space>
             </n-space>
         </div>
@@ -27,12 +27,18 @@
 
 <script setup lang="ts">
 import { NH1, NH2, NP, NSpace, NSelect, NButton } from 'naive-ui'
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { useStore } from '@/store/store';
 import { useRouter } from 'vue-router'
 
 const store = useStore();
 const router = useRouter()
+
+const resolution = ref(store.state.bilibili.resolution)
+
+watch(resolution, () => {
+    store.commit('bilibili/setResolution', resolution.value)
+})
 
 const options = ref([
     {
