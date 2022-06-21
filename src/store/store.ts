@@ -1,5 +1,6 @@
 import { InjectionKey } from "vue"
 import { createStore, Store, useStore as baseUseStore } from "vuex"
+import { vuexLocal } from "./persist"
 
 
 export interface State {
@@ -31,6 +32,9 @@ export const store = createStore<State>({
             context.commit('increment')
         }
     },
+    plugins: [
+        vuexLocal.plugin
+    ]
 })
 
 export function useStore() {
