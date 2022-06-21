@@ -11,16 +11,12 @@ export const store = createStore<RootState>({
         return {
             count: 0,
             isWeb: true,
-            resolution: "120"
         }
     },
     mutations: {
         setIsWeb(state, isWeb: boolean) {
             state.isWeb = isWeb
         },
-        setResolution(state, resolution: string) {
-            state.resolution = resolution
-        }
     },
     actions: {
         increment(context) {

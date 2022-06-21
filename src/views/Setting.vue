@@ -12,11 +12,12 @@
                     <n-p v-if="!store.state.bilibili.logined">
                         <n-button @click="router.push('/login')">还没有登录，去登录</n-button>
                     </n-p>
-                    <n-button v-if="store.state.bilibili.logined" @click="store.commit('bilibili/setLogin', { logined: false })">退出登录</n-button>
+                    <n-button v-if="store.state.bilibili.logined"
+                        @click="store.commit('bilibili/setLogin', { logined: false })">退出登录</n-button>
                 </n-space>
                 <n-space justify="space-between">
                     <n-p>视频最大分辨率</n-p>
-                    <n-select v-model:value="store.state.resolution" :options="options" style="width: 8em;" />
+                    <n-select v-model:value="store.state.bilibili.resolution" :options="options" style="width: 8em;" />
                 </n-space>
             </n-space>
         </div>

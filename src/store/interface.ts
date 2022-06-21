@@ -4,9 +4,7 @@ export interface AllState extends RootState {
 
 
 export interface RootState {
-    count: number,
     isWeb: boolean,
-    resolution: string,
 }
 
 export interface bilState {
@@ -15,4 +13,5 @@ export interface bilState {
     SESSDATA: string,
     bili_jct: string,
     logined: boolean,
+    resolution: string,
 }
