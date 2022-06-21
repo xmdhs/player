@@ -1,5 +1,5 @@
 import { Module } from "vuex";
-import { bilState, RootState } from "../interface"
+import { bilState, RootState } from "@/store/interface"
 
 
 

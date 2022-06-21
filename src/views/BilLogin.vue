@@ -18,10 +18,10 @@
 import { NCard, NSkeleton, NSpace, useNotification, NP, useMessage } from 'naive-ui'
 import { onMounted, onUnmounted, ref } from 'vue';
 import QRCode from 'qrcode'
-import { cors } from '../utils/interface'
-import { NError } from '../utils/Nnotification'
+import { cors } from '@/utils/interface'
+import { NError } from '@/utils/Nnotification'
 import { useRouter } from 'vue-router';
-import { useStore } from '../store/store';
+import { useStore } from '@/store/store';
 
 const qrLoading = ref(true);
 const notification = useNotification()

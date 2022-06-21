@@ -1,5 +1,5 @@
-import { cors, dplayerDm } from "./interface"
-import { vtttime } from "./vtt"
+import { cors, dplayerDm } from "@/utils/interface"
+import { vtttime } from "@/utils/vtt"
 
 const cidapi = () => (cors + `https://api.bilibili.com/x/player/pagelist?`)
 const zmapi = () => (cors + `https://api.bilibili.com/x/player/v2?`)

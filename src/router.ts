@@ -7,10 +7,10 @@ declare module 'vue-router' {
     }
 }
 
-import SetUrl from './views/SetUrl.vue'
-import VideoPlayer from './views/VideoPlayer.vue'
-import Setting from './views/Setting.vue'
-import BilLogin from './views/BilLogin.vue'
+import SetUrl from '@/views/SetUrl.vue'
+import VideoPlayer from '@/views/VideoPlayer.vue'
+import Setting from '@/views/Setting.vue'
+import BilLogin from '@/views/BilLogin.vue'
 
 const routes: RouteRecordRaw[] = [
     {

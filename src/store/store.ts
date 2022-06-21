@@ -1,8 +1,8 @@
 import { InjectionKey } from "vue"
 import { createStore, Store, useStore as baseUseStore } from "vuex"
-import { vuexLocal } from "./persist"
-import { AllState, RootState } from "./interface"
-import { bilibili } from "./modules/bilibili"
+import { vuexLocal } from "@/store/persist"
+import { AllState, RootState } from "@/store/interface"
+import { bilibili } from "@/store/modules/bilibili"
 
 export const key: InjectionKey<Store<RootState>> = Symbol()
 

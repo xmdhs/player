@@ -1,5 +1,5 @@
 import VuexPersistence from 'vuex-persist'
-import { AllState } from "./interface"
+import { AllState } from "@/store/interface"
 
 
 export const vuexLocal = new VuexPersistence<AllState>({

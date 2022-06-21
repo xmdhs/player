@@ -27,7 +27,7 @@
 <script setup lang="ts">
 import { NH1, NH2, NP, NSpace, NSelect, NButton } from 'naive-ui'
 import { ref } from 'vue';
-import { useStore } from '../store/store';
+import { useStore } from '@/store/store';
 import { useRouter } from 'vue-router'
 
 const store = useStore();

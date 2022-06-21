@@ -42,19 +42,19 @@
 
 <script setup lang="ts">
 import { Ref, ref, watchEffect } from 'vue'
-import { bilZm2vtt, getbilCidS, getBilZm, getDM, getZm } from '../utils/bilapi';
-import { getDm as getBahaDm } from '../utils/baha';
-import { dplayerDm } from '../utils/interface';
-import waitgroup from '../utils/WaitGroup';
-import selVue from '../components/Sel.vue';
-import { dmoffset, vttoffset } from '../utils/offset';
-import { searchanime, getDm as getAcpDm, SearchObject } from '../utils/acplay';
-import DplayerVue from '../components/Dplayer.vue';
+import { bilZm2vtt, getbilCidS, getBilZm, getDM, getZm } from '@/utils/bilapi';
+import { getDm as getBahaDm } from '@/utils/baha';
+import { dplayerDm } from '@/utils/interface';
+import waitgroup from '@/utils/WaitGroup';
+import selVue from '@/components/Sel.vue';
+import { dmoffset, vttoffset } from '@/utils/offset';
+import { searchanime, getDm as getAcpDm, SearchObject } from '@/utils/acplay';
+import DplayerVue from '@/components/Dplayer.vue';
 import { NButton, NInput, NInputNumber, NSpace, NCollapse, NCollapseItem, useNotification } from 'naive-ui'
-import danmakuList from '../components/DanmakuList.vue';
-import blockList from '../components/BlockList.vue';
-import { addblock, unblock, getBlocked, danmakuFilter } from '../utils/block';
-import { NError } from '../utils/Nnotification';
+import danmakuList from '@/components/DanmakuList.vue';
+import blockList from '@/components/BlockList.vue';
+import { addblock, unblock, getBlocked, danmakuFilter } from '@/utils/block';
+import { NError } from '@/utils/Nnotification';
 
 
 const bilDanmaku = ref('');

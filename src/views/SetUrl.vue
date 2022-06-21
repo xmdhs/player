@@ -28,7 +28,7 @@
 import { onActivated, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { NInput, NButton, NSpace, NUpload, NUploadDragger, NText, UploadCustomRequestOptions, NGrid, NGi, useMessage } from 'naive-ui';
-import { useStore } from '../store/store';
+import { useStore } from '@/store/store';
 
 const url = ref('');
 
