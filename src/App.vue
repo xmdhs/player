@@ -5,7 +5,11 @@
                 <router-link to="/" :class="$style.headerText">
                     <strong>播放器</strong>
                 </router-link>
-                <HeaderMenuVue />
+                <router-link to="/setting" style="color: inherit;text-decoration: inherit;">
+                    <n-icon size="30">
+                        <SettingsOutline />
+                    </n-icon>
+                </router-link>
             </n-layout-header>
             <n-layout-content :class="$style.container" content-style="padding: 24px;">
                 <router-view v-slot="{ Component, route }">
@@ -20,9 +24,9 @@
 </template>
 
 <script setup lang="ts">
-import { NMessageProvider, NLayout, NLayoutContent, NLayoutHeader, NDropdown, NButton, DropdownDividerOption, DropdownGroupOption, DropdownOption, DropdownRenderOption } from 'naive-ui'
+import { NMessageProvider, NLayout, NLayoutContent, NLayoutHeader, NIcon } from 'naive-ui'
 import { RouterView, RouterLink } from 'vue-router'
-import HeaderMenuVue from './views/HeaderMenu.vue';
+import { SettingsOutline } from '@vicons/ionicons5'
 </script>
 
 <style module>

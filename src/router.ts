@@ -1,4 +1,3 @@
-import { KeepAlive } from 'vue'
 import { createRouter, createWebHashHistory, createWebHistory, RouteRecordRaw } from 'vue-router'
 
 declare module 'vue-router' {
@@ -10,6 +9,7 @@ declare module 'vue-router' {
 
 import SetUrl from './views/SetUrl.vue'
 import VideoPlayer from './views/VideoPlayer.vue'
+import Setting from './views/Setting.vue'
 
 const routes: RouteRecordRaw[] = [
     {
@@ -28,6 +28,14 @@ const routes: RouteRecordRaw[] = [
             scrollToTop: true
         },
         props: route => ({ url: route.query.video })
+    },
+    {
+        path: "/setting",
+        name: "setting",
+        component: Setting,
+        meta: {
+            scrollToTop: true
+        },
     }
 ]
 
