@@ -11,6 +11,8 @@ import SetUrl from '@/views/SetUrl.vue'
 import VideoPlayer from '@/views/VideoPlayer.vue'
 import Setting from '@/views/Setting.vue'
 import BilLogin from '@/views/BilLogin.vue'
+import BiliCid from '@/views/BiliCid.vue'
+
 
 const routes: RouteRecordRaw[] = [
     {
@@ -49,7 +51,7 @@ const routes: RouteRecordRaw[] = [
     {
         path: "/bilicid",
         name: "BiliCid",
-        component: BilLogin,
+        component: BiliCid,
         meta: {
             scrollToTop: true
         },
