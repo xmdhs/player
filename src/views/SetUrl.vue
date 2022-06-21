@@ -2,7 +2,8 @@
     <n-space vertical :size="20">
         <n-grid :cols="8" x-gap="5" item-responsive>
             <n-gi span="6">
-                <n-input type="text" v-model:value="url" placeholder="视频直链" />
+                <n-input type="text" v-model:value="url"
+                    :placeholder="store.state.isWeb ? '视频直链' : '视频直链 / bvid / epid'" />
             </n-gi>
             <n-gi>
                 <n-button @click="Form">播放</n-button>
@@ -26,13 +27,24 @@
 <script setup lang="ts">
 import { onActivated, ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { NInput, NButton, NSpace, NUpload, NUploadDragger, NText, UploadCustomRequestOptions, NGrid, NGi } from 'naive-ui';
+import { NInput, NButton, NSpace, NUpload, NUploadDragger, NText, UploadCustomRequestOptions, NGrid, NGi, useMessage } from 'naive-ui';
+import { useStore } from '../store/store';
 
 const url = ref('');
 
 const router = useRouter();
+const message = useMessage();
+const store = useStore();
 
 function Form() {
+    let u = url.value.toLowerCase();
+    if (u.startsWith("ep") || u.startsWith("bv")) {
+        if (!store.state.bilibili.logined) {
+            message.error("请先登录，才能解析 bilibili 视频");
+            router.push('/login');
+            return;
+        }
+    }
     router.push({ name: "player", query: { video: url.value } });
 }
 
