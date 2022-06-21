@@ -10,6 +10,7 @@ declare module 'vue-router' {
 import SetUrl from './views/SetUrl.vue'
 import VideoPlayer from './views/VideoPlayer.vue'
 import Setting from './views/Setting.vue'
+import BilLogin from './views/BilLogin.vue'
 
 const routes: RouteRecordRaw[] = [
     {
@@ -33,6 +34,14 @@ const routes: RouteRecordRaw[] = [
         path: "/setting",
         name: "setting",
         component: Setting,
+        meta: {
+            scrollToTop: true
+        },
+    },
+    {
+        path: "/login",
+        name: "login",
+        component: BilLogin,
         meta: {
             scrollToTop: true
         },
