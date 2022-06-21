@@ -1,32 +1,52 @@
 <template>
     <n-notification-provider>
-        <n-layout>
-            <n-layout-header bordered :class="$style.header">
-                <router-link to="/" :class="$style.headerText">
-                    <strong>播放器</strong>
-                </router-link>
-                <router-link to="/setting" style="color: inherit;text-decoration: inherit;">
-                    <n-icon size="30">
-                        <SettingsOutline />
-                    </n-icon>
-                </router-link>
-            </n-layout-header>
-            <n-layout-content :class="$style.container" content-style="padding: 24px;">
-                <router-view v-slot="{ Component, route }">
-                    <keep-alive>
-                        <component :is="Component" v-if="route.meta.keepAlive" />
-                    </keep-alive>
-                    <component :is="Component" v-if="!route.meta.keepAlive" />
-                </router-view>
-            </n-layout-content>
-        </n-layout>
+        <n-message-provider>
+            <n-layout>
+                <n-layout-header bordered :class="$style.header">
+                    <n-space :class="$style.headerText" justify="center" align="center" :size="[30, 0]">
+                        <n-icon size="25" @click="router.back()">
+                            <ArrowBack />
+                        </n-icon>
+                        <n-icon size="25" @click="router.forward()">
+                            <ArrowForward />
+                        </n-icon>
+                        <n-icon size="25" @click="refresh">
+                            <Refresh />
+                        </n-icon>
+                        <n-icon size="25" @click="router.push('/')">
+                            <HomeOutline />
+                        </n-icon>
+                    </n-space>
+
+                    <router-link to="/setting" style="color: inherit;text-decoration: inherit;">
+                        <n-icon size="25">
+                            <SettingsOutline />
+                        </n-icon>
+                    </router-link>
+                </n-layout-header>
+                <n-layout-content :class="$style.container" content-style="padding: 24px;">
+                    <router-view v-slot="{ Component, route }">
+                        <keep-alive>
+                            <component :is="Component" v-if="route.meta.keepAlive" />
+                        </keep-alive>
+                        <component :is="Component" v-if="!route.meta.keepAlive" />
+                    </router-view>
+                </n-layout-content>
+            </n-layout>
+        </n-message-provider>
     </n-notification-provider>
 </template>
 
 <script setup lang="ts">
-import { NLayout, NLayoutContent, NLayoutHeader, NIcon, NNotificationProvider } from 'naive-ui'
-import { RouterView, RouterLink } from 'vue-router'
-import { SettingsOutline } from '@vicons/ionicons5'
+import { NLayout, NLayoutContent, NLayoutHeader, NIcon, NNotificationProvider, NSpace, NMessageProvider } from 'naive-ui'
+import { RouterView, RouterLink, useRouter } from 'vue-router'
+import { SettingsOutline, ArrowBack, ArrowForward, Refresh, HomeOutline } from '@vicons/ionicons5'
+
+const router = useRouter()
+
+function refresh() {
+    location.reload()
+}
 </script>
 
 <style module>

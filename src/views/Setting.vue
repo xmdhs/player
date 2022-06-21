@@ -9,7 +9,10 @@
             <n-space vertical :size="[0, 20]">
                 <n-space justify="space-between">
                     <n-p>账户</n-p>
-                    <n-p>还没有登录</n-p>
+                    <n-p v-if="!store.state.bilibili.logined">
+                        <n-button @click="router.push('/login')">还没有登录，去登录</n-button>
+                    </n-p>
+                    <n-button v-if="store.state.bilibili.logined" @click="store.commit('bilibili/setLogin', { logined: false })">退出登录</n-button>
                 </n-space>
                 <n-space justify="space-between">
                     <n-p>视频最大分辨率</n-p>
@@ -22,11 +25,13 @@
 </template>
 
 <script setup lang="ts">
-import { NH1, NH2, NP, NSpace, NSelect } from 'naive-ui'
-import { ref, watch } from 'vue';
+import { NH1, NH2, NP, NSpace, NSelect, NButton } from 'naive-ui'
+import { ref } from 'vue';
 import { useStore } from '../store/store';
+import { useRouter } from 'vue-router'
 
 const store = useStore();
+const router = useRouter()
 
 const options = ref([
     {

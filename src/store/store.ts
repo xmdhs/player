@@ -1,17 +1,12 @@
 import { InjectionKey } from "vue"
 import { createStore, Store, useStore as baseUseStore } from "vuex"
 import { vuexLocal } from "./persist"
+import { AllState, RootState } from "./interface"
+import { bilibili } from "./modules/bilibili"
 
+export const key: InjectionKey<Store<RootState>> = Symbol()
 
-export interface State {
-    count: number,
-    isWeb: boolean,
-    resolution: string,
-}
-
-export const key: InjectionKey<Store<State>> = Symbol()
-
-export const store = createStore<State>({
+export const store = createStore<RootState>({
     state() {
         return {
             count: 0,
@@ -33,11 +28,14 @@ export const store = createStore<State>({
         }
     },
     plugins: [
-        vuexLocal.plugin
-    ]
+        vuexLocal.plugin as any
+    ],
+    modules: {
+        bilibili: bilibili
+    }
 })
 
-export function useStore() {
-    return baseUseStore(key)
+export function useStore<T = AllState>() {
+    return baseUseStore<T>(key)
 }
 

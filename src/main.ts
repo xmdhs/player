@@ -15,6 +15,7 @@ import { setCors, setApiAddr, apiAddr } from './utils/interface'
         console.debug(e)
     }
     apiAddr != "" ? store.commit('setIsWeb', false) : store.commit('setIsWeb', true)
+    store.commit('setIsWeb', false)
     const app = createApp(App)
     app.use(router)
     app.use(store, key)

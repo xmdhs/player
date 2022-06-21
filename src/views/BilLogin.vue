@@ -15,21 +15,32 @@
 </template>
 
 <script setup lang="ts">
-import { NCard, NSkeleton, NSpace, useNotification, NP } from 'naive-ui'
-import { onMounted, ref } from 'vue';
+import { NCard, NSkeleton, NSpace, useNotification, NP, useMessage } from 'naive-ui'
+import { onMounted, onUnmounted, ref } from 'vue';
 import QRCode from 'qrcode'
 import { cors } from '../utils/interface'
 import { NError } from '../utils/Nnotification'
+import { useRouter } from 'vue-router';
+import { useStore } from '../store/store';
 
 const qrLoading = ref(true);
 const notification = useNotification()
 const canvasRef = ref<HTMLElement | null>(null);
+const message = useMessage()
+const router = useRouter()
+const store = useStore()
 
 onMounted(start)
 
-let oauthKey = ""
+let out = false
+
+onUnmounted(() => {
+    out = true
+})
 
 async function start() {
+    out = false
+    let oauthKey = ""
     let url: string;
     try {
         let f = await fetch(cors + "https://passport.bilibili.com/qrcode/getLoginUrl")
@@ -53,6 +64,40 @@ async function start() {
         }
     })
     qrLoading.value = false
+    check(oauthKey)
+}
+
+async function check(oauthKey: string): Promise<void> {
+    if (out) return;
+    let f = await fetch(cors + "https://passport.bilibili.com/qrcode/getLoginInfo", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: new URLSearchParams({
+            oauthKey: oauthKey
+        })
+    })
+    let r = await f.json() as apiRoot<{ url: string } | number>
+    const data = r?.data
+    if (r.code == 0 && typeof data == "object" && "url" in data) {
+        let u = new URL(data.url)
+        store.commit('bilibili/setLogin', {
+            DedeUserID: u.searchParams.get("DedeUserID"),
+            DedeUserID__ckMd5: u.searchParams.get("DedeUserID__ckMd5"),
+            SESSDATA: u.searchParams.get("SESSDATA"),
+            bili_jct: u.searchParams.get("bili_jct"),
+            logined: true
+        })
+        router.back()
+        return
+    }
+    if (data === -5 || data === -4) {
+        await new Promise(resolve => setTimeout(resolve, 2000))
+        return check(oauthKey)
+    }
+    message.warning("二维码失效，请重新扫码")
+    return start()
 }
 
 function ErrMsg(msg: string) {
