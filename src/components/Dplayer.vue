@@ -111,7 +111,7 @@ function newPlayer(danmaku: string, vtt: string, dplayer: HTMLElement, url: stri
                 fontSize: "4vmin"
             }
         }
-        if (url.endsWith(".m3u8") && Hls.isSupported()) {
+        if (new URL(url).pathname.endsWith(".m3u8") && Hls.isSupported()) {
             o.video!.type = "customHls"
             o.video!.customType = {
                 customHls: function (video: HTMLVideoElement, player: any) {
