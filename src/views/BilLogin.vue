@@ -2,7 +2,7 @@
     <n-space justify="center" align="center">
         <div style="width: 25em;max-width: 100%;">
             <n-card title="B站扫码登录" size="large">
-                <n-skeleton :repeat="12" text v-if="qrLoading"></n-skeleton>
+                <n-skeleton :repeat="7" text v-if="qrLoading"></n-skeleton>
                 <div v-show="!qrLoading" style="height: 15em;max-height:100%">
                     <n-space justify="center" align="center">
                         <canvas style="height: 100%;width:100%;" ref="canvasRef"></canvas>
