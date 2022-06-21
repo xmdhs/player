@@ -50,10 +50,11 @@ import selVue from '../components/Sel.vue';
 import { dmoffset, vttoffset } from '../utils/offset';
 import { searchanime, getDm as getAcpDm, SearchObject } from '../utils/acplay';
 import DplayerVue from '../components/Dplayer.vue';
-import { NAlert, NButton, NInput, NInputNumber, NSpace, NCollapse, NCollapseItem, useMessage } from 'naive-ui'
+import { NButton, NInput, NInputNumber, NSpace, NCollapse, NCollapseItem, useNotification } from 'naive-ui'
 import danmakuList from '../components/DanmakuList.vue';
 import blockList from '../components/BlockList.vue';
 import { addblock, unblock, getBlocked, danmakuFilter } from '../utils/block';
+import { NError } from '../utils/Nnotification';
 
 
 const bilDanmaku = ref('');
@@ -72,7 +73,7 @@ const acplist = ref([] as { label: string, value: string }[])
 const dmlimit = ref(null as number | null)
 
 const tempdm = ref<dplayerDm>({ code: 0, data: [] })
-const message = useMessage()
+const notification = useNotification()
 
 const props = defineProps<{
     url: string
@@ -260,10 +261,7 @@ function warpErr<F extends Function>(f: F): F {
             return await f(...args)
         } catch (e) {
             console.error(e)
-            message.error(String(e), {
-                duration: 0,
-                closable: true
-            })
+            NError(notification, String(e))
         }
     } as any
 }

@@ -1,5 +1,5 @@
 <template>
-    <n-message-provider>
+    <n-notification-provider>
         <n-layout>
             <n-layout-header bordered :class="$style.header">
                 <router-link to="/" :class="$style.headerText">
@@ -20,11 +20,11 @@
                 </router-view>
             </n-layout-content>
         </n-layout>
-    </n-message-provider>
+    </n-notification-provider>
 </template>
 
 <script setup lang="ts">
-import { NMessageProvider, NLayout, NLayoutContent, NLayoutHeader, NIcon } from 'naive-ui'
+import { NLayout, NLayoutContent, NLayoutHeader, NIcon, NNotificationProvider } from 'naive-ui'
 import { RouterView, RouterLink } from 'vue-router'
 import { SettingsOutline } from '@vicons/ionicons5'
 </script>
