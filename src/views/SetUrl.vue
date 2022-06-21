@@ -44,6 +44,7 @@ function Form() {
             router.push('/login');
             return;
         }
+        router.push({ name: "BiliCid", query: { videoID: url.value } });
     }
     router.push({ name: "player", query: { video: url.value } });
 }

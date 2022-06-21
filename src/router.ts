@@ -45,6 +45,15 @@ const routes: RouteRecordRaw[] = [
         meta: {
             scrollToTop: true
         },
+    },
+    {
+        path: "/bilicid",
+        name: "BiliCid",
+        component: BilLogin,
+        meta: {
+            scrollToTop: true
+        },
+        props: route => ({ videoID: route.query.videoID })
     }
 ]
 
