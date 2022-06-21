@@ -72,15 +72,7 @@ const options = ref([
     {
         label: '360P',
         value: '16',
-    },
-    {
-        label: '240P',
-        value: '240',
-    },
-    {
-        label: '144P',
-        value: '144',
-    },
+    }
 ])
 
 
