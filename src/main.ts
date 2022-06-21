@@ -1,8 +1,9 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
-import { CorsServer,ApiServer } from './wails/App'
-import { setCors,setApiAddr } from './utils/interface'
+import { store, key } from './store/store'
+import { CorsServer, ApiServer } from './wails/App'
+import { setCors, setApiAddr, apiAddr } from './utils/interface'
 
 (async () => {
     try {
@@ -13,7 +14,9 @@ import { setCors,setApiAddr } from './utils/interface'
     } catch (e) {
         console.debug(e)
     }
+    apiAddr != "" && store.commit('setIsWeb', false)
     const app = createApp(App)
     app.use(router)
+    app.use(store, key)
     app.mount('#app')
 })()

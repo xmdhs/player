@@ -1,23 +1,32 @@
 <template>
-    <n-h2>b站相关设置</n-h2>
-    <n-space vertical :size="[0, 20]">
-        <n-space justify="space-between">
-            <n-p>账户</n-p>
-            <n-p>还没有登录</n-p>
-        </n-space>
-        <n-space justify="space-between">
-            <n-p>视频最大分辨率</n-p>
-            <n-select v-model:value="resolution" :options="options" style="width: 8em;" />
-        </n-space>
-    </n-space>
+    <div :class="$style.grid">
+        <div :class="[$style['grid-area'], $style['flex-centered']]" @click="(e) => e.preventDefault()"
+            style="z-index: 1;" v-if="store.state.isWeb">
+            <n-h1>web 端不可用</n-h1>
+        </div>
+        <div :class="[$style['grid-area'], store.state.isWeb ? $style.blur : '']">
+            <n-h2>b站相关设置</n-h2>
+            <n-space vertical :size="[0, 20]">
+                <n-space justify="space-between">
+                    <n-p>账户</n-p>
+                    <n-p>还没有登录</n-p>
+                </n-space>
+                <n-space justify="space-between">
+                    <n-p>视频最大分辨率</n-p>
+                    <n-select v-model:value="store.state.resolution" :options="options" style="width: 8em;" />
+                </n-space>
+            </n-space>
+        </div>
+    </div>
 
 </template>
 
 <script setup lang="ts">
-import { NH2, NP, NSpace, NSelect } from 'naive-ui'
-import { ref } from 'vue';
+import { NH1, NH2, NP, NSpace, NSelect } from 'naive-ui'
+import { ref, watch } from 'vue';
+import { useStore } from '../store/store';
 
-const resolution = ref('120');
+const store = useStore();
 
 const options = ref([
     {
@@ -62,4 +71,26 @@ const options = ref([
     },
 ])
 
+
 </script>
+
+
+<style module>
+.grid {
+    display: grid;
+}
+
+.grid-area {
+    grid-area: 1 / 1 / 1 / 1;
+}
+
+.flex-centered {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.blur {
+    filter: blur(5px);
+}
+</style>
