@@ -86,6 +86,10 @@ watchEffect(() => {
 })
 
 let acpSearchO = {} as SearchObject
+let oldDmdata: dplayerDm["data"] = []
+const blockUserList = ref([] as string[]);
+const blockWordList = ref([] as string[]);
+
 
 const wait = new waitgroup()
 
@@ -148,6 +152,9 @@ const Form = warpErr(async () => {
     }
 
     if (tempdm.value.data.length > 0) {
+        await getBlockData()
+        oldDmdata = tempdm.value.data.slice(0)
+        tempdm.value = danmakuFilter({ code: 0, data: oldDmdata }, blockUserList.value, blockWordList.value)
         danmaku.value = JSON.stringify(tempdm.value)
     }
     if (zm.value != "") {
@@ -278,26 +285,22 @@ function reset() {
     wait.setZero()
 }
 
-let oldDmdata: dplayerDm["data"] = []
-
-const blockUserList = ref([] as string[]);
-const blockWordList = ref([] as string[]);
-
-(warpErr(async () => {
-    const warp = async (list: Ref<string[]>, key: string) => {
-        try {
-            list.value = await getBlocked(key) || []
-        } catch (e) {
-            if (!(e instanceof Error && e.message == "not found")) {
-                throw e
+async function getBlockData() {
+    return warpErr(async () => {
+        const warp = async (list: Ref<string[]>, key: string) => {
+            try {
+                list.value = await getBlocked(key) || []
+            } catch (e) {
+                if (!(e instanceof Error && e.message == "not found")) {
+                    throw e
+                }
             }
         }
-    }
 
-    await warp(blockUserList, "user")
-    await warp(blockWordList, "word")
-}))()
-
+        await warp(blockUserList, "user")
+        await warp(blockWordList, "word")
+    })()
+}
 
 function _addblock(type: 'user' | 'word', v: string) {
     if (oldDmdata.length == 0) {
