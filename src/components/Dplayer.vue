@@ -6,8 +6,11 @@
 import { onMounted, onUnmounted, ref, watch } from 'vue';
 import { DPlayer, DPlayerOptions, dp, DPlayerEvents } from '@/types/Dplayer';
 import { WindowFullscreen, WindowUnfullscreen } from '@/wails/runtime/runtime'
+import { NError } from '@/utils/Nnotification'
+import { useNotification } from 'naive-ui';
 
 const dplayer = ref<HTMLElement | null>(null);
+const nontification = useNotification()
 
 const props = defineProps<{
     danmaku: string
@@ -47,15 +50,20 @@ function start() {
     oldanmaku = props.danmaku
     oldurl = props.url
     if (dplayer.value) {
-        dplayer.value.className = ""
-        d = newPlayer(props.danmaku, props.vtt, dplayer.value, props.url);
-        if ((window as any)["runtime"]) {
-            d.on(DPlayerEvents.fullscreen, () => {
-                WindowFullscreen()
-            })
-            d.on(DPlayerEvents.fullscreen_cancel, () => {
-                WindowUnfullscreen()
-            })
+        try {
+            dplayer.value.className = ""
+            d = newPlayer(props.danmaku, props.vtt, dplayer.value, props.url);
+            if ((window as any)["runtime"]) {
+                d.on(DPlayerEvents.fullscreen, () => {
+                    WindowFullscreen()
+                })
+                d.on(DPlayerEvents.fullscreen_cancel, () => {
+                    WindowUnfullscreen()
+                })
+            }
+        } catch (e) {
+            NError(nontification, String(e))
+            console.warn(e)
         }
     }
 }

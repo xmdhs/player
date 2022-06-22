@@ -96,6 +96,7 @@ async function check(oauthKey: string): Promise<void> {
         await new Promise(resolve => setTimeout(resolve, 2000))
         return check(oauthKey)
     }
+    await new Promise(resolve => setTimeout(resolve, 1000))
     message.warning("二维码失效，请重新扫码")
     return start()
 }

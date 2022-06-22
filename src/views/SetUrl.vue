@@ -38,7 +38,7 @@ const store = useStore();
 
 function Form() {
     let u = url.value.toLowerCase();
-    if (u.startsWith("ep") || u.startsWith("bv")) {
+    if ((u.startsWith("ep") || u.startsWith("bv")) && !store.state.isWeb) {
         if (!store.state.bilibili.logined) {
             message.info("请先登录");
             router.push('/login');

@@ -35,7 +35,7 @@
 
 
 <script setup lang="ts">
-import { NLayout, NLayoutContent, NLayoutHeader, NIcon, NNotificationProvider, NSpace, NMessageProvider, NConfigProvider } from 'naive-ui'
+import { NLayout, NLayoutContent, NLayoutHeader, NIcon, NSpace } from 'naive-ui'
 import { RouterView, RouterLink, useRouter } from 'vue-router'
 import { SettingsOutline, ArrowBack, ArrowForward, Refresh, HomeOutline } from '@vicons/ionicons5'
 
