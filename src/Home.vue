@@ -25,9 +25,9 @@
         <n-layout-content :class="$style.container" content-style="padding: 24px;">
             <router-view v-slot="{ Component, route }">
                 <keep-alive>
-                    <component :is="Component" v-if="route.meta.keepAlive" />
+                    <component :is="Component" v-if="route.meta.keepAlive" :key="route.name" />
                 </keep-alive>
-                <component :is="Component" v-if="!route.meta.keepAlive" />
+                <component :is="Component" v-if="!route.meta.keepAlive" :key="route.name" />
             </router-view>
         </n-layout-content>
     </n-layout>
