@@ -1,6 +1,6 @@
 export interface store<T> {
     set(key: string, value: T): Promise<void>;
-    get(key: string): Promise<T>;
+    get(key: string): Promise<T | null>;
 }
 
 export class LocalStore<T> implements store<T> {
@@ -8,12 +8,12 @@ export class LocalStore<T> implements store<T> {
         localStorage.setItem(key, JSON.stringify(value));
     }
 
-    async get(key: string): Promise<T> {
+    async get(key: string): Promise<T | null> {
         let s = localStorage.getItem(key);
         if (s) {
             return JSON.parse(s);
         }
-        throw new Error("not found");
+        return null;
     }
 }
 
@@ -34,13 +34,13 @@ export class RemoteStore<T> implements store<T> {
         })
     }
 
-    async get(key: string): Promise<T> {
+    async get(key: string): Promise<T | null> {
         let s = await fetch(this.api() + "store/" + key);
         if (s.status == 200) {
             return await s.json();
         }
         if (s.status == 404) {
-            throw new Error("not found")
+            return null;
         }
         throw new Error(await s.text());
     }

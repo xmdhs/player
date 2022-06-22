@@ -288,15 +288,8 @@ function reset() {
 async function getBlockData() {
     return warpErr(async () => {
         const warp = async (list: Ref<string[]>, key: string) => {
-            try {
-                list.value = await getBlocked(key) || []
-            } catch (e) {
-                if (!(e instanceof Error && e.message == "not found")) {
-                    throw e
-                }
-            }
+            list.value = await getBlocked(key) || []
         }
-
         await warp(blockUserList, "user")
         await warp(blockWordList, "word")
     })()

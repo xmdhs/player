@@ -15,10 +15,10 @@ const store = (() => {
 
 
 export async function addblock(key: string, value: string) {
-    let l: string[] = []
-    try {
-        l = await store.get(key);
-    } catch (e) { }
+    let l = await store.get(key);
+    if (l == null) {
+        l = []
+    }
     if (l.includes(value)) {
         return;
     }
