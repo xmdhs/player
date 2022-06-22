@@ -40,7 +40,7 @@ function Form() {
     let u = url.value.toLowerCase();
     if (u.startsWith("ep") || u.startsWith("bv")) {
         if (!store.state.bilibili.logined) {
-            message.error("请先登录，才能解析 bilibili 视频");
+            message.info("请先登录");
             router.push('/login');
             return;
         }
