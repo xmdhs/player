@@ -52,7 +52,14 @@ async function start() {
 }
 
 async function set(s: string) {
-    router.push({ name: "player", query: { video: await makeUrl(bvid, s) } })
+    let u = ""
+    try {
+        u = await makeUrl(bvid, s)
+    } catch (e) {
+        NError(notification, String(e))
+        return
+    }
+    router.push({ name: "player", query: { video: u } })
 }
 
 async function makeUrl(bvid: string, cid: string): Promise<string> {
@@ -66,6 +73,9 @@ async function makeUrl(bvid: string, cid: string): Promise<string> {
     u.searchParams.set("bili_jct", store.state.bilibili.bili_jct)
     let r = await fetch(u.toString())
     let rurl = await r.text()
+    if (r.status != 200) {
+        throw rurl
+    }
     let ru = new URL(cors + rurl)
     ru.searchParams.set("_corsreferer", "https://www.bilibili.com")
     return ru.toString()

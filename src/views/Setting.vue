@@ -32,17 +32,16 @@
 
 <script setup lang="ts">
 import { NH1, NH2, NP, NSpace, NSelect, NButton, NPopconfirm } from 'naive-ui'
-import { ref, watch } from 'vue';
+import { ref, watch, computed } from 'vue';
 import { useStore } from '@/store/store';
 import { useRouter } from 'vue-router'
 
 const store = useStore();
 const router = useRouter()
 
-const resolution = ref(store.state.bilibili.resolution)
-
-watch(resolution, () => {
-    store.commit('bilibili/setResolution', resolution.value)
+const resolution = computed({
+    get() { return store.state.bilibili.resolution },
+    set(s) { store.commit('bilibili/setResolution', s) }
 })
 
 const options = ref([
