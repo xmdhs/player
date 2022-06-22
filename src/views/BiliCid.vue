@@ -9,7 +9,7 @@ import { onMounted, ref, watch } from 'vue';
 import { NError } from '@/utils/Nnotification'
 import { useNotification, NH2 } from 'naive-ui';
 import { useRouter } from 'vue-router';
-import { apiAddr } from '@/utils/interface'
+import { apiAddr, cors } from '@/utils/interface'
 import { useStore } from '@/store/store';
 import selVue from '@/components/Sel.vue'
 
@@ -51,11 +51,11 @@ async function start() {
     data.forEach(v => list.value.push({ label: v.part, value: String(v.cid) }))
 }
 
-function set(s: string) {
-    router.push({ name: "player", query: { video: makeUrl(bvid, s) } })
+async function set(s: string) {
+    router.push({ name: "player", query: { video: await makeUrl(bvid, s) } })
 }
 
-function makeUrl(bvid: string, cid: string): string {
+async function makeUrl(bvid: string, cid: string): Promise<string> {
     let u = new URL(apiAddr + "bilibili.flv")
     u.searchParams.set("qn", store.state.bilibili.resolution)
     u.searchParams.set("bvid", bvid)
@@ -64,7 +64,11 @@ function makeUrl(bvid: string, cid: string): string {
     u.searchParams.set("DedeUserID__ckMd5", store.state.bilibili.DedeUserID__ckMd5)
     u.searchParams.set("SESSDATA", store.state.bilibili.SESSDATA)
     u.searchParams.set("bili_jct", store.state.bilibili.bili_jct)
-    return u.toString()
+    let r = await fetch(u.toString())
+    let rurl = await r.text()
+    let ru = new URL(cors + rurl)
+    ru.searchParams.set("_corsreferer", "https://www.bilibili.com")
+    return ru.toString()
 }
 
 </script>
