@@ -1,5 +1,5 @@
 <template>
-    <selVue title="标题" value="id" msg="选择弹幕" :list="list" @set="set" v-if="list.length != 0" />
+    <selVue title="标题" value="id" msg="选择 cid" :list="list" @set="set" v-if="list.length != 0" />
 
 </template>
 
