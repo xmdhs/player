@@ -76,8 +76,9 @@ async function makeUrl(bvid: string, cid: string): Promise<string> {
     if (r.status != 200) {
         throw rurl
     }
-    let ru = new URL(cors + rurl)
-    ru.searchParams.set("_corsreferer", "https://www.bilibili.com")
+    let ru = new URL(cors + "bilibili.flv")
+    ru.searchParams.set("_proxyURL", rurl)
+    ru.searchParams.set("_referer", "https://www.bilibili.com")
     return ru.toString()
 }
 
