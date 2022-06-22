@@ -4,6 +4,7 @@ import router from '@/router'
 import { store, key } from '@/store/store'
 import { CorsServer, ApiServer } from '@/wails/App'
 import { setCors, setApiAddr, apiAddr } from '@/utils/interface'
+import { createWebHashHistory } from 'vue-router'
 
 (async () => {
     try {
@@ -16,7 +17,11 @@ import { setCors, setApiAddr, apiAddr } from '@/utils/interface'
     }
     apiAddr != "" ? store.commit('setIsWeb', false) : store.commit('setIsWeb', true)
     const app = createApp(App)
-    app.use(router)
+    if ((window as any)["runtime"]) {
+        app.use(router(createWebHashHistory()))
+    } else {
+        app.use(router())
+    }
     app.use(store, key)
     app.mount('#app')
 })()
