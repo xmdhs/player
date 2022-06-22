@@ -4,10 +4,13 @@
 
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref, watch } from 'vue';
-import { DPlayer, DPlayerOptions, dp, DPlayerEvents } from '@/types/Dplayer';
+import { DPlayerOptions, DPlayerEvents } from 'dplayer';
+import DPlayer from 'dplayer';
 import { WindowFullscreen, WindowUnfullscreen } from '@/wails/runtime/runtime'
 import { NError } from '@/utils/Nnotification'
 import { useNotification } from 'naive-ui';
+import Hls from 'hls.js'
+import mpegts from 'mpegts.js'
 
 const dplayer = ref<HTMLElement | null>(null);
 const nontification = useNotification()
@@ -18,7 +21,7 @@ const props = defineProps<{
     url: string
 }>();
 
-let d: dp
+let d: DPlayer
 let dmlink: string
 let vttlink: string
 let hls: any
@@ -31,8 +34,8 @@ watch(props, v => {
         oldanmaku = v.danmaku
         dmlink != "" && URL.revokeObjectURL(dmlink)
         let blob = new Blob([v.danmaku])
-        dmlink = URL.createObjectURL(blob)
-        d.danmaku.reload({
+        dmlink = URL.createObjectURL(blob);
+        (d.danmaku as any).reload({
             addition: [dmlink],
             id: "",
             api: "",
@@ -93,7 +96,7 @@ function newPlayer(danmaku: string, vtt: string, dplayer: HTMLElement, url: stri
     }
     let d = newDp(url, dmlink, vttlink, dplayer)
     return d
-    function newDp(url: string, danmaku: string, vtt: string, dom: HTMLElement): dp {
+    function newDp(url: string, danmaku: string, vtt: string, dom: HTMLElement): DPlayer {
         try {
             new URL(url)
         } catch (e) {
@@ -119,7 +122,8 @@ function newPlayer(danmaku: string, vtt: string, dplayer: HTMLElement, url: stri
                 fontSize: "4vmin"
             }
         }
-        if (new URL(url).pathname.endsWith(".m3u8") && Hls.isSupported()) {
+        const pathname = new URL(url).pathname
+        if (pathname.endsWith(".m3u8") && Hls.isSupported()) {
             o.video!.type = "customHls"
             o.video!.customType = {
                 customHls: function (video: HTMLVideoElement, player: any) {
@@ -130,19 +134,27 @@ function newPlayer(danmaku: string, vtt: string, dplayer: HTMLElement, url: stri
 
             }
         }
+        if (pathname.endsWith(".flv")) {
+            o.video!.type = "customflv"
+            o.video!.customType = {
+                customflv: function (video: HTMLVideoElement, player: any) {
+                    const p = mpegts.createPlayer({
+                        type: 'flv',
+                        url: video.src,
+                    }, {
+                        enableWorker: true,
+                        stashInitialSize: 5000,
+                    });
+                    p.attachMediaElement(video);
+                    p.load();
+                },
 
+            }
+        }
         return new DPlayer(o)
     }
 }
 
-
-</script>
-
-<script lang="ts">
-declare var Hls: {
-    isSupported: () => boolean
-    new(): any
-}
 
 </script>
 
