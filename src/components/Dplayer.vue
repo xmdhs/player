@@ -57,10 +57,10 @@ function start() {
             dplayer.value.className = ""
             d = newPlayer(props.danmaku, props.vtt, dplayer.value, props.url);
             if ((window as any)["runtime"]) {
-                d.on(DPlayerEvents.fullscreen, () => {
+                d.on('fullscreen' as DPlayerEvents.fullscreen, () => {
                     WindowFullscreen()
                 })
-                d.on(DPlayerEvents.fullscreen_cancel, () => {
+                d.on('fullscreen_cancel' as DPlayerEvents.fullscreen_cancel, () => {
                     WindowUnfullscreen()
                 })
             }
@@ -142,7 +142,6 @@ function newPlayer(danmaku: string, vtt: string, dplayer: HTMLElement, url: stri
                         type: 'flv',
                         url: video.src,
                     }, {
-                        enableWorker: true,
                         stashInitialSize: 5000,
                     });
                     p.attachMediaElement(video);
