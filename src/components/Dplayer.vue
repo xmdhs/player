@@ -40,7 +40,6 @@ watch(props, v => {
             id: "",
             api: "",
         })
-        d.danmaku.clear()
     }
     if (v.url == oldurl) {
         return
