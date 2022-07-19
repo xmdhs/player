@@ -11,10 +11,10 @@
     "dplayer": "^1.26.0",
     "hls.js": "^1.1.5",
     "mpegts.js": "^1.6.10",
-    "naive-ui": "^2.30.6",
-    "qrcode": "^1.5.0",
+    "naive-ui": "^2.31.0",
+    "qrcode": "^1.5.1",
     "vue": "^3.2.37",
-    "vue-router": "^4.0.16",
+    "vue-router": "^4.1.2",
     "vuex": "^4.0.2",
     "vuex-persist": "^3.1.3"
   },
@@ -22,9 +22,11 @@
     "@types/dplayer": "^1.25.2",
     "@types/qrcode": "^1.4.2",
     "@vicons/ionicons5": "^0.12.0",
-    "@vitejs/plugin-vue": "^2.3.3",
+    "@vitejs/plugin-vue": "^3.0.1",
     "typescript": "^4.7.4",
-    "vite": "^2.9.12",
-    "vue-tsc": "^0.38.1"
+    "vite": "^3.0.2",
+    "vue-tsc": "^0.38.8",
+    "@vitejs/plugin-legacy": "^2.0.0",
+    "terser": "^5.14.2"
   }
 }
