@@ -157,7 +157,7 @@ const Form = warpErr(async () => {
         tempdm.value = danmakuFilter({ code: 0, data: oldDmdata }, blockUserList.value, blockWordList.value)
         danmaku.value = JSON.stringify(tempdm.value)
     }
-    if (zm.value != "") {
+    if (zm.value != "" && offset.value != null) {
         zm.value = vttoffset(zm.value, Number(offset.value))
     }
     videodone.value = true
