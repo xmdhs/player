@@ -30,6 +30,7 @@ let hls: any
 
 let oldanmaku: string
 let oldurl: string
+let resizeThrottler: { (): void }
 
 watch(props, v => {
     if (v.danmaku != oldanmaku) {
@@ -91,14 +92,22 @@ function start() {
                         div.style.top = "0px"
                     }
                     change()
-                    d.on("fullscreen" as DPlayerEvents, () => {
-                        setTimeout(change, 500);
-                    })
-                    d.on("fullscreen_cancel" as DPlayerEvents, () => {
+                    d.on("resize" as DPlayerEvents, () => {
                         setTimeout(change, 500);
                     })
                     d.on("subtitle_hide" as DPlayerEvents, () => parent.contains(div) && parent.removeChild(div))
                     d.on("subtitle_show" as DPlayerEvents, change)
+
+                    let resizeTimeout: NodeJS.Timeout | null;
+                    resizeThrottler = () => {
+                        if (!resizeTimeout) {
+                            resizeTimeout = setTimeout(() => {
+                                resizeTimeout = null;
+                                change()
+                            }, 500);
+                        }
+                    }
+                    window.addEventListener("resize", resizeThrottler)
                 }
 
             })
@@ -119,6 +128,7 @@ function clean() {
     d?.destroy();
     dmlink != "" && URL.revokeObjectURL(dmlink)
     vttlink != "" && URL.revokeObjectURL(vttlink)
+    resizeThrottler && window.removeEventListener("resize", resizeThrottler)
 }
 
 
