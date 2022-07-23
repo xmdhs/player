@@ -88,8 +88,14 @@ function start() {
                         div.style.top = "0px"
                     }
                     change()
-                    d.on("fullscreen" as DPlayerEvents, change)
-                    d.on("fullscreen_cancel" as DPlayerEvents, change)
+                    d.on("fullscreen" as DPlayerEvents, () => {
+                        (window as any)["runtime"] && WindowFullscreen()
+                        change()
+                    })
+                    d.on("fullscreen_cancel" as DPlayerEvents, () => {
+                        (window as any)["runtime"] && WindowUnfullscreen()
+                        change()
+                    })
                     d.on("subtitle_hide" as DPlayerEvents, () => parent.contains(div) && parent.removeChild(div))
                     d.on("subtitle_show" as DPlayerEvents, change)
                 }
