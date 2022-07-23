@@ -1,6 +1,6 @@
 <template>
     <div v-show="finish" v-if="videodone">
-        <DplayerVue :danmaku="danmaku" :vtt="zm" :url="url" />
+        <DplayerVue :danmaku="danmaku" :vtt="zm" :url="url" :ass="asszm" />
         <br />
         <n-collapse v-if="danmaku">
             <n-collapse-item title="弹幕列表" name="1">
@@ -31,6 +31,7 @@
         <n-input :autosize="{ maxRows: 5, minRows: 5 }" type="textarea" v-model:value="danmaku"
             placeholder="dplayer 格式弹幕" />
         <n-input :autosize="{ maxRows: 5, minRows: 5 }" type="textarea" v-model:value="zm" placeholder="vtt 格式字幕" />
+        <n-input :autosize="{ maxRows: 5, minRows: 5 }" type="textarea" v-model:value="asszm" placeholder="ass 格式字幕" />
     </n-space>
     <n-space vertical>
         <n-button @click='reset' type="primary" v-if="finish && !videodone">重新输入</n-button>
@@ -62,6 +63,7 @@ const bahaDm = ref(null as number | null);
 const bzimu = ref("")
 const finish = ref(false)
 const zm = ref("")
+const asszm = ref("")
 const dmcidlist = ref([] as { label: string, value: string }[])
 const zmlist = ref([] as { label: string, value: string }[])
 const danmaku = ref("")

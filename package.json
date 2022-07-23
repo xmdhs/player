@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@plussub/srt-vtt-parser": "^1.1.0",
+    "assjs": "^0.0.11",
     "dplayer": "^1.26.0",
     "hls.js": "^1.1.5",
     "mpegts.js": "^1.6.10",
@@ -22,11 +23,11 @@
     "@types/dplayer": "^1.25.2",
     "@types/qrcode": "^1.4.2",
     "@vicons/ionicons5": "^0.12.0",
+    "@vitejs/plugin-legacy": "^2.0.0",
     "@vitejs/plugin-vue": "^3.0.1",
+    "terser": "^5.14.2",
     "typescript": "^4.7.4",
     "vite": "^3.0.2",
-    "vue-tsc": "^0.38.8",
-    "@vitejs/plugin-legacy": "^2.0.0",
-    "terser": "^5.14.2"
+    "vue-tsc": "^0.38.8"
   }
 }

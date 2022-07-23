@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref, watch } from 'vue';
+import { nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
 import { DPlayerOptions, DPlayerEvents } from 'dplayer';
 import DPlayer from 'dplayer';
 import { WindowFullscreen, WindowUnfullscreen } from '@/wails/runtime/runtime'
@@ -11,6 +11,7 @@ import { NError } from '@/utils/Nnotification'
 import { useNotification } from 'naive-ui';
 import Hls from 'hls.js'
 import mpegts from 'mpegts.js'
+import ASS from 'assjs';
 
 const dplayer = ref<HTMLElement | null>(null);
 const nontification = useNotification()
@@ -19,6 +20,7 @@ const props = defineProps<{
     danmaku: string
     vtt: string
     url: string
+    ass?: string
 }>();
 
 let d: DPlayer
@@ -55,7 +57,11 @@ function start() {
     if (dplayer.value) {
         try {
             dplayer.value.className = ""
-            d = newPlayer(props.danmaku, props.vtt, dplayer.value, props.url);
+            let vtt = props.vtt
+            if (props.ass && props.ass != "") {
+                vtt = "WEBVTT"
+            }
+            d = newPlayer(props.danmaku, vtt, dplayer.value, props.url);
             if ((window as any)["runtime"]) {
                 d.on('fullscreen' as DPlayerEvents.fullscreen, () => {
                     WindowFullscreen()
@@ -64,6 +70,38 @@ function start() {
                     WindowUnfullscreen()
                 })
             }
+            d.on('loadeddata' as DPlayerEvents, async () => {
+                if (props.ass && props.ass != "") {
+                    let ass: ASS
+                    let div = document.createElement("div");
+                    const parent = d.video.parentNode! as Element
+                    parent.appendChild(div)
+                    await nextTick()
+                    ass = new ASS(props.ass, d.video, {
+                        container: div,
+                        resampling: 'video_width',
+                    });
+                    div.style.position = "absolute"
+                    div.style.top = "0px"
+                    const change = async () => {
+                        parent.contains(div) && parent.removeChild(div)
+                        div = document.createElement("div");
+                        parent.appendChild(div)
+                        await nextTick()
+                        ass = new ASS(props.ass as string, d.video, {
+                            container: div,
+                            resampling: 'video_width',
+                        });
+                        div.style.position = "absolute"
+                        div.style.top = "0px"
+                    }
+                    d.on("fullscreen" as DPlayerEvents, change)
+                    d.on("fullscreen_cancel" as DPlayerEvents, change)
+                    d.on("subtitle_hide" as DPlayerEvents, () => parent.contains(div) && parent.removeChild(div))
+                    d.on("subtitle_show" as DPlayerEvents, change)
+                }
+
+            })
         } catch (e) {
             NError(nontification, String(e))
             console.warn(e)

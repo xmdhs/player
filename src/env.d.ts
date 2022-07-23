@@ -6,3 +6,16 @@ declare module '*.vue' {
   const component: DefineComponent<{}, {}, any>
   export default component
 }
+
+declare module 'assjs' {
+  export default class ASS {
+    constructor(source: string, video: HTMLVideoElement, options?: {
+      container?: Element,
+      resampling?: string,
+    })
+    resize(): void
+    show(): void
+    hide(): void
+    destroy(): void
+  }
+}
