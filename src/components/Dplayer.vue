@@ -93,11 +93,11 @@ function start() {
                     change()
                     d.on("fullscreen" as DPlayerEvents, () => {
                         (window as any)["runtime"] && WindowFullscreen()
-                        change()
+                        nextTick(change)
                     })
                     d.on("fullscreen_cancel" as DPlayerEvents, () => {
                         (window as any)["runtime"] && WindowUnfullscreen()
-                        change()
+                        nextTick(change)
                     })
                     d.on("subtitle_hide" as DPlayerEvents, () => parent.contains(div) && parent.removeChild(div))
                     d.on("subtitle_show" as DPlayerEvents, change)
