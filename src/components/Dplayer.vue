@@ -92,10 +92,10 @@ function start() {
                     }
                     change()
                     d.on("fullscreen" as DPlayerEvents, () => {
-                        setTimeout(change, 500);
+                        setTimeout(change, 0);
                     })
                     d.on("fullscreen_cancel" as DPlayerEvents, () => {
-                        setTimeout(change, 500);
+                        setTimeout(change, 0);
                     })
                     d.on("subtitle_hide" as DPlayerEvents, () => parent.contains(div) && parent.removeChild(div))
                     d.on("subtitle_show" as DPlayerEvents, change)
@@ -150,7 +150,7 @@ function newPlayer(danmaku: string, vtt: string, dplayer: HTMLElement, url: stri
             o.danmaku = {
                 addition: [danmaku],
                 id: "",
-                api: "",
+                api: "https://auto.xmdhs.com/dplayer/",
             }
         }
         if (vtt != "") {
