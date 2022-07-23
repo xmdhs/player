@@ -70,12 +70,14 @@ function start() {
                     WindowUnfullscreen()
                 })
             }
+            if (props.ass && props.ass != "") {
+                d.video.removeAttribute("crossorigin")
+            }
             d.on('loadeddata' as DPlayerEvents, async () => {
                 if (props.ass && props.ass != "") {
                     let ass: ASS
                     let div: HTMLElement;
                     const parent = d.video.parentNode! as Element
-                    d.video.removeAttribute("crossorigin")
                     const change = async () => {
                         parent.contains(div) && parent.removeChild(div)
                         div = document.createElement("div");
