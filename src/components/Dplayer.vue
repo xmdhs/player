@@ -73,16 +73,8 @@ function start() {
             d.on('loadeddata' as DPlayerEvents, async () => {
                 if (props.ass && props.ass != "") {
                     let ass: ASS
-                    let div = document.createElement("div");
+                    let div: HTMLElement;
                     const parent = d.video.parentNode! as Element
-                    parent.appendChild(div)
-                    await nextTick()
-                    ass = new ASS(props.ass, d.video, {
-                        container: div,
-                        resampling: 'video_width',
-                    });
-                    div.style.position = "absolute"
-                    div.style.top = "0px"
                     const change = async () => {
                         parent.contains(div) && parent.removeChild(div)
                         div = document.createElement("div");
@@ -95,6 +87,7 @@ function start() {
                         div.style.position = "absolute"
                         div.style.top = "0px"
                     }
+                    change()
                     d.on("fullscreen" as DPlayerEvents, change)
                     d.on("fullscreen_cancel" as DPlayerEvents, change)
                     d.on("subtitle_hide" as DPlayerEvents, () => parent.contains(div) && parent.removeChild(div))
