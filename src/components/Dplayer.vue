@@ -71,9 +71,7 @@ function start() {
                     WindowUnfullscreen()
                 })
             }
-            if (props.ass && props.ass != "") {
-                d.video.removeAttribute("crossorigin")
-            }
+            d.video.removeAttribute("crossorigin")
             d.on('loadeddata' as DPlayerEvents, async () => {
                 if (props.ass && props.ass != "") {
                     let ass: ASS
