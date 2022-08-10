@@ -13,6 +13,7 @@ export default defineConfig({
   ],
   build: {
     sourcemap: true,
+    target: "esnext"
   },
   base: "/",
   resolve: {
