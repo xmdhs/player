@@ -21,6 +21,9 @@ export default defineConfig({
       '@': join(__dirname, "src")
     }
   },
+  esbuild: {
+    target: "esnext"
+  },
   optimizeDeps: {
     esbuildOptions: {
       target: "esnext"
