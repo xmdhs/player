@@ -99,6 +99,10 @@ const Form = warpErr(async () => {
     finish.value = true
     videodone.value = false
 
+    if (danmaku.value){
+        tempdm.value = JSON.parse(danmaku.value)
+    }
+
     if (bilDanmaku.value != "") {
         wait.add(1)
         const r = await getbilCidS(bilDanmaku.value)

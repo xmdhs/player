@@ -8,8 +8,7 @@ export default defineConfig({
   plugins: [
     vue(),
     legacy({
-      targets: "> 0.2%, last 2 versions, Firefox ESR, not dead",
-      externalSystemJS: true
+      targets: "> 0.2%, last 2 versions, Firefox ESR, not dead"
     })
   ],
   build: {
@@ -19,11 +18,6 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': join(__dirname, "src")
-    }
-  },
-  optimizeDeps: {
-    esbuildOptions: {
-      target: "esnext"
     }
   }
 })
