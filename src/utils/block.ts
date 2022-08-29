@@ -45,6 +45,7 @@ export function danmakuFilter(danmaku: dplayerDm, blockUser: string[], blockWord
     }
     if (blockWord.length > 0) {
         d.data = d.data.filter(x => !blockWord.some(y => new RegExp(y).test(x[4])))
+        d.data = d.data.filter(x => !blockUser.some(y => new RegExp(y).test(x[4])))
     }
     return d
 }
