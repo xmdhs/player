@@ -21,14 +21,14 @@ import QRCode from 'qrcode'
 import { cors } from '@/utils/interface'
 import { NError } from '@/utils/Nnotification'
 import { useRouter } from 'vue-router';
-import { useStore } from '@/store/store';
+import { useBilibili } from '@/store/bilibili';
 
 const qrLoading = ref(true);
 const notification = useNotification()
 const canvasRef = ref<HTMLElement | null>(null);
 const message = useMessage()
 const router = useRouter()
-const store = useStore()
+const store = useBilibili()
 
 onMounted(start)
 
@@ -82,11 +82,11 @@ async function check(oauthKey: string): Promise<void> {
     const data = r?.data
     if (r.code == 0 && typeof data == "object" && "url" in data) {
         let u = new URL(data.url)
-        store.commit('bilibili/setLogin', {
-            DedeUserID: u.searchParams.get("DedeUserID"),
-            DedeUserID__ckMd5: u.searchParams.get("DedeUserID__ckMd5"),
-            SESSDATA: u.searchParams.get("SESSDATA"),
-            bili_jct: u.searchParams.get("bili_jct"),
+        store.$patch({
+            DedeUserID: u.searchParams.get("DedeUserID") ?? "",
+            DedeUserID__ckMd5: u.searchParams.get("DedeUserID__ckMd5") ?? "",
+            SESSDATA: u.searchParams.get("SESSDATA") ?? "",
+            bili_jct: u.searchParams.get("bili_jct") ?? "",
             logined: true
         })
         router.back()

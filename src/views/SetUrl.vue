@@ -3,7 +3,7 @@
         <n-grid :cols="8" x-gap="5" item-responsive>
             <n-gi span="6">
                 <n-input type="text" v-model:value="url"
-                    :placeholder="store.state.isWeb ? '视频直链' : '视频直链 / bvid / epid'" />
+                    :placeholder="store.isWeb ? '视频直链' : '视频直链 / bvid / epid'" />
             </n-gi>
             <n-gi>
                 <n-button @click="Form">播放</n-button>
@@ -28,18 +28,20 @@
 import { onActivated, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { NInput, NButton, NSpace, NUpload, NUploadDragger, NText, UploadCustomRequestOptions, NGrid, NGi, useMessage } from 'naive-ui';
+import { useBilibili } from '@/store/bilibili';
 import { useStore } from '@/store/store';
 
 const url = ref('');
 
 const router = useRouter();
 const message = useMessage();
+const bstore = useBilibili();
 const store = useStore();
 
 function Form() {
     let u = url.value.toLowerCase();
-    if ((u.startsWith("ep") || u.startsWith("bv")) && !store.state.isWeb) {
-        if (!store.state.bilibili.logined) {
+    if ((u.startsWith("ep") || u.startsWith("bv")) && !store.isWeb) {
+        if (!bstore.logined) {
             message.info("请先登录");
             router.push('/login');
             return;

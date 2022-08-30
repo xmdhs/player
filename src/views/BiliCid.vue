@@ -10,7 +10,7 @@ import { NError } from '@/utils/Nnotification'
 import { useNotification, NH2 } from 'naive-ui';
 import { useRouter } from 'vue-router';
 import { apiAddr, cors } from '@/utils/interface'
-import { useStore } from '@/store/store';
+import { useBilibili } from '@/store/bilibili';
 import selVue from '@/components/Sel.vue'
 
 const props = defineProps<{
@@ -19,7 +19,7 @@ const props = defineProps<{
 
 const notification = useNotification()
 const router = useRouter()
-const store = useStore()
+const store = useBilibili()
 const list = ref([] as { label: string, value: string }[])
 
 
@@ -64,13 +64,13 @@ async function set(s: string) {
 
 async function makeUrl(bvid: string, cid: string): Promise<string> {
     let u = new URL(apiAddr + "bilibili.flv")
-    u.searchParams.set("qn", store.state.bilibili.resolution)
+    u.searchParams.set("qn", store.resolution)
     u.searchParams.set("bvid", bvid)
     u.searchParams.set("cid", cid)
-    u.searchParams.set("DedeUserID", store.state.bilibili.DedeUserID)
-    u.searchParams.set("DedeUserID__ckMd5", store.state.bilibili.DedeUserID__ckMd5)
-    u.searchParams.set("SESSDATA", store.state.bilibili.SESSDATA)
-    u.searchParams.set("bili_jct", store.state.bilibili.bili_jct)
+    u.searchParams.set("DedeUserID", store.DedeUserID)
+    u.searchParams.set("DedeUserID__ckMd5", store.DedeUserID__ckMd5)
+    u.searchParams.set("SESSDATA", store.SESSDATA)
+    u.searchParams.set("bili_jct", store.bili_jct)
     let r = await fetch(u.toString())
     let rurl = await r.text()
     if (r.status != 200) {

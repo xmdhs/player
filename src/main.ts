@@ -1,10 +1,12 @@
 import { createApp } from 'vue'
 import App from '@/App.vue'
 import router from '@/router'
-import { store, key } from '@/store/store'
 import { CorsServer, ApiServer } from '@/wails/App'
 import { setCors, setApiAddr, apiAddr } from '@/utils/interface'
 import { createWebHashHistory } from 'vue-router'
+import { useStore } from '@/store/store'
+import { createPinia } from 'pinia'
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 
 (async () => {
     try {
@@ -15,13 +17,20 @@ import { createWebHashHistory } from 'vue-router'
     } catch (e) {
         console.debug(e)
     }
-    apiAddr != "" ? store.commit('setIsWeb', false) : store.commit('setIsWeb', true)
+    const pinia = createPinia()
+    pinia.use(piniaPluginPersistedstate)
+
     const app = createApp(App)
+    app.use(pinia)
+
+    const store = useStore()
+    apiAddr != "" ? store.isWeb = false : store.isWeb = true
+
+
     if ((window as any)["runtime"]) {
         app.use(router(createWebHashHistory()))
     } else {
         app.use(router())
     }
-    app.use(store, key)
     app.mount('#app')
 })()

@@ -1,7 +1,7 @@
 <template>
     <div :class="$style.flex">
         <div style="flex:1">
-            <n-input v-model:value="value" type="text" placeholder="屏蔽词（正则）" />
+            <n-input v-model:value="value" type="text" placeholder="屏蔽词 / 用户名（正则）" />
         </div>
         <n-button @click="$emit('addBlockWord', value); value = ''">添加</n-button>
     </div>
