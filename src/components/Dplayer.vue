@@ -27,6 +27,7 @@ let d: DPlayer
 let dmlink: string
 let vttlink: string
 let hls: any
+let mpegtsP: mpegts.Player
 
 let oldanmaku: string
 let oldurl: string
@@ -124,6 +125,7 @@ onUnmounted(clean);
 function clean() {
     hls?.destroy();
     d?.destroy();
+    mpegtsP?.destroy()
     dmlink != "" && URL.revokeObjectURL(dmlink)
     vttlink != "" && URL.revokeObjectURL(vttlink)
     resizeThrottler && window.removeEventListener("resize", resizeThrottler)
@@ -184,14 +186,14 @@ function newPlayer(danmaku: string, vtt: string, dplayer: HTMLElement, url: stri
             o.video!.type = "customflv"
             o.video!.customType = {
                 customflv: function (video: HTMLVideoElement, player: any) {
-                    const p = mpegts.createPlayer({
+                    mpegtsP = mpegts.createPlayer({
                         type: 'flv',
                         url: video.src,
                     }, {
                         stashInitialSize: 5000,
                     });
-                    p.attachMediaElement(video);
-                    p.load();
+                    mpegtsP.attachMediaElement(video);
+                    mpegtsP.load();
                 },
 
             }

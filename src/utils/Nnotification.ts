@@ -11,7 +11,7 @@ export function NError(n: NotificationApiInjection, msg: string) {
                 onClick: () => {
                     location.reload();
                 }
-            }, "刷新")
+            }, () => "错误")
     })
 
 }
