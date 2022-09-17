@@ -2,8 +2,7 @@
     <n-space vertical :size="20">
         <n-grid :cols="8" x-gap="5" item-responsive>
             <n-gi span="6">
-                <n-input type="text" v-model:value="url"
-                    :placeholder="store.isWeb ? '视频直链' : '视频直链 / bvid / epid'" />
+                <n-input type="text" v-model:value="url" :placeholder="store.isWeb ? '视频直链' : '视频直链 / bvid / epid'" />
             </n-gi>
             <n-gi>
                 <n-button @click="Form">播放</n-button>
@@ -30,6 +29,8 @@ import { useRouter } from 'vue-router';
 import { NInput, NButton, NSpace, NUpload, NUploadDragger, NText, UploadCustomRequestOptions, NGrid, NGi, useMessage } from 'naive-ui';
 import { useBilibili } from '@/store/bilibili';
 import { useStore } from '@/store/store';
+import { useSetting } from '@/store/setting';
+import { cors } from '@/utils/interface';
 
 const url = ref('');
 
@@ -37,6 +38,8 @@ const router = useRouter();
 const message = useMessage();
 const bstore = useBilibili();
 const store = useStore();
+const setting = useSetting()
+
 
 function Form() {
     let u = url.value.toLowerCase();
@@ -49,7 +52,11 @@ function Form() {
         router.push({ name: "BiliCid", query: { videoID: url.value } });
         return
     }
-    router.push({ name: "player", query: { video: url.value } });
+    let tu = url.value
+    if (setting.useProxy) {
+        tu = cors + url.value
+    }
+    router.push({ name: "player", query: { video: tu } });
 }
 
 let u = ""
