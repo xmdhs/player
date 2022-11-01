@@ -8,6 +8,7 @@ specifiers:
   '@vitejs/plugin-legacy': ^2.3.0
   '@vitejs/plugin-vue': ^3.2.0
   assjs: ^0.0.11
+  axios: 0.26.0
   dplayer: ^1.27.0
   hls.js: ^1.2.4
   mpegts.js: ^1.6.10
@@ -25,6 +26,7 @@ specifiers:
 dependencies:
   '@plussub/srt-vtt-parser': 1.1.0
   assjs: 0.0.11
+  axios: 0.26.0
   dplayer: 1.27.0
   hls.js: 1.2.4
   mpegts.js: 1.6.10
@@ -363,6 +365,14 @@ packages:
 
   /asynckit/0.4.0:
     resolution: {integrity: sha512-Oei9OH4tRh0YqU3GxhX79dM/mwVgvbZJaSNaRk+bshkj0S5cfHcgYakreBjrHwatXKbz+IoIdYLxrKim2MjW0Q==}
+    dev: false
+
+  /axios/0.26.0:
+    resolution: {integrity: sha512-lKoGLMYtHvFrPVt3r+RBMp9nh34N0M8zEfCWqdWZx6phynIEhQqAdydpyBAAG211zlhX9Rgu08cOamy6XjE5Og==}
+    dependencies:
+      follow-redirects: 1.15.2
+    transitivePeerDependencies:
+      - debug
     dev: false
 
   /axios/0.27.2:
