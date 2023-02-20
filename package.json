@@ -14,7 +14,7 @@
     "mpegts.js": "^1.6.10",
     "naive-ui": "^2.33.5",
     "pinia": "^2.0.23",
-    "pinia-plugin-persistedstate": "^2.3.0",
+    "pinia-plugin-persistedstate": "^3.1.0",
     "qrcode": "^1.5.1",
     "vue": "^3.2.41",
     "vue-router": "^4.1.6"
