@@ -5,6 +5,7 @@
         <n-collapse v-if="danmaku">
             <n-collapse-item title="弹幕列表" name="1">
                 <danmakuList :dmList="tempdm['data']" @addblockUser="(user) => _addblock('user', user)" />
+                <n-button @click="toXml">下载为 xml</n-button>
             </n-collapse-item>
         </n-collapse>
         <br />
@@ -43,7 +44,7 @@
 
 <script setup lang="ts">
 import { Ref, ref, watchEffect } from 'vue'
-import { bilZm2vtt, getbilCidS, getBilZm, getDM, getZm } from '@/utils/bilapi';
+import { bilZm2vtt, dp2bili, getbilCidS, getBilZm, getDM, getZm } from '@/utils/bilapi';
 import { getDm as getBahaDm } from '@/utils/baha';
 import { dplayerDm } from '@/utils/interface';
 import waitgroup from '@/utils/WaitGroup';
@@ -99,7 +100,7 @@ const Form = warpErr(async () => {
     finish.value = true
     videodone.value = false
 
-    if (danmaku.value){
+    if (danmaku.value) {
         tempdm.value = JSON.parse(danmaku.value)
     }
 
@@ -339,11 +340,20 @@ function delblock(type: 'user' | 'word', v: string) {
     danmaku.value = JSON.stringify(tempdm.value)
 }
 
+function toXml() {
+    const x = dp2bili(tempdm.value)
+    const url = URL.createObjectURL(new Blob([x], { type: 'application/xml' }))
+    const a = document.createElement('a');
+    a.href = url
+    a.download = "danmaku.xml";
+    a.click();
+    URL.revokeObjectURL(url);
+}
+
 </script>
 
 
-<style module>
-</style>
+<style module></style>
 
 <style>
 .dplayer-danmaku-item {

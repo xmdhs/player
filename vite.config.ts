@@ -6,10 +6,7 @@ import legacy from '@vitejs/plugin-legacy'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
-    vue(),
-    legacy({
-      targets: "> 0.2%, last 2 versions, Firefox ESR, not dead"
-    })
+    vue()
   ],
   build: {
     sourcemap: true,

@@ -155,3 +155,39 @@ export function bilZm2vtt(zm: bilZmR["body"]): string {
 }
 
 
+export function dp2bili(d: dplayerDm): string {
+    const parser = new DOMParser();
+    const dom = parser.parseFromString(`<?xml version="1.0" encoding="UTF-8"?><i></i>`, "text/html");
+    const idom = dom.querySelector("i")
+
+    for (const v of d.data) {
+        const d = document.createElement("d")
+        const attr = []
+        attr.push(String(v[0])) //0
+        switch (v[1]) {
+            case 0:
+                attr.push("1") //1
+                break
+            case 1:
+                attr.push("5") //1
+                break
+            case 2:
+                attr.push("4") //1
+                break
+            default:
+                attr.push("1") //1
+        }
+        attr.push("25") //2
+        attr.push(v[2]) //3
+        attr.push("0") //4
+        attr.push("0") //5
+        attr.push("0") //6
+        attr.push("0") //7
+
+        d.setAttribute("p", attr.join(","))
+        d.textContent = v[4]
+        idom?.appendChild(d)
+    }
+    
+    return new XMLSerializer().serializeToString(dom)
+}
