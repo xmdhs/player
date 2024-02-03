@@ -157,7 +157,7 @@ export function bilZm2vtt(zm: bilZmR["body"]): string {
 
 export function dp2bili(d: dplayerDm): string {
     const parser = new DOMParser();
-    const dom = parser.parseFromString(`<?xml version="1.0" encoding="UTF-8"?><i></i>`, "text/html");
+    const dom = parser.parseFromString(`<?xml version="1.0" encoding="UTF-8"?><i></i>`, "application/xml");
     const idom = dom.querySelector("i")
 
     for (const v of d.data) {
